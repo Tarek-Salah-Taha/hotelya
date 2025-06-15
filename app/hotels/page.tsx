@@ -21,9 +21,11 @@
 // }
 
 export const dynamic = "force-dynamic";
+export const dynamicParams = true;
 
 import { fetchBasicHotelInfo, fetchHotelCount } from "../_lib/hotelsApi";
 import HotelCard from "../_components/HotelCard";
+import { notFound } from "next/navigation";
 
 export default async function Page({
   searchParams,
@@ -40,6 +42,8 @@ export default async function Page({
   ]);
 
   const totalPages = Math.ceil(totalCount / limit);
+
+  if (!hotels) notFound();
 
   return (
     <HotelCard hotels={hotels} currentPage={page} totalPages={totalPages} />
