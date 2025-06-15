@@ -4,11 +4,7 @@ import { fetchHotelInfo } from "@/app/_lib/hotelsApi";
 import { getHotelReviews } from "@/app/_lib/reviewsApi";
 import { getRooms } from "@/app/_lib/roomsApi";
 
-type Props = {
-  params: { id: string };
-};
-
-async function Page({ params }: Props) {
+async function Page({ params }: { params: { id: string } }) {
   const id = params.id;
   const [hotel, reviews, rooms] = await Promise.all([
     fetchHotelInfo(id),
