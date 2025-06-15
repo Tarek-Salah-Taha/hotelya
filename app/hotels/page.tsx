@@ -1,12 +1,11 @@
 import { fetchBasicHotelInfo, fetchHotelCount } from "../_lib/hotelsApi";
 import HotelCard from "../_components/HotelCard";
 
-type Props = {
-  searchParams: { page?: string };
-};
-
-export default async function HotelsPage({ searchParams }: Props) {
-  const page = parseInt(searchParams.page || "1", 10);
+export default async function HotelsPage(props: {
+  searchParams: Promise<{ page?: string }>;
+}) {
+  const { page: pageStr } = await props.searchParams;
+  const page = parseInt(pageStr || "1", 10);
   const limit = 15;
 
   const [hotels, totalCount] = await Promise.all([

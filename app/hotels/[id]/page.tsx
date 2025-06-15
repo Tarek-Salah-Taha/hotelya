@@ -4,8 +4,13 @@ import { fetchHotelInfo } from "@/app/_lib/hotelsApi";
 import { getHotelReviews } from "@/app/_lib/reviewsApi";
 import { getRooms } from "@/app/_lib/roomsApi";
 
-export default async function Page({ params }: { params: { id: string } }) {
-  const id = params.id;
+export default async function Page({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const { id } = await params;
+
   const [hotel, reviews, rooms] = await Promise.all([
     fetchHotelInfo(id),
     getHotelReviews(id),
