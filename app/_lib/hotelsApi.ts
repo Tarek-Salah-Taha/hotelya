@@ -38,7 +38,7 @@ export async function fetchHotelInfo(id: string): Promise<Hotel> {
     .from("hotel_with_standard_room")
     .select("*")
     .eq("id", id)
-    .single();
+    .maybeSingle();
   if (error) {
     throw new Error(error.message || "Failed to fetch hotels");
   }
