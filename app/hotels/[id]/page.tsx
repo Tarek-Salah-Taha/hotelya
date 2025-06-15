@@ -11,6 +11,13 @@ export default async function Page({
 }) {
   const { id } = await params;
 
+  // export default async function Page({ params }: { params: { id: string } }) {
+  //   const { id } = params;
+
+  // export default async function Page(props: Promise<{ params: { id: string } }>) {
+  //   const { params } = await props;
+  //   const { id } = await params;
+
   const [hotel, reviews, rooms] = await Promise.all([
     fetchHotelInfo(id),
     getHotelReviews(id),
