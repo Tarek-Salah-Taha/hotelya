@@ -22,6 +22,7 @@
 
 export const dynamic = "force-dynamic";
 export const dynamicParams = true;
+export const revalidate = 0;
 
 import { fetchBasicHotelInfo, fetchHotelCount } from "../_lib/hotelsApi";
 import HotelCard from "../_components/HotelCard";
@@ -40,6 +41,8 @@ export default async function Page({
     fetchBasicHotelInfo(page, limit),
     fetchHotelCount(),
   ]);
+
+  console.log(hotels, totalCount);
 
   const totalPages = Math.ceil(totalCount / limit);
 
