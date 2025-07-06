@@ -16,6 +16,7 @@ function ImageGallery({ images }: ImageGalleryProps) {
             className="w-full h-64 object-cover rounded-xl shadow"
             width={600}
             height={400}
+            loading="lazy"
           />
         ))}
       </div>

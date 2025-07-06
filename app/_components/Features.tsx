@@ -1,9 +1,12 @@
 function Features() {
   return (
     <section className="bg-background text-text py-12 px-4 md:px-20">
-      <h2 className="text-2xl md:text-3xl font-bold text-center mb-8">
+      <h2 className="text-2xl md:text-3xl font-bold text-center mb-3">
         Why Choose Hotelya?
       </h2>
+      <p className="text-center mb-4">
+        Experience the best in hotel booking with our premium features.
+      </p>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div className="bg-white shadow-md p-6 rounded">
           <h3 className="text-lg font-bold text-primary mb-2">

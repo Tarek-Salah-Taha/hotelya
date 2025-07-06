@@ -5,29 +5,56 @@ import Image from "next/image";
 import { IoLocationSharp } from "react-icons/io5";
 import { FaHeart, FaRegHeart } from "react-icons/fa";
 import { useRouter } from "next/navigation";
-
-import { iconMap, availableTags } from "@/app/_constants/availableTags";
-import getRatingLabel from "@/app/_lib/getRatingLabel";
-import { HotelCardData } from "@/app/_types/types";
+import { addFavorite, removeFavorite } from "../_lib/favoritesApi";
+import { iconMap, availableTags } from "../_constants/availableTags";
+import getRatingLabel from "../_lib/getRatingLabel";
+import { HotelCardData } from "../_types/types";
+import { useUser } from "../_hooks/useUser";
+import toast from "react-hot-toast";
 
 type HotelCardItemProps = {
   hotel: HotelCardData;
 };
 
 export default function HotelCardItem({ hotel }: HotelCardItemProps) {
-  const router = useRouter();
-
   const [isFavorite, setIsFavorite] = useState(false);
+  const router = useRouter();
+  const { user } = useUser();
 
   const matchingTags = availableTags.filter((tag) =>
     hotel.tags_en?.includes(tag.label)
   );
 
+  const handleFavoriteToggle = async () => {
+    if (!user) {
+      toast.error("Please sign in to save/remove favorites");
+      return;
+    }
+
+    console.log("User ID:", user.id);
+    console.log("Hotel ID:", hotel.id);
+
+    setIsFavorite((prev) => !prev);
+
+    try {
+      if (!isFavorite) {
+        await addFavorite(user.id, hotel.id);
+        toast.success("Added to favorites");
+      } else {
+        await removeFavorite(user.id, hotel.id);
+        toast.success("Removed from favorites");
+      }
+    } catch (err) {
+      toast.error("Something went wrong");
+      console.error(err);
+    }
+  };
+
   return (
     <div className="relative bg-white p-4 rounded shadow flex flex-col">
       {/* Favorite icon */}
       <button
-        onClick={() => setIsFavorite((prev) => !prev)}
+        onClick={handleFavoriteToggle}
         className="absolute top-6 right-6 z-10"
       >
         <div className="w-9 h-9 rounded-full bg-white shadow-md flex items-center justify-center">
@@ -46,6 +73,7 @@ export default function HotelCardItem({ hotel }: HotelCardItemProps) {
         className="w-full h-48 object-cover mb-2 rounded"
         width={500}
         height={300}
+        loading="lazy"
       />
 
       {/* Hotel name and location */}

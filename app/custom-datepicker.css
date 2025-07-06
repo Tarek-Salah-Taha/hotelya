@@ -1,0 +1,32 @@
+.react-datepicker__day--selected,
+.react-datepicker__day--in-range,
+.react-datepicker__day--in-selecting-range {
+  background-color: #00b4d8 !important; /* primary */
+  color: white !important;
+  border-radius: 0.5rem;
+}
+
+.react-datepicker__day--today {
+  font-weight: bold;
+  border-bottom: 2px solid #ff6f61; /* secondary */
+}
+
+/* Force datepicker to be flex and wrap */
+.react-datepicker {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  justify-content: center;
+  gap: 1rem;
+}
+
+/* Each month box takes full width on small screens */
+@media (max-width: 640px) {
+  .react-datepicker__month-container {
+    width: 100% !important;
+  }
+}
+
+/* Optional: limit max width per month */
+.react-datepicker__month-container {
+  max-width: 320px;
+}

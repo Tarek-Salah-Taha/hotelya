@@ -3,7 +3,7 @@
 import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { useUser } from "@/app/_hooks/useUser";
+import { useUser } from "../_hooks/useUser";
 import { logoutUser } from "../_lib/usersApi";
 import { useRouter } from "next/navigation";
 

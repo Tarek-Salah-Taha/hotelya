@@ -1,25 +1,3 @@
-// import { fetchBasicHotelInfo, fetchHotelCount } from "../_lib/hotelsApi";
-// import HotelCard from "../_components/HotelCard";
-
-// export default async function HotelsPage(props: {
-//   searchParams: Promise<{ page?: string }>;
-// }) {
-//   const { page: pageStr } = await props.searchParams;
-//   const page = parseInt(pageStr || "1", 10);
-//   const limit = 15;
-
-//   const [hotels, totalCount] = await Promise.all([
-//     fetchBasicHotelInfo(page, limit),
-//     fetchHotelCount(),
-//   ]);
-
-//   const totalPages = Math.ceil(totalCount / limit);
-
-//   return (
-//     <HotelCard hotels={hotels} currentPage={page} totalPages={totalPages} />
-//   );
-// }
-
 export const dynamic = "force-dynamic";
 export const dynamicParams = true;
 export const revalidate = 0;
@@ -42,13 +20,17 @@ export default async function Page({
     fetchHotelCount(),
   ]);
 
-  console.log(hotels, totalCount);
-
   const totalPages = Math.ceil(totalCount / limit);
+  console.log(totalCount);
 
   if (!hotels) notFound();
 
   return (
-    <HotelCard hotels={hotels} currentPage={page} totalPages={totalPages} />
+    <HotelCard
+      hotels={hotels}
+      currentPage={page}
+      totalPages={totalPages}
+      basePath="/hotels"
+    />
   );
 }

@@ -5,6 +5,7 @@ import Navigation from "./Navigation";
 import UserPreferences from "./UserPreferences";
 import { useState } from "react";
 import { HiOutlineMenuAlt3, HiOutlineX } from "react-icons/hi";
+import { motion, AnimatePresence } from "framer-motion";
 
 function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -31,12 +32,20 @@ function Header() {
       </div>
 
       {/* Mobile Dropdown Navigation */}
-      {isMenuOpen && (
-        <div className="lg:hidden mt-4 space-y-4">
-          <Navigation />
-          <UserPreferences />
-        </div>
-      )}
+      <AnimatePresence>
+        {isMenuOpen && (
+          <motion.div
+            className="lg:hidden mt-4 px-4 space-y-4"
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            transition={{ duration: 0.2 }}
+          >
+            <Navigation />
+            <UserPreferences />
+          </motion.div>
+        )}
+      </AnimatePresence>
     </header>
   );
 }

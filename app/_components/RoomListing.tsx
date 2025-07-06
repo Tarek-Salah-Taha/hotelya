@@ -15,6 +15,8 @@ function RoomListing({ rooms }: RoomListingProps) {
 
         return (
           <RoomCard
+            hotelId={room.hotelId}
+            roomId={room.id}
             key={room.id}
             roomType={room.roomType}
             image={image}

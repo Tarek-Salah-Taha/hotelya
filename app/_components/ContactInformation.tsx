@@ -22,11 +22,15 @@ function ContactInformation({ hotel }: { hotel: Hotel }) {
         </div>
         <div className="flex items-center gap-2">
           <MdEmail className="w-6 h-6 shrink-0 text-primary" />
-          {email}
+          <a href={`mailto:${email}`} target="_blank">
+            {email}
+          </a>
         </div>
         <div className="flex items-center gap-2">
           <FaGlobe className="w-6 h-6 shrink-0 text-primary" />
-          {website}
+          <a href={website} target="_blank">
+            {website}
+          </a>
         </div>
       </div>
     </div>

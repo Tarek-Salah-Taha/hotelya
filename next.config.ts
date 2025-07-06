@@ -1,4 +1,11 @@
-// next.config.js
+const nextConfig = {
+  experimental: {
+    turbo: true,
+  },
+};
+
+module.exports = nextConfig;
+
 module.exports = {
   images: {
     remotePatterns: [
@@ -25,6 +32,11 @@ module.exports = {
         protocol: "https",
         hostname: "jcnxjvrwruueplpsmdse.supabase.co",
         pathname: "/storage/v1/object/public/rooms/types/**",
+      },
+      {
+        protocol: "https",
+        hostname: "jcnxjvrwruueplpsmdse.supabase.co",
+        pathname: "/storage/v1/object/public/avatars/avatars/**",
       },
     ],
   },

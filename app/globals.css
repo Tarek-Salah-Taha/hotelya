@@ -1,5 +1,5 @@
-/* globals.css */
 @import "tailwindcss";
+@import "react-datepicker/dist/react-datepicker.css";
 
 /* @theme {
   --color-primary: #00b4d8;
@@ -15,10 +15,10 @@
   --color-light: #4ba4a5;
   --color-dark: #00484a;
   --color-secondary: #f9dc5c;
-  --color-background: #fdf6e3;
+  --color-background: #fff;
   --color-text: #2f4f4f;
   --color-accent: #ff6f61;
-  --color-border: #dbe4e4;
+  --color-border: #f1f5f9;
   --color-success: #3ba17c;
   --color-error: #c0392b;
 }

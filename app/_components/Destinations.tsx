@@ -2,10 +2,13 @@ import Image from "next/image";
 
 function Destinations() {
   return (
-    <section className="py-12 px-4 md:px-20 bg-white text-text">
-      <h2 className="text-2xl md:text-3xl font-bold text-center mb-8">
+    <section className="py-2 px-4 md:px-20 bg-white text-text">
+      <h2 className="text-2xl md:text-3xl font-bold text-center mb-3">
         Popular Destinations
       </h2>
+      <p className="text-center mb-10">
+        Discover the world&apos;s most amazing places to stay.
+      </p>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
         {[
           { city: "Paris", price: "$120", img: "/paris.jpg" },

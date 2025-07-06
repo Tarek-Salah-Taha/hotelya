@@ -15,7 +15,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Hotelya - Find Your Perfect Stay",
+  title: { template: "%s", default: "Hotelya - Find Your Perfect Stay" },
   description:
     "Discover amazing hotels worldwide with the best prices and instant booking confirmation.",
 };

@@ -29,7 +29,7 @@ import { RiSafe2Line } from "react-icons/ri";
 import { GiHotSurface, GiSuitcase, GiKidSlide } from "react-icons/gi";
 
 import { IconType } from "react-icons";
-import { IconKey, Tag } from "@/app/_types/types";
+import { IconKey, Tag } from "../_types/types";
 
 export const availableTags: Tag[] = [
   { icon: "FaWifi", label: "Free Wi-Fi" },

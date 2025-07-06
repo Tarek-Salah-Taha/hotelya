@@ -1,8 +1,8 @@
-import HotelPage from "@/app/_components/HotelPage";
-import HotelReviews from "@/app/_components/HotelReviews";
-import { fetchHotelInfo } from "@/app/_lib/hotelsApi";
-import { getHotelReviews } from "@/app/_lib/reviewsApi";
-import { getRooms } from "@/app/_lib/roomsApi";
+import HotelPage from "../../_components/HotelPage";
+import HotelReviews from "../../_components/HotelReviews";
+import { fetchHotelInfo } from "../../_lib/hotelsApi";
+import { getHotelReviews } from "../../_lib/reviewsApi";
+import { getRooms } from "../../_lib/roomsApi";
 
 export default async function Page({
   params,
@@ -10,13 +10,6 @@ export default async function Page({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-
-  // export default async function Page({ params }: { params: { id: string } }) {
-  //   const { id } = params;
-
-  // export default async function Page(props: Promise<{ params: { id: string } }>) {
-  //   const { params } = await props;
-  //   const { id } = await params;
 
   const [hotel, reviews, rooms] = await Promise.all([
     fetchHotelInfo(id),

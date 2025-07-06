@@ -6,7 +6,7 @@ import { useForm } from "react-hook-form";
 import supabase from "../_lib/supabase";
 import { useUser } from "../_hooks/useUser";
 import toast from "react-hot-toast";
-import { updateUserProfile } from "../_lib/usersApi";
+import { updateUserProfile, uploadAvatar } from "../_lib/usersApi";
 
 type FormValues = {
   firstName: string;
@@ -77,40 +77,15 @@ export default function Profile() {
 
     setIsUploading(true);
 
-    const fileExt = file.name.split(".").pop();
-    const fileName = `${user.id}-${Date.now()}.${fileExt}`;
-    const filePath = `avatars/${fileName}`;
+    const uploadedUrl = await uploadAvatar(file);
 
-    // Upload to Supabase
-    const { error } = await supabase.storage
-      .from("avatars")
-      .upload(filePath, file, { upsert: true });
-
-    if (error) {
-      console.error("❌ Upload failed:", error.message);
+    if (uploadedUrl && typeof uploadedUrl === "string") {
+      setAvatarUrl(uploadedUrl);
+      setValue("avatarUrl", uploadedUrl);
+      toast.success("Avatar uploaded successfully!");
+    } else {
       toast.error("Failed to upload avatar");
-      setIsUploading(false);
-      return;
     }
-
-    // Get public URL
-    const { data: publicUrlData } = supabase.storage
-      .from("avatars")
-      .getPublicUrl(filePath);
-
-    if (!publicUrlData?.publicUrl) {
-      console.error("❌ Failed to get public URL");
-      toast.error("Failed to get image URL");
-      setIsUploading(false);
-      return;
-    }
-
-    const publicUrl = publicUrlData.publicUrl;
-    console.log("✅ Avatar URL:", publicUrl);
-
-    setAvatarUrl(publicUrl);
-    setValue("avatarUrl", publicUrl);
-    toast.success("Avatar uploaded successfully!");
 
     setIsUploading(false);
   };

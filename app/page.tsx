@@ -1,10 +1,10 @@
-import CallToAction from "@/app/_components/CallToAction";
-import Destinations from "@/app/_components/Destinations";
-import Features from "@/app/_components/Features";
-import Footer from "@/app/_components/Footer";
-import HeroSection from "@/app/_components/HeroSection";
-import SearchBox from "@/app/_components/SearchBox";
-import Testimonials from "@/app/_components/Testimonials";
+import CallToAction from "./_components/CallToAction";
+import Destinations from "./_components/Destinations";
+import Features from "./_components/Features";
+import Footer from "./_components/Footer";
+import HeroSection from "./_components/HeroSection";
+import SearchBox from "./_components/SearchBox";
+import Testimonials from "./_components/Testimonials";
 
 export default function Page() {
   return (

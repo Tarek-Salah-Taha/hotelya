@@ -91,3 +91,25 @@ export async function updateUserProfile(
 
   return { success: true };
 }
+
+export async function uploadAvatar(file: File): Promise<string> {
+  const fileExt = file.name.split(".").pop();
+  const fileName = `${Date.now()}.${fileExt}`;
+  const filePath = `avatars/${fileName}`;
+
+  const { error } = await supabase.storage
+    .from("avatars")
+    .upload(filePath, file, {
+      cacheControl: "3600",
+      upsert: false,
+    });
+
+  if (error) {
+    console.error("Upload error:", error);
+    throw new Error("Failed to upload avatar");
+  }
+
+  const { data } = supabase.storage.from("avatars").getPublicUrl(filePath);
+
+  return data.publicUrl;
+}

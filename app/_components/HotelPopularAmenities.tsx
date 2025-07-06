@@ -1,4 +1,4 @@
-import { iconMap, availableTags } from "@/app/_constants/availableTags";
+import { iconMap, availableTags } from "../_constants/availableTags";
 
 function HotelPopularAmenities({ tags }: { tags: string[] }) {
   const matchingTags = availableTags.filter((tag) => tags?.includes(tag.label));
