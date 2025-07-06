@@ -1,7 +1,3 @@
-export const dynamic = "force-dynamic";
-export const dynamicParams = true;
-export const revalidate = 0;
-
 import {
   fetchFilteredHotels,
   fetchFilteredHotelCount,
@@ -9,33 +5,23 @@ import {
 import HotelCard from "../_components/HotelCard";
 import { notFound } from "next/navigation";
 
-type SearchParams = {
-  destination?: string;
-  page?: string;
-};
-
 export default async function SearchResultsPage({
   searchParams,
 }: {
-  searchParams: SearchParams;
+  searchParams: Promise<{ destination?: string; page?: string }>;
 }) {
-  const destination = searchParams.destination || "";
+  const resolvedParams = await searchParams;
+
+  const destination = resolvedParams?.destination?.trim() || "";
   if (!destination) notFound();
 
-  const city = destination.trim();
-  const country = "";
-
-  if (!city) notFound();
-
-  const page = parseInt(searchParams.page || "1", 10);
+  const page = parseInt(resolvedParams?.page || "1", 10);
   const limit = 15;
 
   const [hotelsResult, countResult] = await Promise.all([
-    fetchFilteredHotels(city, country, page, limit),
-    fetchFilteredHotelCount(city, country),
+    fetchFilteredHotels(destination, "", page, limit),
+    fetchFilteredHotelCount(destination, ""),
   ]);
-
-  console.log(destination);
 
   if (
     !hotelsResult.data ||
@@ -55,6 +41,7 @@ export default async function SearchResultsPage({
       currentPage={page}
       totalPages={totalPages}
       basePath="/search-results"
+      destination={destination}
     />
   );
 }

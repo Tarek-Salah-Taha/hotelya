@@ -1,6 +1,4 @@
-export const dynamic = "force-dynamic";
-export const dynamicParams = true;
-export const revalidate = 0;
+// No dynamic export needed here
 
 import { fetchBasicHotelInfo, fetchHotelCount } from "../_lib/hotelsApi";
 import HotelCard from "../_components/HotelCard";
@@ -11,24 +9,23 @@ export default async function Page({
 }: {
   searchParams: Promise<{ page?: string }>;
 }) {
-  const { page: pageStr } = await searchParams;
-  const page = parseInt(pageStr ?? "1", 10);
+  const { page = "1" } = await searchParams;
   const limit = 15;
+  const currentPage = parseInt(page, 10);
 
   const [hotels, totalCount] = await Promise.all([
-    fetchBasicHotelInfo(page, limit),
+    fetchBasicHotelInfo(currentPage, limit),
     fetchHotelCount(),
   ]);
 
   const totalPages = Math.ceil(totalCount / limit);
-  console.log(totalCount);
 
-  if (!hotels) notFound();
+  if (!hotels || hotels.length === 0) notFound();
 
   return (
     <HotelCard
       hotels={hotels}
-      currentPage={page}
+      currentPage={currentPage}
       totalPages={totalPages}
       basePath="/hotels"
     />

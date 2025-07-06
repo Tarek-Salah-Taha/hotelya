@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
 import HotelCardItem from "./HotelCardItem";
 import { HotelCardData } from "../_types/types";
 
@@ -10,6 +9,7 @@ type HotelCardProps = {
   currentPage: number;
   totalPages: number;
   basePath: string;
+  destination?: string; // Add destination to props
 };
 
 export default function HotelCard({
@@ -17,10 +17,8 @@ export default function HotelCard({
   currentPage,
   totalPages,
   basePath,
+  destination = "", // Default empty string
 }: HotelCardProps) {
-  const params = useSearchParams();
-  const destination = params.get("destination") || "";
-
   const createQuery = (page: number) => {
     const query: Record<string, string | number> = { page };
 
@@ -41,10 +39,9 @@ export default function HotelCard({
       </div>
 
       {/* Pagination */}
-
       {totalPages > 1 && (
         <div className="flex justify-center items-center gap-2 m-6 flex-wrap">
-          {/* Prev */}
+          {/* Previous Page */}
           <Link
             href={{ pathname: basePath, query: createQuery(currentPage - 1) }}
             className={`px-3 py-1 rounded ${
@@ -52,6 +49,7 @@ export default function HotelCard({
                 ? "bg-gray-200 text-gray-500 pointer-events-none"
                 : "bg-gray-100 hover:bg-gray-200"
             }`}
+            aria-disabled={currentPage === 1}
           >
             Prev
           </Link>
@@ -76,7 +74,7 @@ export default function HotelCard({
               </Link>
             ))}
 
-          {/* Next */}
+          {/* Next Page */}
           <Link
             href={{ pathname: basePath, query: createQuery(currentPage + 1) }}
             className={`px-3 py-1 rounded ${
@@ -84,6 +82,7 @@ export default function HotelCard({
                 ? "bg-gray-200 text-gray-500 pointer-events-none"
                 : "bg-gray-100 hover:bg-gray-200"
             }`}
+            aria-disabled={currentPage === totalPages}
           >
             Next
           </Link>
