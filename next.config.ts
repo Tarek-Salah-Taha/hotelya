@@ -1,3 +1,4 @@
+/** @type {import('next').NextConfig} */
 const nextConfig = {
   experimental: {
     turbo: true,
@@ -6,7 +7,8 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: "https",
-        hostname: "cdn.ipwhois.io/flags/**",
+        hostname: "cdn.ipwhois.io",
+        pathname: "/flags/**",
       },
       {
         protocol: "https",
@@ -34,12 +36,13 @@ const nextConfig = {
         pathname: "/storage/v1/object/public/avatars/avatars/**",
       },
     ],
+    // unoptimized: true, // keep this if you're not using Next's image optimization
   },
   async redirects() {
     return [
       {
         source: "/",
-        destination: "/en",
+        destination: "/en", // or your DEFAULT_LANGUAGE
         permanent: true,
       },
     ];
@@ -47,39 +50,3 @@ const nextConfig = {
 };
 
 module.exports = nextConfig;
-
-module.exports = {
-  images: {
-    remotePatterns: [
-      {
-        protocol: "https",
-        hostname: "cdn.ipwhois.io/flags/**",
-      },
-      {
-        protocol: "https",
-        hostname: "jcnxjvrwruueplpsmdse.supabase.co",
-        pathname: "/storage/v1/object/public/hotels/exterior/**",
-      },
-      {
-        protocol: "https",
-        hostname: "jcnxjvrwruueplpsmdse.supabase.co",
-        pathname: "/storage/v1/object/public/hotels/restaurants/**",
-      },
-      {
-        protocol: "https",
-        hostname: "jcnxjvrwruueplpsmdse.supabase.co",
-        pathname: "/storage/v1/object/public/hotels/rooms/**",
-      },
-      {
-        protocol: "https",
-        hostname: "jcnxjvrwruueplpsmdse.supabase.co",
-        pathname: "/storage/v1/object/public/rooms/types/**",
-      },
-      {
-        protocol: "https",
-        hostname: "jcnxjvrwruueplpsmdse.supabase.co",
-        pathname: "/storage/v1/object/public/avatars/avatars/**",
-      },
-    ],
-  },
-};
