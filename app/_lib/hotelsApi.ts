@@ -1,26 +1,50 @@
 import supabase from "./supabase";
-
-import { HotelCardData, Hotel } from "../_types/types";
+import { Hotel, HotelCardData, SupportedLang } from "../_types/types";
+import { normalizeLocalizedFields } from "./normalizeLocalizedFields";
 
 export async function fetchBasicHotelInfo(
   page: number = 1,
-  limit: number = 15
+  limit: number = 15,
+  locale: SupportedLang = "en"
 ): Promise<HotelCardData[]> {
   const from = (page - 1) * limit;
   const to = from + limit - 1;
 
+  // Use 'as const' to prevent TS from expanding all possible combinations of the template
+  const localizedFields = [
+    `hotelName_${locale}`,
+    `city_${locale}`,
+    `country_${locale}`,
+    `tags_${locale}`,
+  ] as const;
+
+  const selectFields = [
+    "id",
+    ...localizedFields,
+    "exteriorImages",
+    "priceNew",
+    "priceOld",
+    "stars",
+    "rating",
+  ].join(",");
+
   const { data, error } = await supabase
     .from("hotel_with_standard_room")
-    .select(
-      "id,hotelName_en,city_en,country_en,stars,rating,tags_en,exteriorImages,priceNew,priceOld"
-    )
+    .select(selectFields)
     .range(from, to);
 
   if (error) {
     throw new Error(error.message || "Failed to fetch hotels");
   }
 
-  return data;
+  return (data as unknown as Hotel[]).map((hotel) =>
+    normalizeLocalizedFields<HotelCardData>(hotel, locale, [
+      "hotelName",
+      "city",
+      "country",
+      "tags",
+    ])
+  );
 }
 
 export async function fetchHotelCount(): Promise<number> {
@@ -50,32 +74,61 @@ export async function fetchFilteredHotels(
   city: string,
   country: string = "",
   page: number = 1,
-  limit: number = 15
+  limit: number = 15,
+  locale: SupportedLang = "en"
 ) {
   const offset = (page - 1) * limit;
 
+  const localizedFields = [
+    `hotelName_${locale}`,
+    `city_${locale}`,
+    `country_${locale}`,
+    `tags_${locale}`,
+  ] as const;
+
+  const selectFields = [
+    "id",
+    ...localizedFields,
+    "exteriorImages",
+    "priceNew",
+    "priceOld",
+    "stars",
+    "rating",
+  ].join(",");
+
   let query = supabase
     .from("hotel_with_standard_room")
-    .select(
-      "id,hotelName_en,city_en,country_en,stars,rating,tags_en,exteriorImages,priceNew,priceOld"
-    )
+    .select(selectFields)
     .range(offset, offset + limit - 1);
 
   if (city && country) {
     query = query
-      .ilike("city_en", `%${city}%`)
-      .ilike("country_en", `%${country}%`);
+      .ilike(`city_${locale}`, `%${city}%`)
+      .ilike(`country_${locale}`, `%${country}%`);
   } else if (city) {
-    query = query.ilike("city_en", `%${city}%`);
+    query = query.ilike(`city_${locale}`, `%${city}%`);
   }
 
   const { data, error } = await query;
-  return { data, error };
+
+  return {
+    data:
+      (data as unknown as Record<string, unknown>[])?.map((hotel) =>
+        normalizeLocalizedFields<HotelCardData>(hotel, locale, [
+          "hotelName",
+          "city",
+          "country",
+          "tags",
+        ])
+      ) || [],
+    error,
+  };
 }
 
 export async function fetchFilteredHotelCount(
   city: string,
-  country: string = ""
+  country: string = "",
+  locale: string = "en"
 ) {
   let query = supabase
     .from("hotel_with_standard_room")
@@ -83,10 +136,10 @@ export async function fetchFilteredHotelCount(
 
   if (city && country) {
     query = query
-      .ilike("city_en", `%${city}%`)
-      .ilike("country_en", `%${country}%`);
+      .ilike(`city_${locale}`, `%${city}%`)
+      .ilike(`country_${locale}`, `%${country}%`);
   } else if (city) {
-    query = query.ilike("city_en", `%${city}%`);
+    query = query.ilike(`city_${locale}`, `%${city}%`);
   }
 
   const { count, error } = await query;
@@ -94,14 +147,15 @@ export async function fetchFilteredHotelCount(
 }
 
 export async function getHotelsByIds(
-  hotelIds: string[]
+  hotelIds: string[],
+  locale: string = "en"
 ): Promise<HotelCardData[]> {
   if (hotelIds.length === 0) return [];
 
   const { data, error } = await supabase
     .from("hotel_with_standard_room")
     .select(
-      "id,hotelName_en,city_en,country_en,stars,rating,tags_en,exteriorImages,priceNew,priceOld"
+      `id,hotelName_${locale},city_${locale},country_${locale},stars,rating,tags_${locale},exteriorImages,priceNew,priceOld`
     )
     .in("id", hotelIds);
 
@@ -110,5 +164,5 @@ export async function getHotelsByIds(
     return [];
   }
 
-  return data || [];
+  return (data as unknown as HotelCardData[]) || [];
 }

@@ -6,6 +6,10 @@ import { useRouter } from "next/navigation";
 import { loginUser } from "../_lib/usersApi";
 import toast from "react-hot-toast";
 import { FiEye, FiEyeOff } from "react-icons/fi";
+import { usePathname } from "next/navigation";
+import { SupportedLang } from "../_types/types";
+
+const supportedLocales: SupportedLang[] = ["en", "ar", "fr", "de", "es", "it"];
 
 export default function Login() {
   const router = useRouter();
@@ -19,6 +23,12 @@ export default function Login() {
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+
+  const pathname = usePathname();
+  const localeFromPath = pathname.split("/")[1] as SupportedLang;
+  const locale: SupportedLang = supportedLocales.includes(localeFromPath)
+    ? localeFromPath
+    : "en";
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -40,7 +50,7 @@ export default function Login() {
     }
 
     // success: redirect or show toast
-    router.push("/"); // or /dashboard
+    router.push(`/${locale}`); // or /dashboard
   };
 
   return (

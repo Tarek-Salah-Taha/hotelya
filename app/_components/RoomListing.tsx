@@ -1,9 +1,5 @@
-import { Room } from "../_types/types";
+import { RoomListingProps } from "../_types/types";
 import RoomCard from "./RoomCard";
-
-type RoomListingProps = {
-  rooms: Room[];
-};
 
 function RoomListing({ rooms }: RoomListingProps) {
   return (

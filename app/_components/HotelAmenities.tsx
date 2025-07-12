@@ -14,7 +14,7 @@ import {
   FaLeaf,
   FaBriefcase,
 } from "react-icons/fa";
-import { Amenities } from "../_types/types";
+import { HotelAmenitiesProps } from "../_types/types";
 
 // 1. Icon map per category
 const iconMap: Record<string, React.ReactElement> = {
@@ -44,10 +44,6 @@ const badgeColorMap: Record<string, string> = {
   "Family & Recreation": "bg-indigo-50 text-indigo-700",
   Sustainability: "bg-emerald-50 text-emerald-700",
   "Business Travel": "bg-gray-100 text-gray-700",
-};
-
-type HotelAmenitiesProps = {
-  amenities: Amenities[];
 };
 
 function HotelAmenities({ amenities }: HotelAmenitiesProps) {

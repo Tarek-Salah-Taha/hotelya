@@ -12,12 +12,12 @@ import { use } from "react";
 export default function BookingPage({
   params,
 }: {
-  params: Promise<{ id: string }>;
+  params: Promise<{ id: string; locale: string }>;
 }) {
   const searchParams = useSearchParams();
   const router = useRouter();
 
-  const { id } = use(params);
+  const { id, locale } = use(params);
   const roomId = Number(id);
 
   const hotelId = Number(searchParams.get("hotelId"));
@@ -60,7 +60,7 @@ export default function BookingPage({
   const handleConfirmBooking = async () => {
     if (!user) {
       toast.error("You must be logged in to book a room.");
-      router.push("/login");
+      router.push(`/${locale}/auth/login`);
       return;
     }
 
@@ -87,7 +87,7 @@ export default function BookingPage({
     });
 
     toast.success("Booking confirmed!");
-    router.push("/bookings");
+    router.push(`/${locale}/bookings`);
   };
 
   return (

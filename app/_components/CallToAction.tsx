@@ -1,7 +1,13 @@
+"use client";
+
 import Link from "next/link";
 import Image from "next/image";
+import { usePathname } from "next/navigation";
 
 function CallToAction() {
+  const pathname = usePathname();
+  const locale = pathname.split("/")[1] || "en";
+
   return (
     <section className="bg-primary text-white pt-10 px-4 md:px-20">
       <div className="max-w-5xl mx-auto grid md:grid-cols-2 items-center gap-10 text-center md:text-left">
@@ -17,7 +23,7 @@ function CallToAction() {
 
           {/* Buttons */}
           <div className="flex flex-col sm:flex-row sm:items-center gap-4">
-            <Link href="/hotels">
+            <Link href={`${locale}/hotels`}>
               <button className="bg-white text-primary font-semibold px-6 py-3 rounded shadow hover:bg-gray-100 transition">
                 Search Hotels
               </button>

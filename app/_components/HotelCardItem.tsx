@@ -8,21 +8,25 @@ import { useRouter } from "next/navigation";
 import { addFavorite, removeFavorite } from "../_lib/favoritesApi";
 import { iconMap, availableTags } from "../_constants/availableTags";
 import getRatingLabel from "../_lib/getRatingLabel";
-import { HotelCardData } from "../_types/types";
+import { HotelCardItemProps } from "../_types/types";
 import { useUser } from "../_hooks/useUser";
 import toast from "react-hot-toast";
-
-type HotelCardItemProps = {
-  hotel: HotelCardData;
-};
+import { usePathname } from "next/navigation";
 
 export default function HotelCardItem({ hotel }: HotelCardItemProps) {
   const [isFavorite, setIsFavorite] = useState(false);
   const router = useRouter();
   const { user } = useUser();
 
+  const pathname = usePathname();
+  const locale = pathname.split("/")[1] || "en";
+
+  const localizedTags = hotel[`tags_${locale}` as keyof typeof hotel] as
+    | string[]
+    | undefined;
+
   const matchingTags = availableTags.filter((tag) =>
-    hotel.tags_en?.includes(tag.label)
+    localizedTags?.includes(tag.label)
   );
 
   const handleFavoriteToggle = async () => {
@@ -33,6 +37,7 @@ export default function HotelCardItem({ hotel }: HotelCardItemProps) {
 
     console.log("User ID:", user.id);
     console.log("Hotel ID:", hotel.id);
+    console.log("Current hotel:", hotel);
 
     setIsFavorite((prev) => !prev);
 
@@ -69,7 +74,7 @@ export default function HotelCardItem({ hotel }: HotelCardItemProps) {
       {/* Hotel image */}
       <Image
         src={hotel.exteriorImages || "/placeholder.jpg"}
-        alt={hotel.hotelName_en}
+        alt={hotel.hotelName}
         className="w-full h-48 object-cover mb-2 rounded"
         width={500}
         height={300}
@@ -77,11 +82,11 @@ export default function HotelCardItem({ hotel }: HotelCardItemProps) {
       />
 
       {/* Hotel name and location */}
-      <h2 className="text-lg font-semibold">{hotel.hotelName_en}</h2>
+      <h2 className="text-lg font-semibold">{hotel.hotelName}</h2>
       <div className="flex items-center gap-1 text-sm text-gray-600">
         <IoLocationSharp className="text-lg text-primary" />
         <span>
-          {hotel.city_en}, {hotel.country_en}
+          {hotel.city} • {hotel.country}
         </span>
       </div>
 
@@ -131,7 +136,7 @@ export default function HotelCardItem({ hotel }: HotelCardItemProps) {
 
           {/* Book Now Button */}
           <button
-            onClick={() => router.push(`/hotels/${hotel.id}`)}
+            onClick={() => router.push(`/${locale}/hotels/${hotel.id}`)}
             className="bg-primary text-white text-sm px-4 py-2 rounded hover:bg-opacity-90 transition"
           >
             Book Now

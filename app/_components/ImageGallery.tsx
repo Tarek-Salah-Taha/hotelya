@@ -1,8 +1,5 @@
 import Image from "next/image";
-
-type ImageGalleryProps = {
-  images: string[];
-};
+import { ImageGalleryProps } from "../_types/types";
 
 function ImageGallery({ images }: ImageGalleryProps) {
   return (

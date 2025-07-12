@@ -23,12 +23,16 @@ const NAV_ITEMS = [
 function Navigation() {
   const { user } = useUser();
   const pathname = usePathname();
+  const locale = pathname.split("/")[1] || "en";
+
+  console.log("Current language:", locale);
 
   return (
     <nav className="text-base sm:text-lg">
       <ul className="flex flex-col lg:flex-row gap-4 lg:gap-8 items-start lg:items-center">
         {NAV_ITEMS.map(({ href, label, icon }) => {
-          const isActive = pathname === href;
+          const fullHref = `/${locale}${href}`;
+          const isActive = pathname === fullHref;
 
           return (
             <li key={href}>
@@ -38,7 +42,7 @@ function Navigation() {
                 transition={{ type: "spring", stiffness: 300 }}
               >
                 <Link
-                  href={href}
+                  href={fullHref}
                   className={`flex items-center gap-2 px-3 py-1.5 rounded transition-colors duration-200 ${
                     isActive
                       ? "text-background font-semibold bg-primary/10"
@@ -62,7 +66,7 @@ function Navigation() {
               transition={{ type: "spring", stiffness: 300 }}
             >
               <Link
-                href="/auth/login"
+                href={`/${locale}/auth/login`}
                 className="flex items-center gap-2 px-3 py-1.5 rounded text-black hover:text-border hover:bg-primary/10 transition-colors duration-200"
               >
                 <CgProfile /> Sign in/Register

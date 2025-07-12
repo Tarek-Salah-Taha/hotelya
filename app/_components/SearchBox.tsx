@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { FaMapMarkerAlt } from "react-icons/fa";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { fetchDestinationSuggestions } from "../_lib/suggestionsApi";
 
 function SearchBox() {
@@ -10,6 +10,9 @@ function SearchBox() {
   const [showTooltip, setShowTooltip] = useState(false);
   const [touched, setTouched] = useState(false);
   const [suggestions, setSuggestions] = useState<string[]>([]);
+
+  const pathname = usePathname();
+  const locale = pathname.split("/")[1] || "en";
 
   const router = useRouter();
 
@@ -25,7 +28,7 @@ function SearchBox() {
     } else {
       const cityOnly = destination.split(",")[0].trim();
       router.push(
-        `/search-results?destination=${encodeURIComponent(cityOnly)}`
+        `${locale}/search-results?destination=${encodeURIComponent(cityOnly)}`
       );
     }
   };
@@ -42,7 +45,9 @@ function SearchBox() {
   const handleSelectSuggestion = (suggestion: string) => {
     setDestination(suggestion);
     const cityOnly = suggestion.split(",")[0].trim();
-    router.push(`/search-results?destination=${encodeURIComponent(cityOnly)}`);
+    router.push(
+      `${locale}/search-results?destination=${encodeURIComponent(cityOnly)}`
+    );
   };
 
   return (

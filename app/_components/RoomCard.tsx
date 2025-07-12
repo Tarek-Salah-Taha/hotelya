@@ -14,26 +14,8 @@ import { LuBaby } from "react-icons/lu";
 import supabase from "../_lib/supabase";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
-import "../custom-datepicker.css";
-
-type RoomCardProps = {
-  hotelId: number;
-  roomId: number;
-  roomType: string;
-  image: string;
-  priceNew: number;
-  priceOld?: number;
-  specs: {
-    area: number;
-    bed: number;
-    bedType: string;
-    bathrooms: number;
-    adults: number;
-    children: number;
-    extraBed: boolean;
-  };
-  roomDescription: string;
-};
+import { usePathname } from "next/navigation";
+import { RoomCardProps } from "../_types/types";
 
 function RoomCard({
   hotelId,
@@ -49,6 +31,9 @@ function RoomCard({
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [endDate, setEndDate] = useState<Date | null>(null);
   const router = useRouter();
+
+  const pathname = usePathname();
+  const locale = pathname.split("/")[1] || "en";
 
   const handleBooking = async () => {
     if (!startDate || !endDate) {
@@ -136,7 +121,7 @@ function RoomCard({
             className="bg-primary text-white px-4 py-2 rounded-lg text-sm hover:bg-opacity-90"
             onClick={() =>
               router.push(
-                `/rooms/${roomId}?price=${priceNew}&roomType=${encodeURIComponent(
+                `/${locale}/rooms/${roomId}?price=${priceNew}&roomType=${encodeURIComponent(
                   roomType
                 )}&hotelId=${hotelId}&hotelName=${encodeURIComponent(
                   "Sea Breeze Hotel"

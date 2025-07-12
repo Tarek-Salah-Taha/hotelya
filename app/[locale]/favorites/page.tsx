@@ -4,16 +4,20 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 
-import { fetchFavorites, removeFavorite } from "../_lib/favoritesApi";
 import toast from "react-hot-toast";
-import { useUser } from "../_hooks/useUser";
-import { getHotelsByIds } from "../_lib/hotelsApi";
-import { HotelCardData } from "../_types/types";
+import { useUser } from "@/app/_hooks/useUser";
+import { HotelCardData } from "@/app/_types/types";
+import { fetchFavorites, removeFavorite } from "@/app/_lib/favoritesApi";
+import { getHotelsByIds } from "@/app/_lib/hotelsApi";
+import { usePathname } from "next/navigation";
 
 export default function FavoritesPage() {
   const { user } = useUser();
   const [favorites, setFavorites] = useState<HotelCardData[]>([]);
   const router = useRouter();
+
+  const pathname = usePathname();
+  const locale = pathname.split("/")[1] || "en";
 
   useEffect(() => {
     if (!user) return;
@@ -21,7 +25,7 @@ export default function FavoritesPage() {
     const loadFavorites = async () => {
       try {
         const favoriteIds = await fetchFavorites(user.id);
-        const hotels = await getHotelsByIds(favoriteIds);
+        const hotels = await getHotelsByIds(favoriteIds, locale);
         setFavorites(hotels);
       } catch (err) {
         toast.error("Failed to load favorites.");
@@ -30,7 +34,7 @@ export default function FavoritesPage() {
     };
 
     loadFavorites();
-  }, [user]);
+  }, [user, locale]);
 
   const handleRemove = async (hotelId: number) => {
     if (!user) return;
@@ -44,7 +48,7 @@ export default function FavoritesPage() {
   };
 
   const handleBookNow = (id: number) => {
-    router.push(`/hotels/${id}`);
+    router.push(`/${locale}/hotels/${id}`);
   };
 
   console.log(user, favorites);
@@ -75,7 +79,9 @@ export default function FavoritesPage() {
             >
               <Image
                 src={hotel.exteriorImages}
-                alt={hotel.hotelName_en}
+                alt={
+                  hotel[`hotelName_${locale}` as keyof HotelCardData] as string
+                }
                 width={400}
                 height={400}
                 className="h-48 w-full object-cover"
@@ -84,10 +90,19 @@ export default function FavoritesPage() {
               <div className="p-4 flex flex-col flex-1 justify-between">
                 <div>
                   <h2 className="text-lg font-semibold text-[color:var(--color-text)]">
-                    {hotel.hotelName_en}
+                    {
+                      hotel[
+                        `hotelName_${locale}` as keyof HotelCardData
+                      ] as string
+                    }
                   </h2>
                   <p className="text-sm text-gray-600 mb-1">
-                    {hotel.city_en} • {hotel.country_en}
+                    {hotel[`city_${locale}` as keyof HotelCardData] as string} •{" "}
+                    {
+                      hotel[
+                        `country_${locale}` as keyof HotelCardData
+                      ] as string
+                    }
                   </p>
                   <p className="text-sm text-gray-500 mb-2">
                     ${hotel.priceNew}/night

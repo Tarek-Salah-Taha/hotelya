@@ -1,17 +1,6 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-
-type Preferences = {
-  country: string;
-  currency: string;
-  language: string;
-  flag?: string;
-};
-
-type Store = {
-  preferences: Preferences;
-  setPreferences: (prefs: Preferences) => void;
-};
+import { Store } from "../_types/types";
 
 export const usePreferencesStore = create<Store>()(
   persist(
@@ -19,7 +8,7 @@ export const usePreferencesStore = create<Store>()(
       preferences: {
         country: "USA",
         currency: "USD",
-        language: "EN",
+        language: "en",
         flag: "https://cdn.ipwhois.io/flags/us.svg",
       },
       setPreferences: (prefs) => set({ preferences: prefs }),

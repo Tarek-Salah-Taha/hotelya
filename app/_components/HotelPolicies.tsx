@@ -1,15 +1,10 @@
-import { Policy } from "../_types/types";
+import { HotelPoliciesProps } from "../_types/types";
 import { FaPerson } from "react-icons/fa6";
 import { FaSignInAlt, FaSignOutAlt, FaSmoking } from "react-icons/fa";
 import { TbCalendarCancel } from "react-icons/tb";
 import { MdOutlinePets } from "react-icons/md";
 import { convertTo12Hour } from "../_lib/convertTo12Hour";
 
-type HotelPoliciesProps = {
-  policies: Policy[];
-  checkIn: string;
-  checkOut: string;
-};
 function HotelPolicies({ policies, checkIn, checkOut }: HotelPoliciesProps) {
   const { minAge, petsAllowed, smokingAllowed, cancellationPolicy } =
     policies[0] || {};

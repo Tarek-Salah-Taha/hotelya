@@ -1,3 +1,4 @@
+import { SupportedLang } from "../_types/types";
 import supabase from "./supabase";
 
 export async function createBooking(booking: {
@@ -22,11 +23,14 @@ export async function createBooking(booking: {
   return data;
 }
 
-export async function getBookingsByUser(userId: string) {
+export async function getBookingsByUser(
+  userId: string,
+  locale: SupportedLang = "en"
+) {
   const { data, error } = await supabase
     .from("bookings")
     .select(
-      "*, hotel:hotelId(hotelName_en, city_en, country_en, exteriorImages)"
+      `*, hotel:hotelId(hotelName_${locale}, city_${locale}, country_${locale}, exteriorImages)`
     )
     .eq("userId", userId);
 

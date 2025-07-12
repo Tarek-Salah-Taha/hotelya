@@ -5,13 +5,29 @@ import Link from "next/link";
 import Image from "next/image";
 import { useUser } from "../_hooks/useUser";
 import { logoutUser } from "../_lib/usersApi";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import { SupportedLang } from "../_types/types";
 
 export default function UserDropdown() {
   const router = useRouter();
   const { user } = useUser();
   const [open, setOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+
+  const supportedLocales: SupportedLang[] = [
+    "en",
+    "ar",
+    "fr",
+    "de",
+    "es",
+    "it",
+  ];
+
+  const pathname = usePathname();
+  const localeFromPath = pathname.split("/")[1] as SupportedLang;
+  const locale: SupportedLang = supportedLocales.includes(localeFromPath)
+    ? localeFromPath
+    : "en";
 
   const initials = `${user?.firstName?.[0] || ""}${
     user?.lastName?.[0] || ""
@@ -30,7 +46,7 @@ export default function UserDropdown() {
 
   const handleLogout = async () => {
     await logoutUser();
-    router.push("/");
+    router.push(`/${locale}`);
   };
 
   useEffect(() => {

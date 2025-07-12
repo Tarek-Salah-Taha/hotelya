@@ -1,11 +1,5 @@
+import { LoginData, RegisterData } from "../_types/types";
 import supabase from "./supabase";
-
-type RegisterData = {
-  firstName: string;
-  lastName: string;
-  email: string;
-  password: string;
-};
 
 export async function registerUser({
   email,
@@ -41,11 +35,6 @@ export async function registerUser({
 
   return { user: authData.user };
 }
-
-type LoginData = {
-  email: string;
-  password: string;
-};
 
 export async function loginUser({ email, password }: LoginData) {
   const { data, error } = await supabase.auth.signInWithPassword({

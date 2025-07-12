@@ -7,18 +7,7 @@ import supabase from "../_lib/supabase";
 import { useUser } from "../_hooks/useUser";
 import toast from "react-hot-toast";
 import { updateUserProfile, uploadAvatar } from "../_lib/usersApi";
-
-type FormValues = {
-  firstName: string;
-  lastName: string;
-  email: string;
-  mobile: string;
-  dateOfBirth: string | null;
-  gender: string;
-  city: string;
-  country: string;
-  avatarUrl?: string;
-};
+import { FormValues } from "../_types/types";
 
 export default function Profile() {
   const { user } = useUser();

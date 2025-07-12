@@ -1,38 +1,30 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useUser } from "../_hooks/useUser";
 import toast from "react-hot-toast";
 import Image from "next/image";
-import { getBookingsByUser } from "../_lib/bookingsApi";
-
-type Booking = {
-  id: string;
-  checkInDate: string;
-  checkOutDate: string;
-  hotel?: {
-    hotelName_en?: string;
-    city_en?: string;
-    country_en?: string;
-    exteriorImages?: string;
-  };
-};
+import { useUser } from "@/app/_hooks/useUser";
+import { getBookingsByUser } from "@/app/_lib/bookingsApi";
+import { Booking, SupportedLang } from "@/app/_types/types";
+import { usePathname } from "next/navigation";
 
 export default function BookingsPage() {
   const { user } = useUser();
   const [activeTab, setActiveTab] = useState<"upcoming" | "past">("upcoming");
   const [bookings, setBookings] = useState<Booking[]>([]);
+  const pathname = usePathname();
+  const locale = pathname.split("/")[1] || "en";
 
   useEffect(() => {
     if (!user) return;
 
-    getBookingsByUser(user.id)
+    getBookingsByUser(user.id, locale as SupportedLang)
       .then((data) => setBookings(data))
       .catch((err) => {
         console.error(err);
         toast.error("Failed to load bookings");
       });
-  }, [user]);
+  }, [user, locale]);
 
   const today = new Date();
 
@@ -93,15 +85,33 @@ export default function BookingsPage() {
                 src={booking.hotel?.exteriorImages || "/placeholder.jpg"}
                 width={400}
                 height={400}
-                alt={booking.hotel?.hotelName_en || "Hotel"}
+                alt={
+                  (booking.hotel?.[
+                    `hotelName_${locale}` as keyof typeof booking.hotel
+                  ] as string) || "Hotel"
+                }
                 className="w-full md:w-48 h-48 object-cover"
               />
               <div className="p-4 flex-1">
                 <h2 className="text-lg font-semibold text-[color:var(--color-text)]">
-                  {booking.hotel?.hotelName_en}
+                  {
+                    booking.hotel?.[
+                      `hotelName_${locale}` as keyof typeof booking.hotel
+                    ] as string
+                  }
                 </h2>
                 <p className="text-sm text-gray-600 mb-1">
-                  {booking.hotel?.city_en}, {booking.hotel?.country_en}
+                  {
+                    booking.hotel?.[
+                      `city_${locale}` as keyof typeof booking.hotel
+                    ] as string
+                  }{" "}
+                  •{" "}
+                  {
+                    booking.hotel?.[
+                      `country_${locale}` as keyof typeof booking.hotel
+                    ] as string
+                  }
                 </p>
                 <p className="text-sm text-gray-500">
                   {booking.checkInDate.slice(0, 10)} →{" "}

@@ -1,33 +1,30 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import HotelCardItem from "./HotelCardItem";
-import { HotelCardData } from "../_types/types";
-
-type HotelCardProps = {
-  hotels: HotelCardData[];
-  currentPage: number;
-  totalPages: number;
-  basePath: string;
-  destination?: string; // Add destination to props
-};
+import { HotelCardProps } from "../_types/types";
 
 export default function HotelCard({
   hotels,
   currentPage,
   totalPages,
   basePath,
-  destination = "", // Default empty string
+  destination = "",
 }: HotelCardProps) {
+  const pathname = usePathname();
+  const locale = pathname.split("/")[1] || "en";
+
   const createQuery = (page: number) => {
     const query: Record<string, string | number> = { page };
-
     if (destination.trim() && basePath === "/search-results") {
       query.destination = destination;
     }
-
     return query;
   };
+
+  // Add locale prefix to basePath
+  const localizedPath = `/${locale}${basePath}`;
 
   return (
     <div className="space-y-8">
@@ -41,9 +38,12 @@ export default function HotelCard({
       {/* Pagination */}
       {totalPages > 1 && (
         <div className="flex justify-center items-center gap-2 m-6 flex-wrap">
-          {/* Previous Page */}
+          {/* Prev */}
           <Link
-            href={{ pathname: basePath, query: createQuery(currentPage - 1) }}
+            href={{
+              pathname: localizedPath,
+              query: createQuery(currentPage - 1),
+            }}
             className={`px-3 py-1 rounded ${
               currentPage === 1
                 ? "bg-gray-200 text-gray-500 pointer-events-none"
@@ -63,7 +63,7 @@ export default function HotelCard({
             .map((page) => (
               <Link
                 key={page}
-                href={{ pathname: basePath, query: createQuery(page) }}
+                href={{ pathname: localizedPath, query: createQuery(page) }}
                 className={`px-3 py-1 rounded ${
                   currentPage === page
                     ? "bg-primary text-white"
@@ -74,9 +74,12 @@ export default function HotelCard({
               </Link>
             ))}
 
-          {/* Next Page */}
+          {/* Next */}
           <Link
-            href={{ pathname: basePath, query: createQuery(currentPage + 1) }}
+            href={{
+              pathname: localizedPath,
+              query: createQuery(currentPage + 1),
+            }}
             className={`px-3 py-1 rounded ${
               currentPage === totalPages
                 ? "bg-gray-200 text-gray-500 pointer-events-none"

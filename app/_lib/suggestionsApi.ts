@@ -1,14 +1,6 @@
+import { HotelSuggestion, Suggestion } from "../_types/types";
 import supabase from "./supabase";
 
-type Suggestion = string;
-
-type HotelSuggestion = {
-  [key: string]: string | null;
-};
-
-/**
- * Multilingual city-country suggestion fetcher.
- */
 export async function fetchDestinationSuggestions(
   query: string
 ): Promise<Suggestion[]> {
@@ -17,9 +9,9 @@ export async function fetchDestinationSuggestions(
   const languages = ["en"];
   // const languages = ["en", "ar", "fr", "es", "de", "it"];
 
-  const fields = languages.flatMap((lang) => [
-    `city_${lang}`,
-    `country_${lang}`,
+  const fields = languages.flatMap((locale) => [
+    `city_${locale}`,
+    `country_${locale}`,
   ]);
 
   const orFilter = fields.map((field) => `${field}.ilike.%${query}%`).join(",");
@@ -38,9 +30,9 @@ export async function fetchDestinationSuggestions(
   const suggestions: Set<string> = new Set();
 
   (data as unknown as HotelSuggestion[]).forEach((hotel) => {
-    languages.forEach((lang) => {
-      const city = hotel[`city_${lang}`];
-      const country = hotel[`country_${lang}`];
+    languages.forEach((locale) => {
+      const city = hotel[`city_${locale}`];
+      const country = hotel[`country_${locale}`];
       if (city && country) {
         suggestions.add(`${city}, ${country}`);
       }

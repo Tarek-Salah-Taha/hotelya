@@ -4,20 +4,7 @@ import React, { useState } from "react";
 import { toast } from "react-hot-toast";
 import { addHotelReview, getHotelReviews } from "../_lib/reviewsApi";
 import StarRating from "./StarRating";
-
-type Review = {
-  id: string;
-  hotelId: string;
-  author: string;
-  rating: number;
-  comment: string;
-  date: string;
-};
-
-type Props = {
-  hotelId: string;
-  initialReviews: Review[];
-};
+import { HotelReviewsProps } from "../_types/types";
 
 function getInitials(name: string) {
   const parts = name.trim().split(" ");
@@ -32,7 +19,10 @@ function formatDate(dateString: string) {
   });
 }
 
-export default function HotelReviews({ hotelId, initialReviews }: Props) {
+export default function HotelReviews({
+  hotelId,
+  initialReviews,
+}: HotelReviewsProps) {
   const [reviews, setReviews] = useState(initialReviews);
   const [author, setAuthor] = useState("");
   const [rating, setRating] = useState(10);

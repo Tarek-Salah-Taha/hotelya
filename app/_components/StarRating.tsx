@@ -1,10 +1,6 @@
 import { useState } from "react";
 import { FaStar } from "react-icons/fa";
-
-type StarRatingProps = {
-  rating: number;
-  setRating: (rating: number) => void;
-};
+import { StarRatingProps } from "../_types/types";
 
 export default function StarRating({ rating, setRating }: StarRatingProps) {
   const [hovered, setHovered] = useState(0);

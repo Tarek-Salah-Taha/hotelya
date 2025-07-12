@@ -1,4 +1,4 @@
-import { Hotel, Room } from "../_types/types";
+import { HotelPageProps } from "../_types/types";
 import ContactInformation from "./ContactInformation";
 import HotelAmenities from "./HotelAmenities";
 import HotelHeader from "./HotelHeader";
@@ -9,11 +9,6 @@ import ImageGallery from "./ImageGallery";
 import LanguagesSpoken from "./LanguagesSpoken";
 import PaymentOptions from "./PaymentOptions";
 import RoomListing from "./RoomListing";
-
-type HotelPageProps = {
-  hotel: Hotel;
-  rooms: Room[];
-};
 
 function HotelPage({ hotel, rooms }: HotelPageProps) {
   const allImages = [
@@ -26,29 +21,25 @@ function HotelPage({ hotel, rooms }: HotelPageProps) {
     <div className="space-y-6">
       <HotelHeader hotel={hotel} />
       <ImageGallery images={allImages} />
-      <HotelOverview description={hotel.description_en} />
-      <HotelPopularAmenities tags={hotel.tags_en} />
+      <HotelOverview description={hotel.description} />
+      <HotelPopularAmenities tags={hotel.tags} />
       <HotelAmenities
         amenities={
-          Array.isArray(hotel.amenities_en)
-            ? hotel.amenities_en
-            : [hotel.amenities_en]
+          Array.isArray(hotel.amenities) ? hotel.amenities : [hotel.amenities]
         }
       />
       <RoomListing rooms={rooms} />
       <ContactInformation hotel={hotel} />
       <HotelPolicies
         policies={
-          Array.isArray(hotel.policies_en)
-            ? hotel.policies_en
-            : [hotel.policies_en]
+          Array.isArray(hotel.policies) ? hotel.policies : [hotel.policies]
         }
         checkIn={hotel.checkIn}
         checkOut={hotel.checkOut}
       />
 
-      <PaymentOptions payment={hotel.paymentOptions_en} />
-      <LanguagesSpoken languages={hotel.languagesSpoken_en} />
+      <PaymentOptions payment={hotel.paymentOptions} />
+      <LanguagesSpoken languages={hotel.languagesSpoken} />
     </div>
   );
 }
