@@ -4,6 +4,11 @@
 // import { LocalizedHotel } from "../_lib/transformHotel";
 
 // // ------------------------
+// // Remove these types:
+// // - Preferences
+// // - Store
+
+// // Keep only the SupportedLang type for language selection
 // export type SupportedLang = "en" | "ar" | "fr" | "de" | "es" | "it";
 
 // export type Localized<T> = {

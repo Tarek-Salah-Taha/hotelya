@@ -7,8 +7,7 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: "https",
-        hostname: "cdn.ipwhois.io",
-        pathname: "/flags/**",
+        hostname: "flagcdn.com",
       },
       {
         protocol: "https",
