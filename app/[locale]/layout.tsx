@@ -20,6 +20,17 @@ export const metadata: Metadata = {
     "Discover amazing hotels worldwide with the best prices and instant booking confirmation.",
 };
 
+export async function generateStaticParams() {
+  return [
+    { locale: "en" },
+    { locale: "ar" },
+    { locale: "fr" },
+    { locale: "de" },
+    { locale: "es" },
+    { locale: "it" },
+  ];
+}
+
 export default function RootLayout({
   children,
 }: {
