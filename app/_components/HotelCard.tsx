@@ -11,6 +11,7 @@ export default function HotelCard({
   totalPages,
   basePath,
   destination = "",
+  onPageChange,
 }: HotelCardProps) {
   const pathname = usePathname();
   const locale = pathname.split("/")[1] || "en";
@@ -60,19 +61,33 @@ export default function HotelCard({
               Math.max(0, currentPage - 3),
               Math.min(totalPages, currentPage + 2)
             )
-            .map((page) => (
-              <Link
-                key={page}
-                href={{ pathname: localizedPath, query: createQuery(page) }}
-                className={`px-3 py-1 rounded ${
-                  currentPage === page
-                    ? "bg-primary text-white"
-                    : "bg-gray-100 hover:bg-gray-200"
-                }`}
-              >
-                {page}
-              </Link>
-            ))}
+            .map((page) =>
+              onPageChange ? (
+                <button
+                  key={page}
+                  onClick={() => onPageChange(page)}
+                  className={`px-3 py-1 rounded ${
+                    currentPage === page
+                      ? "bg-primary text-white"
+                      : "bg-gray-100 hover:bg-gray-200"
+                  }`}
+                >
+                  {page}
+                </button>
+              ) : (
+                <Link
+                  key={page}
+                  href={{ pathname: localizedPath, query: createQuery(page) }}
+                  className={`px-3 py-1 rounded ${
+                    currentPage === page
+                      ? "bg-primary text-white"
+                      : "bg-gray-100 hover:bg-gray-200"
+                  }`}
+                >
+                  {page}
+                </Link>
+              )
+            )}
 
           {/* Next */}
           <Link

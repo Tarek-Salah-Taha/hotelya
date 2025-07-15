@@ -27,19 +27,14 @@ export default async function SearchResultsPage({
   const locale = resolvedParams?.locale || "en";
 
   const [hotelsResult, countResult] = await Promise.all([
-    fetchFilteredHotels(destination, "", page, limit, locale),
+    fetchFilteredHotels({
+      city: destination,
+      locale,
+      page,
+      limit,
+    }),
     fetchFilteredHotelCount(destination, "", locale),
   ]);
-
-  if (
-    !hotelsResult.data ||
-    hotelsResult.error ||
-    countResult.error ||
-    hotelsResult.data.length === 0
-  ) {
-    console.error("Search error:", hotelsResult.error || countResult.error);
-    notFound();
-  }
 
   const totalPages = Math.ceil((countResult.count || 0) / limit);
 

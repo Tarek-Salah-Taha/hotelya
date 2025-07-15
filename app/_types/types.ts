@@ -366,6 +366,21 @@ export type Room = {
   extraBed: boolean;
 };
 
+export type HotelFilterData = {
+  id: string;
+  continent: string;
+  country: string;
+  city: string;
+  priceNew: number;
+  rating: number;
+  stars: number;
+  paymentOptions: string[];
+  languagesSpoken: string[];
+  amenities: string[];
+  policies: string[];
+  tags: string[];
+};
+
 // ------------------------
 // 🛎️ UI Component Props
 // ------------------------
@@ -398,6 +413,7 @@ export type HotelCardProps = {
   totalPages: number;
   basePath: string;
   destination?: string;
+  onPageChange?: (page: number) => void; // for client-side pagination
 };
 
 export type HotelCardItemProps = {

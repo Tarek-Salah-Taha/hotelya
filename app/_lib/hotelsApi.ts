@@ -50,11 +50,14 @@ export async function fetchBasicHotelInfo(
 export async function fetchHotelCount(): Promise<number> {
   const { count, error } = await supabase
     .from("hotel_with_standard_room")
-    .select("*", { count: "exact", head: true });
+    .select("id", { count: "exact", head: true });
 
-  if (error) throw new Error(error.message || "Failed to count hotels");
+  if (error) {
+    console.error("Error counting hotels:", error);
+    throw new Error(error.message || "Failed to count hotels");
+  }
 
-  return count || 0;
+  return count ?? 0;
 }
 
 export async function fetchHotelInfo(id: string): Promise<Hotel> {
@@ -70,15 +73,40 @@ export async function fetchHotelInfo(id: string): Promise<Hotel> {
   return data;
 }
 
-export async function fetchFilteredHotels(
-  city: string,
-  country: string = "",
-  page: number = 1,
-  limit: number = 15,
-  locale: SupportedLang = "en"
-) {
+export async function fetchFilteredHotels(filters: {
+  continent?: string;
+  country?: string;
+  city?: string;
+  minPrice?: number;
+  maxPrice?: number;
+  rating?: number;
+  stars?: number;
+  paymentOptions?: string[];
+  languagesSpoken?: string[];
+  cancellationFreeOnly?: boolean;
+  locale: SupportedLang;
+  page?: number;
+  limit?: number;
+}): Promise<{ data: HotelCardData[]; count: number }> {
+  const {
+    continent,
+    country,
+    city,
+    minPrice,
+    maxPrice,
+    rating,
+    stars,
+    paymentOptions,
+    languagesSpoken,
+    cancellationFreeOnly,
+    locale,
+    page = 1,
+    limit = 15,
+  } = filters;
+
   const offset = (page - 1) * limit;
 
+  // localized display fields
   const localizedFields = [
     `hotelName_${locale}`,
     `city_${locale}`,
@@ -94,26 +122,48 @@ export async function fetchFilteredHotels(
     "priceOld",
     "stars",
     "rating",
-  ].join(",");
+  ];
 
   let query = supabase
     .from("hotel_with_standard_room")
-    .select(selectFields)
+    .select(selectFields.join(","), { count: "exact" })
     .range(offset, offset + limit - 1);
 
-  if (city && country) {
-    query = query
-      .ilike(`city_${locale}`, `%${city}%`)
-      .ilike(`country_${locale}`, `%${country}%`);
-  } else if (city) {
-    query = query.ilike(`city_${locale}`, `%${city}%`);
+  // ✅ Localized filters
+  if (continent) query = query.ilike(`continent_${locale}`, `%${continent}%`);
+  if (country) query = query.ilike(`country_${locale}`, `%${country}%`);
+  if (city) query = query.ilike(`city_${locale}`, `%${city}%`);
+
+  // ✅ Numeric filters
+  if (rating) query = query.gte("rating", rating);
+  if (stars) query = query.eq("stars", stars);
+  if (minPrice !== undefined) query = query.gte("priceNew", minPrice);
+  if (maxPrice !== undefined) query = query.lte("priceNew", maxPrice);
+
+  // ✅ Localized array filters
+  if (paymentOptions?.length) {
+    paymentOptions.forEach((option) => {
+      query = query.contains(`paymentOptions_${locale}`, [option]);
+    });
   }
 
-  const { data, error } = await query;
+  if (languagesSpoken?.length) {
+    languagesSpoken.forEach((lang) => {
+      query = query.contains(`languagesSpoken_${locale}`, [lang]);
+    });
+  }
+
+  if (cancellationFreeOnly) {
+    query = query.eq("cancellationFree", true);
+  }
+
+  const { data, error, count } = await query;
+
+  if (error) throw new Error(error.message);
 
   return {
     data:
-      (data as unknown as Record<string, unknown>[])?.map((hotel) =>
+      (data as unknown as HotelCardData[]).map((hotel) =>
         normalizeLocalizedFields<HotelCardData>(hotel, locale, [
           "hotelName",
           "city",
@@ -121,7 +171,7 @@ export async function fetchFilteredHotels(
           "tags",
         ])
       ) || [],
-    error,
+    count: count || 0,
   };
 }
 
