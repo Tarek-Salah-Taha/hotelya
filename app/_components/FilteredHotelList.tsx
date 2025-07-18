@@ -1,20 +1,22 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import HotelFilters from "./HotelFilters";
 import HotelCard from "./HotelCard";
 import Spinner from "./Spinner";
+import NoResults from "./NoResults";
 import { fetchFilteredHotels } from "../_lib/hotelsApi";
 import { HotelFilterData, HotelCardData, SupportedLang } from "../_types/types";
-import NoResults from "./NoResults";
 
 type Props = {
   filters: HotelFilterData[];
   locale: SupportedLang;
   initialHotels: HotelCardData[];
   initialTotalPages: number;
-  layout?: "filters" | "hotels"; // optional layout toggle
 };
+
+const limit = 15;
 
 export default function FilteredHotelList({
   filters,
@@ -22,17 +24,35 @@ export default function FilteredHotelList({
   initialHotels,
   initialTotalPages,
 }: Props) {
-  const [filteredHotels, setFilteredHotels] = useState(initialHotels);
-  const [filterParams, setFilterParams] = useState({});
-  const [currentPage, setCurrentPage] = useState(1);
+  const searchParams = useSearchParams();
+  const [filteredHotels, setFilteredHotels] = useState<HotelCardData[]>([]);
   const [totalPages, setTotalPages] = useState(initialTotalPages);
-  const [isLoading, setIsLoading] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [isLoading, setIsLoading] = useState(true);
 
-  const limit = 15;
+  // Parse filter params from URL
+  const filterParams = useMemo(() => {
+    const getArray = (key: string) =>
+      searchParams.get(key)?.split(",").map(decodeURIComponent) ?? [];
+
+    return {
+      continent: getArray("continent"),
+      country: searchParams.get("country") || "",
+      city: searchParams.get("city") || "",
+      minPrice: Number(searchParams.get("minPrice")) || 0,
+      maxPrice: Number(searchParams.get("maxPrice")) || 1000,
+      ratingLabels: getArray("ratingLabels"),
+      stars: getArray("stars").map(Number),
+      paymentOptions: getArray("paymentOptions"),
+      languagesSpoken: getArray("languagesSpoken"),
+      sort: searchParams.get("sort") || "", // Add this line
+    };
+  }, [searchParams]);
 
   useEffect(() => {
-    async function fetchData() {
-      setIsLoading(true);
+    const hasFilters = searchParams.toString() !== "";
+
+    const fetchData = async () => {
       try {
         const result = await fetchFilteredHotels({
           ...filterParams,
@@ -45,13 +65,20 @@ export default function FilteredHotelList({
         setTotalPages(Math.ceil(result.count / limit));
       } catch (error) {
         console.error("Error fetching hotels:", error);
+        setFilteredHotels([]);
       } finally {
         setIsLoading(false);
       }
-    }
+    };
 
-    fetchData();
-  }, [filterParams, locale, currentPage]);
+    if (hasFilters) {
+      setIsLoading(true);
+      fetchData();
+    } else {
+      setFilteredHotels(initialHotels);
+      setIsLoading(false);
+    }
+  }, [filterParams, currentPage, locale, searchParams, initialHotels]);
 
   return (
     <>
@@ -60,10 +87,7 @@ export default function FilteredHotelList({
         <HotelFilters
           filters={filters}
           locale={locale}
-          onApplyFilters={(filters) => {
-            setFilterParams(filters);
-            setCurrentPage(1);
-          }}
+          onApplyFilters={() => setCurrentPage(1)}
         />
       </aside>
 
@@ -77,10 +101,7 @@ export default function FilteredHotelList({
             <HotelFilters
               filters={filters}
               locale={locale}
-              onApplyFilters={(filters) => {
-                setFilterParams(filters);
-                setCurrentPage(1);
-              }}
+              onApplyFilters={() => setCurrentPage(1)}
             />
           </div>
         </details>
@@ -100,9 +121,7 @@ export default function FilteredHotelList({
             currentPage={currentPage}
             totalPages={totalPages}
             basePath="/hotels"
-            onPageChange={(page) => {
-              setCurrentPage(page);
-            }}
+            onPageChange={(page) => setCurrentPage(page)}
           />
         )}
       </main>

@@ -396,6 +396,8 @@ export type HotelCardData = {
   priceOld: number;
   stars: number;
   rating: number;
+  paymentOptions?: string[];
+  languagesSpoken?: string[];
 };
 
 export type HotelHeaderData = {
@@ -418,6 +420,18 @@ export type HotelCardProps = {
 
 export type HotelCardItemProps = {
   hotel: HotelCardData;
+};
+
+export type HotelFilterParams = {
+  continent: string[];
+  country: string;
+  city: string;
+  minPrice: number;
+  maxPrice: number;
+  ratingLabels: string[];
+  stars: number[];
+  paymentOptions: string[];
+  languagesSpoken: string[];
 };
 
 export type HotelPageProps = {

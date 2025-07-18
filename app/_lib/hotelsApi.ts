@@ -1,3 +1,5 @@
+// ✅ INTEGRATED & FINALIZED FILTERED HOTEL FETCHING SYSTEM
+
 import supabase from "./supabase";
 import { Hotel, HotelCardData, SupportedLang } from "../_types/types";
 import { normalizeLocalizedFields } from "./normalizeLocalizedFields";
@@ -10,7 +12,6 @@ export async function fetchBasicHotelInfo(
   const from = (page - 1) * limit;
   const to = from + limit - 1;
 
-  // Use 'as const' to prevent TS from expanding all possible combinations of the template
   const localizedFields = [
     `hotelName_${locale}`,
     `city_${locale}`,
@@ -66,27 +67,28 @@ export async function fetchHotelInfo(id: string): Promise<Hotel> {
     .select("*")
     .eq("id", id)
     .maybeSingle();
+
   if (error) {
-    throw new Error(error.message || "Failed to fetch hotels");
+    throw new Error(error.message || "Failed to fetch hotel");
   }
 
   return data;
 }
 
 export async function fetchFilteredHotels(filters: {
-  continent?: string;
+  continent?: string | string[];
   country?: string;
   city?: string;
   minPrice?: number;
   maxPrice?: number;
-  rating?: number;
-  stars?: number;
+  ratingLabels?: string[];
+  stars?: number[];
   paymentOptions?: string[];
   languagesSpoken?: string[];
-  cancellationFreeOnly?: boolean;
   locale: SupportedLang;
   page?: number;
   limit?: number;
+  sort?: string; // Add this line
 }): Promise<{ data: HotelCardData[]; count: number }> {
   const {
     continent,
@@ -94,11 +96,10 @@ export async function fetchFilteredHotels(filters: {
     city,
     minPrice,
     maxPrice,
-    rating,
+    ratingLabels,
     stars,
     paymentOptions,
     languagesSpoken,
-    cancellationFreeOnly,
     locale,
     page = 1,
     limit = 15,
@@ -106,13 +107,14 @@ export async function fetchFilteredHotels(filters: {
 
   const offset = (page - 1) * limit;
 
-  // localized display fields
   const localizedFields = [
     `hotelName_${locale}`,
     `city_${locale}`,
     `country_${locale}`,
     `tags_${locale}`,
-  ] as const;
+    `paymentOptions_${locale}`,
+    `languagesSpoken_${locale}`,
+  ];
 
   const selectFields = [
     "id",
@@ -126,52 +128,106 @@ export async function fetchFilteredHotels(filters: {
 
   let query = supabase
     .from("hotel_with_standard_room")
-    .select(selectFields.join(","), { count: "exact" })
-    .range(offset, offset + limit - 1);
+    .select(selectFields.join(","), { count: "exact" });
 
-  // ✅ Localized filters
-  if (continent) query = query.ilike(`continent_${locale}`, `%${continent}%`);
+  // 🌍 Location filters
+  if (Array.isArray(continent) && continent.length > 0) {
+    query = query.in(`continent_${locale}`, continent);
+  } else if (typeof continent === "string" && continent) {
+    query = query.ilike(`continent_${locale}`, `%${continent}%`);
+  }
+
   if (country) query = query.ilike(`country_${locale}`, `%${country}%`);
   if (city) query = query.ilike(`city_${locale}`, `%${city}%`);
 
-  // ✅ Numeric filters
-  if (rating) query = query.gte("rating", rating);
-  if (stars) query = query.eq("stars", stars);
+  // 💰 Price filters
   if (minPrice !== undefined) query = query.gte("priceNew", minPrice);
   if (maxPrice !== undefined) query = query.lte("priceNew", maxPrice);
 
-  // ✅ Localized array filters
-  if (paymentOptions?.length) {
-    paymentOptions.forEach((option) => {
-      query = query.contains(`paymentOptions_${locale}`, [option]);
-    });
+  // ⭐ Star filters
+  if (stars?.length) {
+    query = query.in("stars", stars);
   }
 
-  if (languagesSpoken?.length) {
-    languagesSpoken.forEach((lang) => {
-      query = query.contains(`languagesSpoken_${locale}`, [lang]);
-    });
+  // 📊 Rating Labels (client-side filtering based on logic)
+  if (ratingLabels?.length) {
+    const conditions = ratingLabels
+      .map((label) => {
+        switch (label) {
+          case "Excellent":
+            return "rating.gte.8.5";
+          case "Very Good":
+            return "and(rating.gte.7.5,rating.lt.8.5)";
+          case "Good":
+            return "and(rating.gte.6,rating.lt.7.5)";
+          case "Average":
+            return "rating.lt.6";
+          default:
+            return "";
+        }
+      })
+      .filter(Boolean);
+
+    if (conditions.length > 0) {
+      query = query.or(conditions.join(","));
+    }
   }
 
-  if (cancellationFreeOnly) {
-    query = query.eq("cancellationFree", true);
-  }
-
-  const { data, error, count } = await query;
+  const { data, error } = await query;
 
   if (error) throw new Error(error.message);
 
+  // ✅ Normalize + manual filter
+  let filtered = (data as unknown as HotelCardData[]).map((hotel) =>
+    normalizeLocalizedFields<HotelCardData>(hotel, locale, [
+      "hotelName",
+      "city",
+      "country",
+      "tags",
+      "paymentOptions",
+      "languagesSpoken",
+    ])
+  );
+
+  if (paymentOptions?.length) {
+    filtered = filtered.filter((hotel) =>
+      hotel.paymentOptions?.some((option) => paymentOptions.includes(option))
+    );
+  }
+
+  if (languagesSpoken?.length) {
+    filtered = filtered.filter((hotel) =>
+      hotel.languagesSpoken?.some((lang) => languagesSpoken.includes(lang))
+    );
+  }
+
+  // Add sorting before pagination
+  if (filters.sort) {
+    switch (filters.sort) {
+      case "price-asc":
+        filtered.sort((a, b) => a.priceNew - b.priceNew);
+        break;
+      case "price-desc":
+        filtered.sort((a, b) => b.priceNew - a.priceNew);
+        break;
+      case "rating-desc":
+        filtered.sort((a, b) => (b.rating || 0) - (a.rating || 0));
+        break;
+      case "stars-desc":
+        filtered.sort((a, b) => (b.stars || 0) - (a.stars || 0));
+        break;
+      case "stars-asc":
+        filtered.sort((a, b) => (a.stars || 0) - (b.stars || 0));
+        break;
+    }
+  }
+
+  const count = filtered.length;
+  const paginated = filtered.slice(offset, offset + limit);
+
   return {
-    data:
-      (data as unknown as HotelCardData[]).map((hotel) =>
-        normalizeLocalizedFields<HotelCardData>(hotel, locale, [
-          "hotelName",
-          "city",
-          "country",
-          "tags",
-        ])
-      ) || [],
-    count: count || 0,
+    data: paginated,
+    count,
   };
 }
 
