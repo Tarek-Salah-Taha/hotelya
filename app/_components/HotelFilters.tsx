@@ -8,7 +8,20 @@ import {
 } from "@/app/_types/types";
 import getRatingLabel from "../_lib/getRatingLabel";
 import { IoChevronDown, IoChevronUp } from "react-icons/io5";
+import {
+  FaGlobe,
+  FaFlag,
+  FaCity,
+  FaMoneyBill,
+  FaLanguage,
+  FaThumbsUp,
+  FaSort,
+  FaFilter,
+  FaSpinner,
+  FaStar,
+} from "react-icons/fa";
 import { useRouter, useSearchParams } from "next/navigation";
+import { toast } from "react-hot-toast";
 
 const starRatings = [5, 4, 3, 2, 1];
 
@@ -35,7 +48,7 @@ export default function HotelFilters({ filters, onApplyFilters }: Props) {
       selectedCountry: "",
       selectedCity: "",
       minPrice: 0,
-      maxPrice: 1000,
+      maxPrice: 0,
       selectedRatings: [] as string[],
       selectedStars: [] as number[],
       selectedPayments: [] as string[],
@@ -59,7 +72,7 @@ export default function HotelFilters({ filters, onApplyFilters }: Props) {
     newState.selectedCountry = searchParams.get("country") || "";
     newState.selectedCity = searchParams.get("city") || "";
     newState.minPrice = Number(searchParams.get("minPrice")) || 0;
-    newState.maxPrice = Number(searchParams.get("maxPrice")) || 1000;
+    newState.maxPrice = Number(searchParams.get("maxPrice")) || 0;
     newState.selectedRatings = getParamArray("ratingLabels");
     newState.selectedStars = getParamArray("stars").map(Number);
     newState.selectedPayments = getParamArray("paymentOptions");
@@ -70,6 +83,7 @@ export default function HotelFilters({ filters, onApplyFilters }: Props) {
 
   const [filterState, setFilterState] = useState(initialState);
   const [openSection, setOpenSection] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
 
   const toggleSection = (section: string) => {
     setOpenSection((prev) => (prev === section ? null : section));
@@ -144,9 +158,25 @@ export default function HotelFilters({ filters, onApplyFilters }: Props) {
   const ratingLabels = getUniqueRatingLabelsFromData(filters);
 
   const handleApplyFilters = async () => {
+    const isEmpty =
+      filterState.selectedContinents.length === 0 &&
+      !filterState.selectedCountry &&
+      !filterState.selectedCity &&
+      filterState.minPrice === 0 &&
+      filterState.maxPrice === 0 &&
+      filterState.selectedRatings.length === 0 &&
+      filterState.selectedStars.length === 0 &&
+      filterState.selectedPayments.length === 0 &&
+      filterState.selectedLanguages.length === 0;
+
+    if (isEmpty) {
+      toast("No filters selected to apply.", { icon: "⚠️" });
+      return;
+    }
+
+    setLoading(true);
     const params = new URLSearchParams();
 
-    // Only add params that have values
     if (filterState.selectedContinents.length)
       params.set("continent", filterState.selectedContinents.join(","));
     if (filterState.selectedCountry)
@@ -154,7 +184,7 @@ export default function HotelFilters({ filters, onApplyFilters }: Props) {
     if (filterState.selectedCity) params.set("city", filterState.selectedCity);
     if (filterState.minPrice > 0)
       params.set("minPrice", filterState.minPrice.toString());
-    if (filterState.maxPrice < 1000)
+    if (filterState.maxPrice < 0)
       params.set("maxPrice", filterState.maxPrice.toString());
     if (filterState.selectedRatings.length)
       params.set("ratingLabels", filterState.selectedRatings.join(","));
@@ -166,16 +196,14 @@ export default function HotelFilters({ filters, onApplyFilters }: Props) {
       params.set("languagesSpoken", filterState.selectedLanguages.join(","));
 
     const queryString = params.toString();
-    const currentQuery = window.location.search.slice(1); // Remove the '?' from the start
+    const currentQuery = window.location.search.slice(1);
 
-    // Only update URL if the query string has actually changed
     if (queryString !== currentQuery) {
-      await router.replace(
+      router.replace(
         queryString ? `?${queryString}` : window.location.pathname
       );
     }
 
-    // Call onApplyFilters after the URL is updated
     onApplyFilters?.({
       ...filterState,
       continent: [],
@@ -186,19 +214,35 @@ export default function HotelFilters({ filters, onApplyFilters }: Props) {
       paymentOptions: [],
       languagesSpoken: [],
     });
+
+    setTimeout(() => setLoading(false), 500);
   };
 
   const resetFilters = async () => {
-    setFilterState(initialState);
-    // Wait for the URL update to complete
-    await router.replace("?");
+    const isEmpty =
+      filterState.selectedContinents.length === 0 &&
+      !filterState.selectedCountry &&
+      !filterState.selectedCity &&
+      filterState.minPrice === 0 &&
+      filterState.maxPrice === 0 &&
+      filterState.selectedRatings.length === 0 &&
+      filterState.selectedStars.length === 0 &&
+      filterState.selectedPayments.length === 0 &&
+      filterState.selectedLanguages.length === 0;
 
+    if (isEmpty) {
+      toast("There are no filters to reset.", { icon: "ℹ️" });
+      return;
+    }
+
+    setFilterState(initialState);
+    router.replace("?");
     onApplyFilters?.({
       continent: [],
       country: "",
       city: "",
       minPrice: 0,
-      maxPrice: 1000,
+      maxPrice: 0,
       ratingLabels: [],
       stars: [],
       paymentOptions: [],
@@ -208,12 +252,79 @@ export default function HotelFilters({ filters, onApplyFilters }: Props) {
 
   if (filters.length <= 1) return null;
 
+  {
+    /* Friendly label map */
+  }
+  const filterLabels: Record<keyof typeof filterState, string> = {
+    selectedContinents: "Continent",
+    selectedCountry: "Country",
+    selectedCity: "City",
+    minPrice: "Min Price",
+    maxPrice: "Max Price",
+    selectedRatings: "Rating",
+    selectedStars: "Stars",
+    selectedPayments: "Payment Method",
+    selectedLanguages: "Language",
+  };
+
+  const removeFilter = (
+    key: keyof typeof filterState,
+    value?: string | number
+  ) => {
+    setFilterState((prev) => {
+      const newState = { ...prev };
+      if (Array.isArray(prev[key])) {
+        (newState[key as keyof typeof filterState] as unknown[]) = (
+          prev[key] as unknown as (string | number)[]
+        ).filter((v) => v !== value);
+      } else {
+        (newState[key as keyof typeof filterState] as unknown) =
+          typeof prev[key] === "number" ? 0 : "";
+      }
+      return newState;
+    });
+  };
+
   return (
     <section className="p-4 sm:p-6 border rounded-2xl bg-white shadow-lg text-sm space-y-4">
+      <div className="flex justify-between items-center">
+        <h2 className="text-lg font-semibold flex items-center gap-2">
+          <FaFilter /> Filters
+        </h2>
+        {loading && <FaSpinner className="animate-spin text-primary" />}
+      </div>
+
+      {/* Filter Summary */}
+      {Object.entries(filterState)
+        .filter(([, val]) => (Array.isArray(val) ? val.length > 0 : val))
+        .map(([key, val]) => {
+          const label = filterLabels[key as keyof typeof filterState] || key;
+          const values = Array.isArray(val) ? val : [val];
+
+          return values.map((v) => (
+            <span
+              key={`${key}-${v}`}
+              className="inline-flex items-center bg-primary/10 text-primary text-xs font-medium px-2 py-1 rounded-full mr-2 mb-2 shadow-sm"
+            >
+              {label}: {v}
+              <button
+                onClick={() => removeFilter(key as keyof typeof filterState, v)}
+                className="ml-1 text-primary hover:text-red-500"
+                aria-label="Remove filter"
+              >
+                ×
+              </button>
+            </span>
+          ));
+        })}
+
       {/* Sort By */}
       <div className="mb-4">
-        <label htmlFor="sortBy" className="block font-semibold mb-1">
-          Sort by:
+        <label
+          htmlFor="sortBy"
+          className="flex items-center gap-2 font-semibold mb-2 text-base hover:bg-gray-100 p-2 rounded"
+        >
+          <FaSort /> Sort by:
         </label>
         <select
           id="sortBy"
@@ -228,29 +339,30 @@ export default function HotelFilters({ filters, onApplyFilters }: Props) {
               params.delete("sort");
             }
 
-            // Update the URL without reloading
             router.replace(`?${params.toString()}`);
           }}
         >
           <option value="">Default</option>
-          <option value="price-asc">Price: Low to High</option>
-          <option value="price-desc">Price: High to Low</option>
-          <option value="rating-desc">Rating: High to Low</option>
-          <option value="rating-asc">Rating: Low to High</option>
-          <option value="stars-desc">Stars: High to Low</option>
-          <option value="stars-asc">Stars: Low to High</option>
+          <option value="price-asc">▲ Price: Low to High</option>
+          <option value="price-desc">▼ Price: High to Low</option>
+          <option value="rating-asc">▲ Rating: Low to High</option>
+          <option value="rating-desc">▼ Rating: High to Low</option>
+          <option value="stars-asc">▲ Stars: Low to High</option>
+          <option value="stars-desc">▼ Stars: High to Low</option>
         </select>
       </div>
-
       {/* Continent */}
       <div>
         <button
-          className="flex justify-between items-center w-full font-semibold mb-2"
+          className="flex justify-between items-center w-full font-semibold mb-2 text-base hover:bg-gray-100 p-2 rounded"
           onClick={() => toggleSection("continent")}
         >
-          Continent{" "}
+          <span className="flex items-center gap-2">
+            <FaGlobe /> Continent
+          </span>
           {openSection === "continent" ? <IoChevronUp /> : <IoChevronDown />}
         </button>
+
         {openSection === "continent" && (
           <div className="space-y-1">
             {continents.map((item) => {
@@ -279,14 +391,15 @@ export default function HotelFilters({ filters, onApplyFilters }: Props) {
           </div>
         )}
       </div>
-
       {/* Country */}
       <div>
         <button
-          className="flex justify-between items-center w-full font-semibold mb-2"
+          className="flex justify-between items-center w-full font-semibold mb-2 text-base hover:bg-gray-100 p-2 rounded"
           onClick={() => toggleSection("country")}
         >
-          Country{" "}
+          <span className="flex items-center gap-2">
+            <FaFlag /> Country
+          </span>
           {openSection === "country" ? <IoChevronUp /> : <IoChevronDown />}
         </button>
         {openSection === "country" && (
@@ -308,14 +421,16 @@ export default function HotelFilters({ filters, onApplyFilters }: Props) {
           </select>
         )}
       </div>
-
       {/* City */}
       <div>
         <button
-          className="flex justify-between items-center w-full font-semibold mb-2"
+          className="flex justify-between items-center w-full font-semibold mb-2 text-base hover:bg-gray-100 p-2 rounded"
           onClick={() => toggleSection("city")}
         >
-          City {openSection === "city" ? <IoChevronUp /> : <IoChevronDown />}
+          <span className="flex items-center gap-2">
+            <FaCity /> City
+          </span>
+          {openSection === "city" ? <IoChevronUp /> : <IoChevronDown />}
         </button>
         {openSection === "city" && (
           <select
@@ -335,14 +450,16 @@ export default function HotelFilters({ filters, onApplyFilters }: Props) {
           </select>
         )}
       </div>
-
       {/* Price */}
       <div>
         <button
-          className="flex justify-between items-center w-full font-semibold mb-2"
+          className="flex justify-between items-center w-full font-semibold mb-2 text-base hover:bg-gray-100 p-2 rounded"
           onClick={() => toggleSection("price")}
         >
-          Price Range{" "}
+          <span className="flex items-center gap-2">
+            <FaMoneyBill /> Price Range
+          </span>
+
           {openSection === "price" ? <IoChevronUp /> : <IoChevronDown />}
         </button>
         {openSection === "price" && (
@@ -352,6 +469,7 @@ export default function HotelFilters({ filters, onApplyFilters }: Props) {
               placeholder="Min"
               className="w-1/2 border border-gray-300 p-2 rounded-lg"
               value={filterState.minPrice}
+              min={0}
               onChange={(e) =>
                 setFilterState((prev) => ({
                   ...prev,
@@ -362,6 +480,7 @@ export default function HotelFilters({ filters, onApplyFilters }: Props) {
             <input
               type="number"
               placeholder="Max"
+              max={filterState.maxPrice}
               className="w-1/2 border border-gray-300 p-2 rounded-lg"
               value={filterState.maxPrice}
               onChange={(e) =>
@@ -374,14 +493,15 @@ export default function HotelFilters({ filters, onApplyFilters }: Props) {
           </div>
         )}
       </div>
-
       {/* Rating */}
       <div>
         <button
-          className="flex justify-between items-center w-full font-semibold mb-2"
+          className="flex justify-between items-center w-full font-semibold mb-2 text-base hover:bg-gray-100 p-2 rounded"
           onClick={() => toggleSection("rating")}
         >
-          Rating{" "}
+          <span className="flex items-center gap-2">
+            <FaStar /> Rating
+          </span>
           {openSection === "rating" ? <IoChevronUp /> : <IoChevronDown />}
         </button>
         {openSection === "rating" && (
@@ -407,14 +527,15 @@ export default function HotelFilters({ filters, onApplyFilters }: Props) {
           </div>
         )}
       </div>
-
       {/* Stars */}
       <div>
         <button
-          className="flex justify-between items-center w-full font-semibold mb-2"
+          className="flex justify-between items-center w-full font-semibold mb-2 text-base hover:bg-gray-100 p-2 rounded"
           onClick={() => toggleSection("stars")}
         >
-          Star Rating{" "}
+          <span className="flex items-center gap-2">
+            <FaThumbsUp /> User Rating
+          </span>
           {openSection === "stars" ? <IoChevronUp /> : <IoChevronDown />}
         </button>
         {openSection === "stars" && (
@@ -440,14 +561,15 @@ export default function HotelFilters({ filters, onApplyFilters }: Props) {
           </div>
         )}
       </div>
-
       {/* Payment */}
       <div>
         <button
-          className="flex justify-between items-center w-full font-semibold mb-2"
+          className="flex justify-between items-center w-full font-semibold mb-2 text-base hover:bg-gray-100 p-2 rounded"
           onClick={() => toggleSection("payment")}
         >
-          Payment Methods{" "}
+          <span className="flex items-center gap-2">
+            <FaMoneyBill /> Payment Methods
+          </span>
           {openSection === "payment" ? <IoChevronUp /> : <IoChevronDown />}
         </button>
         {openSection === "payment" && (
@@ -473,16 +595,18 @@ export default function HotelFilters({ filters, onApplyFilters }: Props) {
           </div>
         )}
       </div>
-
       {/* Languages */}
       <div>
         <button
-          className="flex justify-between items-center w-full font-semibold mb-2"
+          className="flex justify-between items-center w-full font-semibold mb-2 text-base hover:bg-gray-100 p-2 rounded"
           onClick={() => toggleSection("languages")}
         >
-          Languages Spoken{" "}
+          <span className="flex items-center gap-2">
+            <FaLanguage /> Languages Spoken
+          </span>
           {openSection === "languages" ? <IoChevronUp /> : <IoChevronDown />}
         </button>
+
         {openSection === "languages" && (
           <div className="space-y-1">
             {languages.map((lang) => (
@@ -506,7 +630,6 @@ export default function HotelFilters({ filters, onApplyFilters }: Props) {
           </div>
         )}
       </div>
-
       {/* Buttons */}
       <div className="mt-4 flex flex-col gap-3 sm:flex-row">
         <button
