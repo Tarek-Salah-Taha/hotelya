@@ -27,8 +27,17 @@ export default function FilteredHotelList({
   const searchParams = useSearchParams();
   const [filteredHotels, setFilteredHotels] = useState<HotelCardData[]>([]);
   const [totalPages, setTotalPages] = useState(initialTotalPages);
-  const [currentPage, setCurrentPage] = useState(1);
+  // Update this line to get the initial page from URL
+  const [currentPage, setCurrentPage] = useState(
+    parseInt(searchParams.get("page") || "1", 10)
+  );
   const [isLoading, setIsLoading] = useState(true);
+
+  // Add this effect to update currentPage when URL changes
+  useEffect(() => {
+    const page = parseInt(searchParams.get("page") || "1", 10);
+    setCurrentPage(page);
+  }, [searchParams]);
 
   // Parse filter params from URL
   const filterParams = useMemo(() => {
@@ -121,7 +130,8 @@ export default function FilteredHotelList({
             currentPage={currentPage}
             totalPages={totalPages}
             basePath="/hotels"
-            onPageChange={(page) => setCurrentPage(page)}
+            // Remove this line:
+            // onPageChange={(page) => setCurrentPage(page)}
           />
         )}
       </main>
