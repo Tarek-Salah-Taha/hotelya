@@ -11,11 +11,15 @@ export async function createBooking(booking: {
   numChildren: number;
   totalPrice: number;
   status?: string;
+  createdAt: string;
+  roomType: string;
+  priceNew: number;
+  totalNights: number;
 }) {
   const { data, error } = await supabase.from("bookings").insert([
     {
       ...booking,
-      status: booking.status || "confirmed",
+      status: booking.status || "Confirmed",
     },
   ]);
 
@@ -43,6 +47,16 @@ export async function getBookedDateRanges(roomId: number) {
     .from("bookings")
     .select("checkInDate, checkOutDate")
     .eq("roomId", roomId);
+
+  if (error) throw error;
+  return data;
+}
+
+export async function cancelBooking(bookingId: string) {
+  const { data, error } = await supabase
+    .from("bookings")
+    .update({ status: "Cancelled" })
+    .eq("id", bookingId);
 
   if (error) throw error;
   return data;

@@ -8,11 +8,12 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import toast from "react-hot-toast";
 import { use } from "react";
+import { SupportedLang } from "@/app/_types/types";
 
 export default function BookingPage({
   params,
 }: {
-  params: Promise<{ id: string; locale: string }>;
+  params: Promise<{ id: string; locale: SupportedLang }>;
 }) {
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -78,6 +79,11 @@ export default function BookingPage({
       numAdults: adults,
       numChildren: children,
       totalPrice,
+      createdAt: new Date().toLocaleDateString(),
+      roomType: searchParams.get("roomType") || "",
+      status: "Confirmed",
+      priceNew: price,
+      totalNights,
     });
 
     console.log("Booking payload:", {

@@ -15,7 +15,7 @@ import supabase from "../_lib/supabase";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import { usePathname } from "next/navigation";
-import { RoomCardProps } from "../_types/types";
+import { RoomCardProps, SupportedLang } from "../_types/types";
 
 function RoomCard({
   hotelId,
@@ -33,7 +33,11 @@ function RoomCard({
   const router = useRouter();
 
   const pathname = usePathname();
-  const locale = pathname.split("/")[1] || "en";
+  const locale: SupportedLang = (
+    ["en", "fr", "es"].includes(pathname.split("/")[1])
+      ? pathname.split("/")[1]
+      : "en"
+  ) as SupportedLang;
 
   const handleBooking = async () => {
     if (!startDate || !endDate) {

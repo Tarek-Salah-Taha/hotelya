@@ -234,7 +234,7 @@ export async function fetchFilteredHotels(filters: {
 export async function fetchFilteredHotelCount(
   city: string,
   country: string = "",
-  locale: string = "en"
+  locale: SupportedLang = "en"
 ) {
   let query = supabase
     .from("hotel_with_standard_room")
@@ -254,21 +254,43 @@ export async function fetchFilteredHotelCount(
 
 export async function getHotelsByIds(
   hotelIds: string[],
-  locale: string = "en"
+  locale: SupportedLang = "en"
 ): Promise<HotelCardData[]> {
   if (hotelIds.length === 0) return [];
 
+  const localizedFields = [
+    `hotelName_${locale}`,
+    `city_${locale}`,
+    `country_${locale}`,
+    `tags_${locale}`,
+  ] as const;
+
+  const selectFields = [
+    "id",
+    ...localizedFields,
+    "stars",
+    "rating",
+    "exteriorImages",
+    "priceNew",
+    "priceOld",
+  ].join(",");
+
   const { data, error } = await supabase
     .from("hotel_with_standard_room")
-    .select(
-      `id,hotelName_${locale},city_${locale},country_${locale},stars,rating,tags_${locale},exteriorImages,priceNew,priceOld`
-    )
+    .select(selectFields)
     .in("id", hotelIds);
 
   if (error) {
-    console.error("Error fetching favorite hotels:", error.message);
+    console.error("Error fetching hotels by IDs:", error.message);
     return [];
   }
 
-  return (data as unknown as HotelCardData[]) || [];
+  return (data as unknown as HotelCardData[]).map((hotel) =>
+    normalizeLocalizedFields<HotelCardData>(hotel, locale, [
+      "hotelName",
+      "city",
+      "country",
+      "tags",
+    ])
+  );
 }

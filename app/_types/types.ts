@@ -353,7 +353,7 @@ export type Hotel = Localized<{
 export type Room = {
   hotelId: number;
   id: number;
-  roomType: string;
+
   area: number;
   beds: number;
   bathrooms: number;
@@ -361,9 +361,10 @@ export type Room = {
   children: number;
   priceOld: number;
   priceNew: number;
-  bedType: string;
+  roomType: string;
   roomDescription: string;
   extraBed: boolean;
+  bedType: string;
 };
 
 export type HotelFilterData = {
@@ -505,8 +506,17 @@ export type Review = {
 
 export type Booking = {
   id: string;
+  hotelId: string;
   checkInDate: string;
   checkOutDate: string;
+  status: string;
+  numAdults: number;
+  numChildren: number;
+  totalPrice: number;
+  totalNights: number;
+  createdAt: string;
+  roomType: string;
+  priceNew: number;
   hotel?: {
     exteriorImages: string;
   } & {
