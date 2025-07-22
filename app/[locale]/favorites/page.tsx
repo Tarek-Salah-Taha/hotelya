@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 
 import toast from "react-hot-toast";
 import { useUser } from "@/app/_hooks/useUser";
-import { HotelCardData } from "@/app/_types/types";
+import { HotelCardData, SupportedLang } from "@/app/_types/types";
 import { fetchFavorites, removeFavorite } from "@/app/_lib/favoritesApi";
 import { getHotelsByIds } from "@/app/_lib/hotelsApi";
 import { usePathname } from "next/navigation";
@@ -25,7 +25,10 @@ export default function FavoritesPage() {
     const loadFavorites = async () => {
       try {
         const favoriteIds = await fetchFavorites(user.id);
-        const hotels = await getHotelsByIds(favoriteIds, locale);
+        const hotels = await getHotelsByIds(
+          favoriteIds,
+          locale as SupportedLang
+        );
         setFavorites(hotels);
       } catch (err) {
         toast.error("Failed to load favorites.");
