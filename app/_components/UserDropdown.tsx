@@ -10,7 +10,7 @@ import { SupportedLang } from "../_types/types";
 
 export default function UserDropdown() {
   const router = useRouter();
-  const { user } = useUser();
+  const { user, loading } = useUser();
   const [open, setOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -53,6 +53,10 @@ export default function UserDropdown() {
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
+
+  if (loading) {
+    return <div className="w-12 h-12 rounded-full bg-gray-200 animate-pulse" />; // Or any loading UI
+  }
 
   if (!user) return null;
 

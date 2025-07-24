@@ -589,9 +589,7 @@ export type IconKey =
   | "FaWifi"
   | "FaParking"
   | "FaSnowflake"
-  | "FaSortAmountUpAlt"
   | "FaBed"
-  | "FaBriefcase"
   | "FaBolt"
   | "FaCoffee"
   | "FaDumbbell"
@@ -605,7 +603,7 @@ export type IconKey =
   | "MdAccessTime"
   | "MdTv"
   | "MdRestaurant"
-  | "MdFreeBreakfast"
+  | "MdFoodBank"
   | "MdPets"
   | "MdAccessible"
   | "MdFamilyRestroom"
@@ -616,5 +614,5 @@ export type IconKey =
 
 export type Tag = {
   icon: IconKey;
-  label: string;
+  labels: string[];
 };

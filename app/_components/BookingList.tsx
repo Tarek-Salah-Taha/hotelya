@@ -42,7 +42,7 @@ const formatDate = (dateString: string, locale: SupportedLang) => {
 };
 
 export default function Page() {
-  const { user } = useUser();
+  const { user, loading: userLoading } = useUser();
   const [activeTab, setActiveTab] = useState<"upcoming" | "past">("upcoming");
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [sortBy, setSortBy] = useState<"latest" | "oldest" | "name">("latest");
@@ -122,6 +122,46 @@ export default function Page() {
     );
   });
 
+  const handleCancelClick = (bookingId: string) => {
+    toast.custom(
+      (t) => (
+        <div
+          className={`${t.visible ? "animate-enter" : "animate-leave"} 
+      max-w-md w-full bg-white shadow-lg rounded-lg pointer-events-auto flex flex-col p-4`}
+        >
+          <div className="text-sm font-medium text-gray-900 mb-2">
+            Confirm Cancellation
+          </div>
+          <div className="text-sm text-gray-500 mb-4">
+            Are you sure you want to cancel this booking?
+          </div>
+          <div className="flex gap-2 justify-end">
+            <button
+              onClick={() => toast.dismiss(t.id)}
+              className="px-3 py-1.5 text-sm text-gray-600 hover:bg-gray-100 rounded"
+            >
+              No
+            </button>
+            <button
+              onClick={() => {
+                handleCancelBooking(bookingId);
+                toast.dismiss(t.id);
+              }}
+              className="px-3 py-1.5 text-sm bg-red-500 text-white hover:bg-red-600 rounded"
+            >
+              Yes, Cancel
+            </button>
+          </div>
+        </div>
+      ),
+      { duration: Infinity }
+    );
+  };
+
+  if (userLoading) {
+    return <div className="w-12 h-12 rounded-full bg-gray-200 animate-pulse" />; // Or any loading UI
+  }
+
   if (!user) {
     return (
       <div className="flex items-center justify-center min-h-[60vh]">
@@ -190,7 +230,7 @@ export default function Page() {
                 e.target.value as "all" | "confirmed" | "cancelled"
               )
             }
-            className="border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[color:var(--color-primary)] focus:border-transparent"
+            className="border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary] focus:border-transparent"
           >
             <option value="all">All</option>
             <option value="Confirmed">Confirmed</option>
@@ -205,7 +245,7 @@ export default function Page() {
             onChange={(e) =>
               setSortBy(e.target.value as "latest" | "oldest" | "name")
             }
-            className="border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[color:var(--color-primary)] focus:border-transparent"
+            className="border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary] focus:border-transparent"
           >
             <option value="latest">Latest</option>
             <option value="oldest">Oldest</option>
@@ -367,7 +407,7 @@ export default function Page() {
                           <h3 className="text-xs font-medium text-gray-500 uppercase tracking-wider mb-1">
                             Total Price
                           </h3>
-                          <p className="text-xl font-semibold text-[color:var(--color-primary)]">
+                          <p className="text-xl font-semibold text-primary">
                             ${booking.totalPrice.toFixed(2)}
                           </p>
                         </div>
@@ -376,16 +416,8 @@ export default function Page() {
                           {activeTab === "upcoming" &&
                             status === "Confirmed" && (
                               <button
-                                onClick={() => {
-                                  if (
-                                    confirm(
-                                      "Are you sure you want to cancel this booking?"
-                                    )
-                                  ) {
-                                    handleCancelBooking(booking.id);
-                                  }
-                                }}
-                                className="px-4 py-2 rounded-lg border border-red-300 bg-red-50 text-red-700 font-medium text-sm hover:bg-red-100 transition duration-200 shadow-sm w-full sm:w-auto"
+                                onClick={() => handleCancelClick(booking.id)}
+                                className="flex-1 bg-white border border-red-300 text-red-500 font-medium py-2 px-4 rounded-lg hover:bg-accent transition flex items-center justify-center gap-1 hover:text-white"
                               >
                                 Cancel Booking
                               </button>

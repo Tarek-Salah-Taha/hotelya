@@ -8,6 +8,8 @@ import Spinner from "./Spinner";
 import NoResults from "./NoResults";
 import { fetchFilteredHotels } from "../_lib/hotelsApi";
 import { HotelFilterData, HotelCardData, SupportedLang } from "../_types/types";
+import { motion, AnimatePresence } from "framer-motion";
+import { FaChevronCircleDown, FaChevronCircleUp } from "react-icons/fa";
 
 type Props = {
   filters: HotelFilterData[];
@@ -26,6 +28,8 @@ export default function FilteredHotelList({
 }: Props) {
   const searchParams = useSearchParams();
   const [filteredHotels, setFilteredHotels] = useState<HotelCardData[]>([]);
+  const [isOpen, setIsOpen] = useState(false);
+
   const [totalPages, setTotalPages] = useState(initialTotalPages);
   // Update this line to get the initial page from URL
   const [currentPage, setCurrentPage] = useState(
@@ -101,19 +105,55 @@ export default function FilteredHotelList({
       </aside>
 
       {/* Mobile drawer */}
-      <div className="block lg:hidden mb-4">
-        <details className="border border-gray-300 rounded-lg">
-          <summary className="cursor-pointer px-4 py-2 font-medium bg-gray-100 rounded-t-lg">
-            Filters
-          </summary>
-          <div className="p-4">
-            <HotelFilters
-              filters={filters}
-              locale={locale}
-              onApplyFilters={() => setCurrentPage(1)}
-            />
-          </div>
-        </details>
+
+      <div className="block lg:hidden mb-6">
+        <motion.div
+          className="border border-gray-200 rounded-xl shadow-sm overflow-hidden"
+          whileHover={{ scale: 1.005 }}
+        >
+          <motion.button
+            onClick={() => setIsOpen(!isOpen)}
+            className="w-full px-5 py-3 bg-gray-50 hover:bg-gray-100 
+                flex items-center justify-between text-gray-700
+                transition-colors focus:outline-none
+                focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
+            whileTap={{ scale: 0.98 }}
+            aria-expanded={isOpen}
+          >
+            <div className="font-semibold text-gray-800 flex items-center gap-3">
+              {isOpen ? "Hide filters" : "Show filters"}
+            </div>
+            {isOpen ? (
+              <>
+                <FaChevronCircleUp className="text-primary" />
+              </>
+            ) : (
+              <>
+                <FaChevronCircleDown className="text-primary" />
+              </>
+            )}
+          </motion.button>
+
+          <AnimatePresence>
+            {isOpen && (
+              <motion.div
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: "auto" }}
+                exit={{ opacity: 0, height: 0 }}
+                transition={{ duration: 0.2 }}
+                className="bg-white border-t border-gray-100"
+              >
+                <div className="p-4 border-t border-gray-100">
+                  <HotelFilters
+                    filters={filters}
+                    locale={locale}
+                    onApplyFilters={() => setCurrentPage(1)}
+                  />
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </motion.div>
       </div>
 
       {/* Hotel Cards */}

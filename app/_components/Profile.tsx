@@ -10,7 +10,7 @@ import { updateUserProfile, uploadAvatar } from "../_lib/usersApi";
 import { FormValues } from "../_types/types";
 
 export default function Profile() {
-  const { user } = useUser();
+  const { user, loading } = useUser();
   const avatarInputRef = useRef<HTMLInputElement>(null);
   const [avatarUrl, setAvatarUrl] = useState<string>("");
   const [isUploading, setIsUploading] = useState(false);
@@ -115,6 +115,10 @@ export default function Profile() {
     ];
     return Math.round((checks.filter(Boolean).length / checks.length) * 100);
   };
+
+  if (loading) {
+    return <div className="w-12 h-12 rounded-full bg-gray-200 animate-pulse" />; // Or any loading UI
+  }
 
   return (
     <div className="min-h-screen bg-[#f5f7fa] p-4 md:p-8">

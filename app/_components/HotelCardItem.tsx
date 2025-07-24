@@ -19,18 +19,10 @@ export default function HotelCardItem({ hotel }: HotelCardItemProps) {
   const [isFavorite, setIsFavorite] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
   const router = useRouter();
-  const { user } = useUser();
+  const { user, loading } = useUser();
 
   const pathname = usePathname();
   const locale = pathname.split("/")[1] || "en";
-
-  const localizedTags = hotel[`tags_${locale}` as keyof typeof hotel] as
-    | string[]
-    | undefined;
-
-  const matchingTags = availableTags.filter((tag) =>
-    localizedTags?.includes(tag.label)
-  );
 
   const handleFavoriteToggle = async () => {
     if (!user) {
@@ -53,6 +45,10 @@ export default function HotelCardItem({ hotel }: HotelCardItemProps) {
       console.error(err);
     }
   };
+
+  if (loading) {
+    return <div className="w-12 h-12 rounded-full bg-gray-200 animate-pulse" />; // Or any loading UI
+  }
 
   return (
     <motion.div
@@ -137,31 +133,34 @@ export default function HotelCardItem({ hotel }: HotelCardItemProps) {
               </motion.span>
             ))}
           </div>
-          <div className="flex items-center gap-2">
-            <motion.span
-              className="bg-primary text-white text-sm font-semibold px-2 py-1 rounded-lg"
-              whileHover={{ scale: 1.05 }}
-            >
+
+          <div className="flex items-center bg-gradient-to-br from-white/90 to-white/70 backdrop-blur-sm rounded-lg shadow-sm border border-white/20 overflow-hidden">
+            <div className="bg-primary px-3 py-1.5 text-white font-bold">
               {hotel.rating}
-            </motion.span>
-            <span className="text-sm text-gray-700">
+            </div>
+            <div className="px-3 py-1.5 text-sm font-medium text-gray-700">
               {getRatingLabel(hotel.rating)}
-            </span>
+            </div>
           </div>
         </div>
 
         {/* Tags */}
         <div className="flex flex-wrap gap-2 mb-4">
-          {matchingTags.map((tag) => {
-            const Icon = iconMap[tag.icon];
+          {hotel?.tags?.map((tagLabel) => {
+            const matchedTag = availableTags.find((tag) =>
+              tag.labels.includes(tagLabel)
+            );
+
+            const Icon = matchedTag ? iconMap[matchedTag.icon] : null;
+
             return (
               <motion.div
-                key={tag.label}
+                key={tagLabel}
                 className="flex items-center gap-1 text-xs text-gray-700 bg-gray-100 px-3 py-1.5 rounded-full"
                 whileHover={{ y: -2 }}
               >
-                <Icon className="w-3 h-3 text-primary" />
-                <span>{tag.label}</span>
+                {Icon && <Icon className="w-3 h-3 text-primary" />}
+                <span>{tagLabel}</span>
               </motion.div>
             );
           })}

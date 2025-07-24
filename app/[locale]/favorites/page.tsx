@@ -12,17 +12,17 @@ import { getHotelsByIds } from "@/app/_lib/hotelsApi";
 import { usePathname } from "next/navigation";
 import { IoLocationSharp } from "react-icons/io5";
 import { availableTags, iconMap } from "@/app/_constants/availableTags";
+import getRatingLabel from "@/app/_lib/getRatingLabel";
+import { FiArrowRight } from "react-icons/fi";
+import { FaRegTrashAlt } from "react-icons/fa";
 
 export default function FavoritesPage() {
-  const { user } = useUser();
+  const { user, loading } = useUser();
   const [favorites, setFavorites] = useState<HotelCardData[]>([]);
   const router = useRouter();
 
   const pathname = usePathname();
   const locale = pathname.split("/")[1] || "en";
-
-  console.log("favorites data:", favorites);
-  console.log("Locale:", locale);
 
   useEffect(() => {
     if (!user) return;
@@ -34,7 +34,6 @@ export default function FavoritesPage() {
           favoriteIds,
           locale as SupportedLang
         );
-
         setFavorites(hotels);
       } catch (err) {
         toast.error("Failed to load favorites.");
@@ -60,6 +59,57 @@ export default function FavoritesPage() {
     router.push(`/${locale}/hotels/${id}`);
   };
 
+  const handleRemoveWithConfirmation = (hotelId: number) => {
+    toast.custom(
+      (t) => (
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -20 }}
+          className={`${t.visible ? "animate-enter" : "animate-leave"} 
+            max-w-md w-full bg-white shadow-lg rounded-lg pointer-events-auto flex flex-col p-4 border border-red-100`}
+        >
+          <div className="text-sm font-medium text-gray-900 mb-2">
+            Confirm Removal
+          </div>
+          <div className="text-sm text-gray-500 mb-4">
+            Are you sure you want to remove this hotel?
+          </div>
+          <div className="flex gap-2 justify-end">
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={() => toast.dismiss(t.id)}
+              className="px-3 py-1.5 text-sm text-gray-600 hover:bg-gray-100 rounded-lg transition"
+            >
+              Cancel
+            </motion.button>
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={() => {
+                handleRemove(hotelId);
+                toast.dismiss(t.id);
+              }}
+              className="px-3 py-1.5 text-sm bg-red-500 text-white hover:bg-red-600 rounded-lg transition"
+            >
+              Remove
+            </motion.button>
+          </div>
+        </motion.div>
+      ),
+      { duration: Infinity }
+    );
+  };
+
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-64">
+        <div className="w-12 h-12 rounded-full border-4 border-primary border-t-transparent animate-spin" />
+      </div>
+    );
+  }
+
   if (!user)
     return (
       <motion.div
@@ -77,7 +127,7 @@ export default function FavoritesPage() {
         initial={{ y: -20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.4 }}
-        className="text-3xl font-bold text-center mb-8 text-[color:var(--color-text)]"
+        className="text-3xl font-bold text-center mb-8 text-text"
       >
         My Favorite Hotels
       </motion.h1>
@@ -114,31 +164,15 @@ export default function FavoritesPage() {
                     className="object-cover transition-transform duration-500 hover:scale-105"
                     loading="lazy"
                   />
-                  <div className="absolute top-2 right-2 bg-white/90 rounded-full px-2 py-1 flex items-center shadow-sm">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="h-4 w-4 text-yellow-500"
-                      viewBox="0 0 20 20"
-                      fill="currentColor"
-                    >
-                      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                    </svg>
-                    <span className="ml-1 text-sm font-medium">
-                      {hotel.rating}
-                    </span>
-                  </div>
-                  <div className="absolute bottom-2 left-2 flex">
-                    {[...Array(hotel.stars)].map((_, i) => (
-                      <svg
-                        key={i}
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="h-5 w-5 text-yellow-400"
-                        viewBox="0 0 20 20"
-                        fill="currentColor"
-                      >
-                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                      </svg>
-                    ))}
+                  <div className="absolute top-3 right-3">
+                    <div className="flex items-center bg-gradient-to-br from-white/90 to-white/70 backdrop-blur-sm rounded-lg shadow-sm border border-white/20 overflow-hidden">
+                      <div className="bg-primary px-3 py-1.5 text-white font-bold">
+                        {hotel.rating}
+                      </div>
+                      <div className="px-3 py-1.5 text-sm font-medium text-gray-700">
+                        {getRatingLabel(hotel.rating)}
+                      </div>
+                    </div>
                   </div>
                 </div>
 
@@ -153,66 +187,81 @@ export default function FavoritesPage() {
                         {hotel.city} • {hotel.country}
                       </span>
                     </div>
-                    <div className="flex items-center mb-3">
-                      <span className="text-lg font-bold text-[color:var(--color-primary)]">
-                        ${hotel.priceNew}
-                      </span>
-                      {hotel.priceOld && (
-                        <span className="ml-2 text-sm text-gray-500 line-through">
-                          ${hotel.priceOld}
-                        </span>
-                      )}
-                      <span className="ml-2 text-sm text-gray-500">/night</span>
+
+                    <div className="text-yellow-400 flex items-center gap-1 py-1 px-3">
+                      {[...Array(5)].map((_, i) => (
+                        <motion.span
+                          key={i}
+                          animate={{
+                            scale: i < hotel.stars ? 1.2 : 1,
+                          }}
+                          transition={{ type: "spring", stiffness: 500 }}
+                        >
+                          {i < hotel.stars ? "★" : "☆"}
+                        </motion.span>
+                      ))}
                     </div>
 
                     <div className="flex flex-wrap gap-2 mb-4">
-                      {availableTags
-                        .filter((tagDef) => hotel.tags?.includes(tagDef.label))
-                        .map((tagDef) => {
-                          const Icon = iconMap[tagDef.icon];
-                          return (
-                            <div
-                              key={tagDef.label}
-                              className="flex items-center gap-1 text-xs text-gray-700 bg-gray-100 px-3 py-1.5 rounded-full"
-                            >
-                              <Icon className="w-3 h-3 text-primary" />
-                              <span>{tagDef.label}</span>
-                            </div>
-                          );
-                        })}
+                      {hotel.tags?.map((tagLabel) => {
+                        const matchedTag = availableTags.find((tagDef) =>
+                          tagDef.labels.includes(tagLabel)
+                        );
+                        const Icon = matchedTag
+                          ? iconMap[matchedTag.icon]
+                          : null;
+
+                        return (
+                          <div
+                            key={tagLabel}
+                            className="flex items-center gap-1 text-xs text-gray-700 bg-gray-100 px-3 py-1.5 rounded-full"
+                          >
+                            {Icon && <Icon className="w-3 h-3 text-primary" />}
+                            <span>{tagLabel}</span>
+                          </div>
+                        );
+                      })}
                     </div>
                   </div>
 
-                  <div className="flex flex-col sm:flex-row gap-3 mt-4">
+                  <div className="flex items-center mb-2">
+                    <span className="text-lg font-bold text-primary">
+                      ${hotel.priceNew}
+                    </span>
+                    {hotel.priceOld && (
+                      <span className="ml-2 text-sm text-gray-500 line-through">
+                        ${hotel.priceOld}
+                      </span>
+                    )}
+                    <span className="ml-2 text-sm text-gray-500">/night</span>
+                  </div>
+
+                  <div className="flex sm:flex-row gap-5 mt-4">
                     <motion.button
                       whileHover={{ scale: 1.03 }}
                       whileTap={{ scale: 0.98 }}
                       onClick={() => handleBookNow(hotel.id)}
-                      className="flex-1 bg-[color:var(--color-primary)] text-white font-medium py-2 px-4 rounded-lg hover:bg-opacity-90 transition shadow-md"
+                      className="flex-1 bg-primary text-white font-medium py-2 px-4 rounded-lg hover:bg-opacity-90 transition shadow-md flex items-center justify-center gap-2"
                     >
-                      Book Now
+                      <span>Book Now</span>
+                      <motion.span
+                        transition={{ type: "spring", stiffness: 500 }}
+                      >
+                        <FiArrowRight />
+                      </motion.span>
                     </motion.button>
                     <motion.button
                       whileHover={{ scale: 1.03 }}
                       whileTap={{ scale: 0.98 }}
-                      onClick={() => handleRemove(hotel.id)}
-                      className="flex-1 bg-white border border-red-300 text-red-500 font-medium py-2 px-4 rounded-lg hover:bg-red-50 transition flex items-center justify-center gap-1"
+                      onClick={() => handleRemoveWithConfirmation(hotel.id)}
+                      className="flex-1 bg-white border border-red-300 text-red-500 font-medium py-2 px-4 rounded-lg hover:bg-accent transition flex items-center justify-center gap-1 hover:text-white"
                     >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="h-5 w-5"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
+                      <motion.span
+                        transition={{ type: "spring", stiffness: 500 }}
                       >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                        />
-                      </svg>
-                      Remove
+                        <FaRegTrashAlt />
+                      </motion.span>
+                      <span>Remove</span>
                     </motion.button>
                   </div>
                 </div>

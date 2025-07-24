@@ -21,11 +21,15 @@ const NAV_ITEMS = [
 ];
 
 function Navigation() {
-  const { user } = useUser();
+  const { user, loading } = useUser();
   const pathname = usePathname();
   const locale = pathname.split("/")[1] || "en";
 
   console.log("Current language:", locale);
+
+  if (loading) {
+    return <div className="w-12 h-12 rounded-full bg-gray-200 animate-pulse" />; // Or any loading UI
+  }
 
   return (
     <nav className="text-base sm:text-lg">

@@ -22,6 +22,9 @@ import {
 } from "react-icons/fa";
 import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "react-hot-toast";
+import { motion, AnimatePresence } from "framer-motion";
+import { IoMdSearch } from "react-icons/io";
+import { VscDebugRestart } from "react-icons/vsc";
 
 const starRatings = [5, 4, 3, 2, 1];
 
@@ -252,9 +255,6 @@ export default function HotelFilters({ filters, onApplyFilters }: Props) {
 
   if (filters.length <= 1) return null;
 
-  {
-    /* Friendly label map */
-  }
   const filterLabels: Record<keyof typeof filterState, string> = {
     selectedContinents: "Continent",
     selectedCountry: "Country",
@@ -286,49 +286,67 @@ export default function HotelFilters({ filters, onApplyFilters }: Props) {
   };
 
   return (
-    <section className="p-4 sm:p-6 border rounded-2xl bg-white shadow-lg text-sm space-y-4">
+    <motion.section
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.3 }}
+      className="p-4 sm:p-6 border border-gray-200 rounded-2xl bg-white shadow-sm hover:shadow-md transition-shadow duration-300 text-sm space-y-4"
+    >
       <div className="flex justify-between items-center">
-        <h2 className="text-lg font-semibold flex items-center gap-2">
-          <FaFilter /> Filters
+        <h2 className="text-xl font-bold flex items-center gap-3 text-gray-800">
+          <FaFilter className="text-primary" /> Filters
         </h2>
-        {loading && <FaSpinner className="animate-spin text-primary" />}
+        {loading && (
+          <motion.div
+            animate={{ rotate: 360 }}
+            transition={{ repeat: Infinity, duration: 1, ease: "linear" }}
+          >
+            <FaSpinner className="text-primary" />
+          </motion.div>
+        )}
       </div>
 
       {/* Filter Summary */}
-      {Object.entries(filterState)
-        .filter(([, val]) => (Array.isArray(val) ? val.length > 0 : val))
-        .map(([key, val]) => {
-          const label = filterLabels[key as keyof typeof filterState] || key;
-          const values = Array.isArray(val) ? val : [val];
+      <div className="flex flex-wrap gap-2">
+        {Object.entries(filterState)
+          .filter(([, val]) => (Array.isArray(val) ? val.length > 0 : val))
+          .map(([key, val]) => {
+            const label = filterLabels[key as keyof typeof filterState] || key;
+            const values = Array.isArray(val) ? val : [val];
 
-          return values.map((v) => (
-            <span
-              key={`${key}-${v}`}
-              className="inline-flex items-center bg-primary/10 text-primary text-xs font-medium px-2 py-1 rounded-full mr-2 mb-2 shadow-sm"
-            >
-              {label}: {v}
-              <button
-                onClick={() => removeFilter(key as keyof typeof filterState, v)}
-                className="ml-1 text-primary hover:text-red-500"
-                aria-label="Remove filter"
+            return values.map((v) => (
+              <motion.span
+                key={`${key}-${v}`}
+                initial={{ scale: 0.9, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                className="inline-flex items-center bg-blue-100 text-blue-800 text-xs font-medium px-3 py-1 rounded-full shadow-sm"
               >
-                ×
-              </button>
-            </span>
-          ));
-        })}
+                {label}: {v}
+                <button
+                  onClick={() =>
+                    removeFilter(key as keyof typeof filterState, v)
+                  }
+                  className="ml-1.5 text-blue-600 hover:text-red-500 transition-colors"
+                  aria-label="Remove filter"
+                >
+                  ×
+                </button>
+              </motion.span>
+            ));
+          })}
+      </div>
 
       {/* Sort By */}
       <div className="mb-4">
         <label
           htmlFor="sortBy"
-          className="flex items-center gap-2 font-semibold mb-2 text-base hover:bg-gray-100 p-2 rounded"
+          className="flex items-center gap-2 font-semibold mb-2 text-base p-2 rounded-lg hover:bg-gray-50 transition-colors cursor-pointer"
         >
-          <FaSort /> Sort by:
+          <FaSort className="text-primary" /> Sort by:
         </label>
         <select
           id="sortBy"
-          className="w-full border border-gray-300 p-2 rounded-lg"
+          className="w-full border border-gray-300 p-2 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
           value={searchParams.get("sort") || ""}
           onChange={(e) => {
             const newSort = e.target.value;
@@ -338,7 +356,6 @@ export default function HotelFilters({ filters, onApplyFilters }: Props) {
             } else {
               params.delete("sort");
             }
-
             router.replace(`?${params.toString()}`);
           }}
         >
@@ -351,300 +368,447 @@ export default function HotelFilters({ filters, onApplyFilters }: Props) {
           <option value="stars-desc">▼ Stars: High to Low</option>
         </select>
       </div>
+
       {/* Continent */}
-      <div>
-        <button
-          className="flex justify-between items-center w-full font-semibold mb-2 text-base hover:bg-gray-100 p-2 rounded"
+      <div className="border-b border-gray-100 pb-2">
+        <motion.button
+          whileTap={{ scale: 0.98 }}
+          className="flex justify-between items-center w-full font-semibold mb-2 text-base p-2 rounded-lg hover:bg-gray-50 transition-colors"
           onClick={() => toggleSection("continent")}
         >
-          <span className="flex items-center gap-2">
-            <FaGlobe /> Continent
+          <span className="flex items-center gap-2 text-gray-700">
+            <FaGlobe className="text-primary" /> Continent
           </span>
-          {openSection === "continent" ? <IoChevronUp /> : <IoChevronDown />}
-        </button>
+          {openSection === "continent" ? (
+            <IoChevronUp className="text-gray-500" />
+          ) : (
+            <IoChevronDown className="text-gray-500" />
+          )}
+        </motion.button>
 
-        {openSection === "continent" && (
-          <div className="space-y-1">
-            {continents.map((item) => {
-              const count = filters.filter((f) => f.continent === item).length;
-              return (
-                <label key={item} className="flex items-center gap-2">
+        <AnimatePresence>
+          {openSection === "continent" && (
+            <motion.div
+              initial="closed"
+              animate="open"
+              exit="closed"
+              className="space-y-2 pl-8"
+            >
+              {continents.map((item) => {
+                const count = filters.filter(
+                  (f) => f.continent === item
+                ).length;
+                return (
+                  <motion.label
+                    key={item}
+                    whileHover={{ scale: 1.02 }}
+                    className="flex items-center gap-3 cursor-pointer text-gray-700"
+                  >
+                    <input
+                      type="checkbox"
+                      className="w-4 h-4 text-blue-600 rounded focus:ring-blue-500"
+                      checked={filterState.selectedContinents.includes(item)}
+                      onChange={(e) =>
+                        setFilterState((prev) => ({
+                          ...prev,
+                          selectedContinents: e.target.checked
+                            ? [...prev.selectedContinents, item]
+                            : prev.selectedContinents.filter((c) => c !== item),
+                          selectedCountry: "",
+                          selectedCity: "",
+                        }))
+                      }
+                    />
+                    <span>
+                      {item} <span className="text-gray-500">({count})</span>
+                    </span>
+                  </motion.label>
+                );
+              })}
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+
+      {/* Country */}
+      <div className="border-b border-gray-100 pb-2">
+        <motion.button
+          whileTap={{ scale: 0.98 }}
+          className="flex justify-between items-center w-full font-semibold mb-2 text-base p-2 rounded-lg hover:bg-gray-50 transition-colors"
+          onClick={() => toggleSection("country")}
+        >
+          <span className="flex items-center gap-2 text-gray-700">
+            <FaFlag className="text-primary" /> Country
+          </span>
+          {openSection === "country" ? (
+            <IoChevronUp className="text-gray-500" />
+          ) : (
+            <IoChevronDown className="text-gray-500" />
+          )}
+        </motion.button>
+
+        <AnimatePresence>
+          {openSection === "country" && (
+            <motion.div initial="closed" animate="open" exit="closed">
+              <select
+                className="w-full border border-gray-300 p-2 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                value={filterState.selectedCountry}
+                onChange={(e) =>
+                  setFilterState((prev) => ({
+                    ...prev,
+                    selectedCountry: e.target.value,
+                    selectedCity: "",
+                  }))
+                }
+              >
+                <option value="">All Countries</option>
+                {countries.map((item) => (
+                  <option key={item}>{item}</option>
+                ))}
+              </select>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+
+      {/* City */}
+      <div className="border-b border-gray-100 pb-2">
+        <motion.button
+          whileTap={{ scale: 0.98 }}
+          className="flex justify-between items-center w-full font-semibold mb-2 text-base p-2 rounded-lg hover:bg-gray-50 transition-colors"
+          onClick={() => toggleSection("city")}
+        >
+          <span className="flex items-center gap-2 text-gray-700">
+            <FaCity className="text-primary" /> City
+          </span>
+          {openSection === "city" ? (
+            <IoChevronUp className="text-gray-500" />
+          ) : (
+            <IoChevronDown className="text-gray-500" />
+          )}
+        </motion.button>
+
+        <AnimatePresence>
+          {openSection === "city" && (
+            <motion.div initial="closed" animate="open" exit="closed">
+              <select
+                className="w-full border border-gray-300 p-2 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                value={filterState.selectedCity}
+                onChange={(e) =>
+                  setFilterState((prev) => ({
+                    ...prev,
+                    selectedCity: e.target.value,
+                  }))
+                }
+              >
+                <option value="">All Cities</option>
+                {cities.map((item) => (
+                  <option key={item}>{item}</option>
+                ))}
+              </select>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+
+      {/* Price */}
+      <div className="border-b border-gray-100 pb-2">
+        <motion.button
+          whileTap={{ scale: 0.98 }}
+          className="flex justify-between items-center w-full font-semibold mb-2 text-base p-2 rounded-lg hover:bg-gray-50 transition-colors"
+          onClick={() => toggleSection("price")}
+        >
+          <span className="flex items-center gap-2 text-gray-700">
+            <FaMoneyBill className="text-primary" /> Price Range
+          </span>
+          {openSection === "price" ? (
+            <IoChevronUp className="text-gray-500" />
+          ) : (
+            <IoChevronDown className="text-gray-500" />
+          )}
+        </motion.button>
+
+        <AnimatePresence>
+          {openSection === "price" && (
+            <motion.div
+              initial="closed"
+              animate="open"
+              exit="closed"
+              className="flex gap-3"
+            >
+              <input
+                type="number"
+                placeholder="Min"
+                className="w-1/2 border border-gray-300 p-2 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                value={filterState.minPrice}
+                min={0}
+                onChange={(e) =>
+                  setFilterState((prev) => ({
+                    ...prev,
+                    minPrice: +e.target.value,
+                  }))
+                }
+              />
+              <input
+                type="number"
+                placeholder="Max"
+                max={filterState.maxPrice}
+                className="w-1/2 border border-gray-300 p-2 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                value={filterState.maxPrice}
+                onChange={(e) =>
+                  setFilterState((prev) => ({
+                    ...prev,
+                    maxPrice: +e.target.value,
+                  }))
+                }
+              />
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+
+      {/* Rating */}
+      <div className="border-b border-gray-100 pb-2">
+        <motion.button
+          whileTap={{ scale: 0.98 }}
+          className="flex justify-between items-center w-full font-semibold mb-2 text-base p-2 rounded-lg hover:bg-gray-50 transition-colors"
+          onClick={() => toggleSection("rating")}
+        >
+          <span className="flex items-center gap-2 text-gray-700">
+            <FaStar className="text-primary" /> Rating
+          </span>
+          {openSection === "rating" ? (
+            <IoChevronUp className="text-gray-500" />
+          ) : (
+            <IoChevronDown className="text-gray-500" />
+          )}
+        </motion.button>
+
+        <AnimatePresence>
+          {openSection === "rating" && (
+            <motion.div
+              initial="closed"
+              animate="open"
+              exit="closed"
+              className="space-y-2 pl-8"
+            >
+              {ratingLabels.map((label) => (
+                <motion.label
+                  key={label}
+                  whileHover={{ scale: 1.02 }}
+                  className="flex items-center gap-3 cursor-pointer text-gray-700"
+                >
                   <input
                     type="checkbox"
-                    className="accent-primary"
-                    checked={filterState.selectedContinents.includes(item)}
+                    className="w-4 h-4 text-blue-600 rounded focus:ring-blue-500"
+                    checked={filterState.selectedRatings.includes(label)}
                     onChange={(e) =>
                       setFilterState((prev) => ({
                         ...prev,
-                        selectedContinents: e.target.checked
-                          ? [...prev.selectedContinents, item]
-                          : prev.selectedContinents.filter((c) => c !== item),
-                        selectedCountry: "",
-                        selectedCity: "",
+                        selectedRatings: e.target.checked
+                          ? [...prev.selectedRatings, label]
+                          : prev.selectedRatings.filter((r) => r !== label),
                       }))
                     }
                   />
-                  {item} ({count})
-                </label>
-              );
-            })}
-          </div>
-        )}
+                  {label}
+                </motion.label>
+              ))}
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
-      {/* Country */}
-      <div>
-        <button
-          className="flex justify-between items-center w-full font-semibold mb-2 text-base hover:bg-gray-100 p-2 rounded"
-          onClick={() => toggleSection("country")}
-        >
-          <span className="flex items-center gap-2">
-            <FaFlag /> Country
-          </span>
-          {openSection === "country" ? <IoChevronUp /> : <IoChevronDown />}
-        </button>
-        {openSection === "country" && (
-          <select
-            className="w-full border border-gray-300 p-2 rounded-lg"
-            value={filterState.selectedCountry}
-            onChange={(e) =>
-              setFilterState((prev) => ({
-                ...prev,
-                selectedCountry: e.target.value,
-                selectedCity: "",
-              }))
-            }
-          >
-            <option value="">All Countries</option>
-            {countries.map((item) => (
-              <option key={item}>{item}</option>
-            ))}
-          </select>
-        )}
-      </div>
-      {/* City */}
-      <div>
-        <button
-          className="flex justify-between items-center w-full font-semibold mb-2 text-base hover:bg-gray-100 p-2 rounded"
-          onClick={() => toggleSection("city")}
-        >
-          <span className="flex items-center gap-2">
-            <FaCity /> City
-          </span>
-          {openSection === "city" ? <IoChevronUp /> : <IoChevronDown />}
-        </button>
-        {openSection === "city" && (
-          <select
-            className="w-full border border-gray-300 p-2 rounded-lg"
-            value={filterState.selectedCity}
-            onChange={(e) =>
-              setFilterState((prev) => ({
-                ...prev,
-                selectedCity: e.target.value,
-              }))
-            }
-          >
-            <option value="">All Cities</option>
-            {cities.map((item) => (
-              <option key={item}>{item}</option>
-            ))}
-          </select>
-        )}
-      </div>
-      {/* Price */}
-      <div>
-        <button
-          className="flex justify-between items-center w-full font-semibold mb-2 text-base hover:bg-gray-100 p-2 rounded"
-          onClick={() => toggleSection("price")}
-        >
-          <span className="flex items-center gap-2">
-            <FaMoneyBill /> Price Range
-          </span>
 
-          {openSection === "price" ? <IoChevronUp /> : <IoChevronDown />}
-        </button>
-        {openSection === "price" && (
-          <div className="flex gap-3">
-            <input
-              type="number"
-              placeholder="Min"
-              className="w-1/2 border border-gray-300 p-2 rounded-lg"
-              value={filterState.minPrice}
-              min={0}
-              onChange={(e) =>
-                setFilterState((prev) => ({
-                  ...prev,
-                  minPrice: +e.target.value,
-                }))
-              }
-            />
-            <input
-              type="number"
-              placeholder="Max"
-              max={filterState.maxPrice}
-              className="w-1/2 border border-gray-300 p-2 rounded-lg"
-              value={filterState.maxPrice}
-              onChange={(e) =>
-                setFilterState((prev) => ({
-                  ...prev,
-                  maxPrice: +e.target.value,
-                }))
-              }
-            />
-          </div>
-        )}
-      </div>
-      {/* Rating */}
-      <div>
-        <button
-          className="flex justify-between items-center w-full font-semibold mb-2 text-base hover:bg-gray-100 p-2 rounded"
-          onClick={() => toggleSection("rating")}
-        >
-          <span className="flex items-center gap-2">
-            <FaStar /> Rating
-          </span>
-          {openSection === "rating" ? <IoChevronUp /> : <IoChevronDown />}
-        </button>
-        {openSection === "rating" && (
-          <div className="space-y-1">
-            {ratingLabels.map((label) => (
-              <label key={label} className="flex items-center gap-2">
-                <input
-                  type="checkbox"
-                  className="accent-primary"
-                  checked={filterState.selectedRatings.includes(label)}
-                  onChange={(e) =>
-                    setFilterState((prev) => ({
-                      ...prev,
-                      selectedRatings: e.target.checked
-                        ? [...prev.selectedRatings, label]
-                        : prev.selectedRatings.filter((r) => r !== label),
-                    }))
-                  }
-                />
-                {label}
-              </label>
-            ))}
-          </div>
-        )}
-      </div>
       {/* Stars */}
-      <div>
-        <button
-          className="flex justify-between items-center w-full font-semibold mb-2 text-base hover:bg-gray-100 p-2 rounded"
+      <div className="border-b border-gray-100 pb-2">
+        <motion.button
+          whileTap={{ scale: 0.98 }}
+          className="flex justify-between items-center w-full font-semibold mb-2 text-base p-2 rounded-lg hover:bg-gray-50 transition-colors"
           onClick={() => toggleSection("stars")}
         >
-          <span className="flex items-center gap-2">
-            <FaThumbsUp /> User Rating
+          <span className="flex items-center gap-2 text-gray-700">
+            <FaThumbsUp className="text-primary" /> User Rating
           </span>
-          {openSection === "stars" ? <IoChevronUp /> : <IoChevronDown />}
-        </button>
-        {openSection === "stars" && (
-          <div className="space-y-1">
-            {starRatings.map((stars) => (
-              <label key={stars} className="flex items-center gap-2">
-                <input
-                  type="checkbox"
-                  className="accent-primary"
-                  checked={filterState.selectedStars.includes(stars)}
-                  onChange={(e) =>
-                    setFilterState((prev) => ({
-                      ...prev,
-                      selectedStars: e.target.checked
-                        ? [...prev.selectedStars, stars]
-                        : prev.selectedStars.filter((s) => s !== stars),
-                    }))
-                  }
-                />
-                {stars} stars
-              </label>
-            ))}
-          </div>
-        )}
+          {openSection === "stars" ? (
+            <IoChevronUp className="text-gray-500" />
+          ) : (
+            <IoChevronDown className="text-gray-500" />
+          )}
+        </motion.button>
+
+        <AnimatePresence>
+          {openSection === "stars" && (
+            <motion.div
+              initial="closed"
+              animate="open"
+              exit="closed"
+              className="space-y-2 pl-8"
+            >
+              {starRatings.map((stars) => (
+                <motion.label
+                  key={stars}
+                  whileHover={{ scale: 1.02 }}
+                  className="flex items-center gap-3 cursor-pointer text-gray-700"
+                >
+                  <input
+                    type="checkbox"
+                    className="w-4 h-4 text-blue-600 rounded focus:ring-blue-500"
+                    checked={filterState.selectedStars.includes(stars)}
+                    onChange={(e) =>
+                      setFilterState((prev) => ({
+                        ...prev,
+                        selectedStars: e.target.checked
+                          ? [...prev.selectedStars, stars]
+                          : prev.selectedStars.filter((s) => s !== stars),
+                      }))
+                    }
+                  />
+
+                  <span className="flex items-center gap-1">
+                    {/* Render star icons */}
+                    {Array.from({ length: stars }, (_, i) => (
+                      <FaStar key={i} className="text-yellow-400 text-sm" />
+                    ))}
+                    {/* Optional text */}
+                    <span className="ml-1 text-sm text-gray-500">
+                      ({stars} Star{stars > 1 ? "s" : ""})
+                    </span>
+                  </span>
+                </motion.label>
+              ))}
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
+
       {/* Payment */}
-      <div>
-        <button
-          className="flex justify-between items-center w-full font-semibold mb-2 text-base hover:bg-gray-100 p-2 rounded"
+      <div className="border-b border-gray-100 pb-2">
+        <motion.button
+          whileTap={{ scale: 0.98 }}
+          className="flex justify-between items-center w-full font-semibold mb-2 text-base p-2 rounded-lg hover:bg-gray-50 transition-colors"
           onClick={() => toggleSection("payment")}
         >
-          <span className="flex items-center gap-2">
-            <FaMoneyBill /> Payment Methods
+          <span className="flex items-center gap-2 text-gray-700">
+            <FaMoneyBill className="text-primary" /> Payment Methods
           </span>
-          {openSection === "payment" ? <IoChevronUp /> : <IoChevronDown />}
-        </button>
-        {openSection === "payment" && (
-          <div className="space-y-1">
-            {paymentMethods.map((method) => (
-              <label key={method} className="flex items-center gap-2">
-                <input
-                  type="checkbox"
-                  className="accent-primary"
-                  checked={filterState.selectedPayments.includes(method)}
-                  onChange={(e) =>
-                    setFilterState((prev) => ({
-                      ...prev,
-                      selectedPayments: e.target.checked
-                        ? [...prev.selectedPayments, method]
-                        : prev.selectedPayments.filter((m) => m !== method),
-                    }))
-                  }
-                />
-                {method}
-              </label>
-            ))}
-          </div>
-        )}
+          {openSection === "payment" ? (
+            <IoChevronUp className="text-gray-500" />
+          ) : (
+            <IoChevronDown className="text-gray-500" />
+          )}
+        </motion.button>
+
+        <AnimatePresence>
+          {openSection === "payment" && (
+            <motion.div
+              initial="closed"
+              animate="open"
+              exit="closed"
+              className="space-y-2 pl-8"
+            >
+              {paymentMethods.map((method) => (
+                <motion.label
+                  key={method}
+                  whileHover={{ scale: 1.02 }}
+                  className="flex items-center gap-3 cursor-pointer text-gray-700"
+                >
+                  <input
+                    type="checkbox"
+                    className="w-4 h-4 text-blue-600 rounded focus:ring-blue-500"
+                    checked={filterState.selectedPayments.includes(method)}
+                    onChange={(e) =>
+                      setFilterState((prev) => ({
+                        ...prev,
+                        selectedPayments: e.target.checked
+                          ? [...prev.selectedPayments, method]
+                          : prev.selectedPayments.filter((m) => m !== method),
+                      }))
+                    }
+                  />
+                  {method}
+                </motion.label>
+              ))}
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
+
       {/* Languages */}
-      <div>
-        <button
-          className="flex justify-between items-center w-full font-semibold mb-2 text-base hover:bg-gray-100 p-2 rounded"
+      <div className="border-b border-gray-100 pb-2">
+        <motion.button
+          whileTap={{ scale: 0.98 }}
+          className="flex justify-between items-center w-full font-semibold mb-2 text-base p-2 rounded-lg hover:bg-gray-50 transition-colors"
           onClick={() => toggleSection("languages")}
         >
-          <span className="flex items-center gap-2">
-            <FaLanguage /> Languages Spoken
+          <span className="flex items-center gap-2 text-gray-700">
+            <FaLanguage className="text-primary" /> Languages Spoken
           </span>
-          {openSection === "languages" ? <IoChevronUp /> : <IoChevronDown />}
-        </button>
+          {openSection === "languages" ? (
+            <IoChevronUp className="text-gray-500" />
+          ) : (
+            <IoChevronDown className="text-gray-500" />
+          )}
+        </motion.button>
 
-        {openSection === "languages" && (
-          <div className="space-y-1">
-            {languages.map((lang) => (
-              <label key={lang} className="flex items-center gap-2">
-                <input
-                  type="checkbox"
-                  className="accent-primary"
-                  checked={filterState.selectedLanguages.includes(lang)}
-                  onChange={(e) =>
-                    setFilterState((prev) => ({
-                      ...prev,
-                      selectedLanguages: e.target.checked
-                        ? [...prev.selectedLanguages, lang]
-                        : prev.selectedLanguages.filter((l) => l !== lang),
-                    }))
-                  }
-                />
-                {lang}
-              </label>
-            ))}
-          </div>
-        )}
+        <AnimatePresence>
+          {openSection === "languages" && (
+            <motion.div
+              initial="closed"
+              animate="open"
+              exit="closed"
+              className="space-y-2 pl-8"
+            >
+              {languages.map((lang) => (
+                <motion.label
+                  key={lang}
+                  whileHover={{ scale: 1.02 }}
+                  className="flex items-center gap-3 cursor-pointer text-gray-700"
+                >
+                  <input
+                    type="checkbox"
+                    className="w-4 h-4 text-blue-600 rounded focus:ring-blue-500"
+                    checked={filterState.selectedLanguages.includes(lang)}
+                    onChange={(e) =>
+                      setFilterState((prev) => ({
+                        ...prev,
+                        selectedLanguages: e.target.checked
+                          ? [...prev.selectedLanguages, lang]
+                          : prev.selectedLanguages.filter((l) => l !== lang),
+                      }))
+                    }
+                  />
+                  {lang}
+                </motion.label>
+              ))}
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
+
       {/* Buttons */}
-      <div className="mt-4 flex flex-col gap-3 sm:flex-row">
-        <button
+      <motion.div
+        className="mt-6 flex flex-col gap-3 sm:flex-row"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.2 }}
+      >
+        <motion.button
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.98 }}
           onClick={handleApplyFilters}
-          className="w-full bg-primary text-white py-2 rounded-lg font-semibold hover:bg-primary/90 transition"
+          className="w-full bg-primary text-white px-2 py-3 rounded-lg font-semibold hover:bg-success transition-all shadow-md hover:shadow-lg flex items-center justify-center gap-1"
         >
-          Apply Filters
-        </button>
-        <button
+          <IoMdSearch className="text-base" /> Apply Filters
+        </motion.button>
+        <motion.button
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.98 }}
           onClick={resetFilters}
-          className="w-full border border-gray-400 text-gray-700 py-2 rounded-lg font-semibold hover:bg-gray-100 transition"
+          className="w-full border gap-1 border-gray-300 text-gray-700 px-2 py-3 rounded-lg font-semibold hover:bg-gray-50 transition-all shadow-sm hover:shadow-md flex items-center justify-center"
         >
-          Reset
-        </button>
-      </div>
-    </section>
+          <VscDebugRestart className="text-base" /> Reset
+        </motion.button>
+      </motion.div>
+    </motion.section>
   );
 }

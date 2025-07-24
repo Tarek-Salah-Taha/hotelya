@@ -35,7 +35,7 @@ export default function BookingPage({
   const [children, setChildren] = useState(0);
   const [monthsToShow, setMonthsToShow] = useState(2);
 
-  const { user } = useUser();
+  const { user, loading } = useUser();
 
   useEffect(() => {
     const handleResize = () => {
@@ -95,6 +95,10 @@ export default function BookingPage({
     toast.success("Booking confirmed!");
     router.push(`/${locale}/bookings`);
   };
+
+  if (loading) {
+    return <div className="w-12 h-12 rounded-full bg-gray-200 animate-pulse" />; // Or any loading UI
+  }
 
   return (
     <div className="max-w-4xl mx-auto mt-10 p-6 bg-white rounded-2xl shadow-lg space-y-8 text-text">
