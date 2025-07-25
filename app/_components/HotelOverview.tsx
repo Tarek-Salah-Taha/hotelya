@@ -1,9 +1,22 @@
 function HotelOverview({ description }: { description: string }) {
   return (
-    <div className="bg-white p-6 rounded-xl shadow-sm text-text">
-      <h2 className="text-2xl font-semibold mb-4">Overview</h2>
-      <p className="text-lg text-gray-700">
-        {description || "No description available for this hotel."}
+    <div className="bg-white p-6 rounded-xl shadow-sm hover:shadow-md transition-all duration-300 group">
+      <div className="relative pb-2 mb-4 overflow-hidden">
+        <h2 className="text-2xl font-semibold text-gray-800 inline-block group-hover:translate-x-1 transition-transform duration-300">
+          Overview
+        </h2>
+        <span
+          className="absolute bottom-0 left-0 w-12 h-1 bg-primary rounded-full 
+          scale-x-0 group-hover:scale-x-100 origin-left transition-transform duration-500"
+        />
+      </div>
+
+      <p className="text-lg text-gray-600 leading-relaxed">
+        {description || (
+          <span className="text-gray-400 italic">
+            No description available for this hotel.
+          </span>
+        )}
       </p>
     </div>
   );

@@ -10,32 +10,143 @@ function HotelPolicies({ policies, checkIn, checkOut }: HotelPoliciesProps) {
     policies[0] || {};
 
   return (
-    <div className="bg-white p-6 rounded-xl shadow-sm text-text">
-      <h2 className="text-2xl font-semibold mb-4">Policies</h2>
-      <div className=" pl-5 text-lg text-gray-700 space-y-2">
-        <div className="flex items-center gap-2">
-          <FaSignInAlt className="w-6 h-6 shrink-0 text-primary" />
-          Check-in: From {convertTo12Hour(checkIn)}.
+    <div
+      className="
+      bg-white p-6 rounded-xl 
+      border border-gray-100
+      shadow-sm hover:shadow-md 
+      transition-all duration-300
+      group
+    "
+    >
+      <div className="relative pb-2 mb-6 overflow-hidden">
+        <h2
+          className="
+          text-2xl font-semibold 
+          text-gray-800
+          inline-block
+          group-hover:translate-x-1 
+          transition-transform duration-300
+        "
+        >
+          Policies
+        </h2>
+        <span
+          className="
+          absolute bottom-0 left-0 
+          w-12 h-1 bg-primary rounded-full 
+          scale-x-0 group-hover:scale-x-100 
+          origin-left transition-transform duration-500
+        "
+        />
+      </div>
+
+      <div className="space-y-4 pl-1">
+        {/* Check-in */}
+        <div className="flex items-start gap-3 group/item">
+          <FaSignInAlt
+            className="
+            w-6 h-6 shrink-0 text-primary 
+            mt-0.5
+            transition-transform
+            group-hover/item:scale-110
+          "
+          />
+          <span className="text-gray-700 leading-relaxed">
+            Check-in: From{" "}
+            <span className="font-medium">{convertTo12Hour(checkIn)}</span>
+          </span>
         </div>
-        <div className="flex items-center gap-2">
-          <FaSignOutAlt className="w-6 h-6 shrink-0 text-primary" />
-          Check-out: Until {convertTo12Hour(checkOut)}.
+
+        {/* Check-out */}
+        <div className="flex items-start gap-3 group/item">
+          <FaSignOutAlt
+            className="
+            w-6 h-6 shrink-0 text-primary 
+            mt-0.5
+            transition-transform
+            group-hover/item:scale-110
+          "
+          />
+          <span className="text-gray-700 leading-relaxed">
+            Check-out: Until{" "}
+            <span className="font-medium">{convertTo12Hour(checkOut)}</span>
+          </span>
         </div>
-        <div className="flex items-center gap-2">
-          <FaPerson className="w-6 h-6 shrink-0 text-primary" />
-          Minimum age for check-in: {minAge} years.
+
+        {/* Minimum Age */}
+        <div className="flex items-start gap-3 group/item">
+          <FaPerson
+            className="
+            w-6 h-6 shrink-0 text-primary 
+            mt-0.5
+            transition-transform
+            group-hover/item:scale-110
+          "
+          />
+          <span className="text-gray-700 leading-relaxed">
+            Minimum age for check-in:{" "}
+            <span className="font-medium">{minAge} years</span>
+          </span>
         </div>
-        <div className="flex items-center gap-2">
-          <TbCalendarCancel className="w-6 h-6 shrink-0 text-primary" />
-          {cancellationPolicy}
+
+        {/* Cancellation Policy */}
+        <div className="flex items-start gap-3 group/item">
+          <TbCalendarCancel
+            className="
+            w-6 h-6 shrink-0 text-primary 
+            mt-0.5
+            transition-transform
+            group-hover/item:scale-110
+          "
+          />
+          <span className="text-gray-700 leading-relaxed">
+            {cancellationPolicy.includes("Free cancellation") ? (
+              <span className="text-green-600 font-medium">
+                {cancellationPolicy}
+              </span>
+            ) : (
+              cancellationPolicy
+            )}
+          </span>
         </div>
-        <div className="flex items-center gap-2">
-          <MdOutlinePets className="w-6 h-6 shrink-0 text-primary" />
-          {petsAllowed ? "Pets are allowed." : "Pets are not allowed."}
+
+        {/* Pets Policy */}
+        <div className="flex items-start gap-3 group/item">
+          <MdOutlinePets
+            className="
+            w-6 h-6 shrink-0 text-primary 
+            mt-0.5
+            transition-transform
+            group-hover/item:scale-110
+          "
+          />
+          <span
+            className={`text-gray-700 leading-relaxed ${
+              petsAllowed ? "text-green-600 font-medium" : "text-gray-600"
+            }`}
+          >
+            {petsAllowed ? "Pets are allowed." : "Pets are not allowed."}
+          </span>
         </div>
-        <div className="flex items-center gap-2">
-          <FaSmoking className="w-6 h-6 shrink-0 text-primary" />
-          {smokingAllowed ? "Smoking is allowed." : "Smoking is not allowed."}
+
+        {/* Smoking Policy */}
+        <div className="flex items-start gap-3 group/item">
+          <FaSmoking
+            className="
+            w-6 h-6 shrink-0 text-primary 
+            mt-0.5
+            transition-transform
+            group-hover/item:scale-110
+          "
+          />
+          <span
+            className={`text-gray-700 leading-relaxed ${
+              smokingAllowed ? "text-red-600 font-medium" : "text-gray-600"
+            }`}
+          >
+            {smokingAllowed ? "Smoking is allowed." : "Smoking is not allowed."}
+          </span>
         </div>
       </div>
     </div>

@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useState } from "react";
+import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "react-hot-toast";
 import { addHotelReview, getHotelReviews } from "../_lib/reviewsApi";
 import StarRating from "./StarRating";
@@ -18,6 +19,25 @@ function formatDate(dateString: string) {
     day: "numeric",
   });
 }
+
+const reviewVariants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.4 },
+  },
+  exit: { opacity: 0, x: -20 },
+};
+
+const formVariants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { delay: 0.2, duration: 0.4 },
+  },
+};
 
 export default function HotelReviews({
   hotelId,
@@ -55,72 +75,143 @@ export default function HotelReviews({
   }
 
   return (
-    <div className="mt-10 p-6 bg-white rounded-xl shadow-sm border text-text">
-      <h2 className="text-2xl font-semibold mb-6">Guest Reviews</h2>
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.5 }}
+      className="mt-10 p-6 bg-white rounded-xl shadow-sm border border-gray-100 group"
+    >
+      <div className="relative pb-2 mb-6 overflow-hidden">
+        <motion.h2
+          className="text-2xl font-semibold text-gray-800 inline-block"
+          whileHover={{ scale: 1.01 }}
+        >
+          Guest Reviews
+        </motion.h2>
+        <span
+          className="
+            absolute bottom-0 left-0 
+            w-12 h-1 bg-primary rounded-full 
+            scale-x-0 group-hover:scale-x-100 
+            origin-left transition-transform duration-500
+          "
+        />
+      </div>
 
       {/* Review List */}
       <div className="space-y-6 mb-10">
         {reviews.length === 0 ? (
-          <p className="text-sm text-gray-500">No reviews yet.</p>
+          <motion.p
+            className="text-sm text-gray-500"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+          >
+            No reviews yet.
+          </motion.p>
         ) : (
-          reviews.map((review) => (
-            <div
-              key={review.id}
-              className="flex gap-4 items-start bg-gray-50 p-4 rounded-lg"
-            >
-              <div className="w-10 h-10 rounded-full bg-primary text-white flex items-center justify-center font-semibold text-sm">
-                {getInitials(review.author).toUpperCase()}
-              </div>
-              <div className="flex-1">
-                <div className="flex justify-between items-center mb-1">
-                  <p className="font-medium">{review.author}</p>
-                  <span className="text-xs text-gray-400">
-                    {formatDate(review.date)}
-                  </span>
+          <AnimatePresence>
+            {reviews.map((review) => (
+              <motion.div
+                key={review.id}
+                variants={reviewVariants}
+                initial="hidden"
+                animate="visible"
+                exit="exit"
+                whileHover={{ scale: 1.01 }}
+                className="flex gap-4 items-start bg-gray-50 p-4 rounded-lg hover:shadow-sm transition-shadow"
+              >
+                <motion.div
+                  className="w-10 h-10 rounded-full bg-primary text-white flex items-center justify-center font-semibold text-sm"
+                  whileHover={{ rotate: 10 }}
+                >
+                  {getInitials(review.author).toUpperCase()}
+                </motion.div>
+                <div className="flex-1">
+                  <div className="flex justify-between items-center mb-1">
+                    <p className="font-medium">{review.author}</p>
+                    <motion.span
+                      className="text-xs text-gray-400"
+                      whileHover={{ scale: 1.05 }}
+                    >
+                      {formatDate(review.date)}
+                    </motion.span>
+                  </div>
+                  <motion.span
+                    className="inline-block bg-yellow-100 text-yellow-700 text-xs px-2 py-0.5 rounded-full mb-1"
+                    whileHover={{ scale: 1.05 }}
+                  >
+                    {review.rating} / 10
+                  </motion.span>
+                  <motion.p
+                    className="text-sm text-gray-700"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: 0.1 }}
+                  >
+                    {review.comment}
+                  </motion.p>
                 </div>
-                <span className="inline-block bg-yellow-100 text-yellow-700 text-xs px-2 py-0.5 rounded-full mb-1">
-                  {review.rating} / 10
-                </span>
-                <p className="text-sm text-gray-700">{review.comment}</p>
-              </div>
-            </div>
-          ))
+              </motion.div>
+            ))}
+          </AnimatePresence>
         )}
       </div>
 
       {/* Add Review Form */}
-      <form
+      <motion.form
         onSubmit={handleSubmit}
+        variants={formVariants}
+        initial="hidden"
+        animate="visible"
         className="space-y-4 border-t pt-6 lg:w-3/4"
       >
-        <h3 className="text-lg font-semibold">Leave a Review</h3>
+        <div className="relative pb-2 mb-4 overflow-hidden">
+          <motion.h3
+            className="text-lg font-semibold text-gray-800 inline-block"
+            whileHover={{ scale: 1.01 }}
+          >
+            Leave a Review
+          </motion.h3>
+          <span
+            className="
+              absolute bottom-0 left-0 
+              w-8 h-0.5 bg-primary rounded-full 
+              scale-x-0 group-hover:scale-x-100 
+              origin-left transition-transform duration-500
+            "
+          />
+        </div>
 
-        <input
+        <motion.input
           type="text"
           value={author}
           onChange={(e) => setAuthor(e.target.value)}
           placeholder="Your name"
           className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary transition"
+          whileFocus={{ scale: 1.01 }}
         />
 
-        <textarea
+        <motion.textarea
           value={comment}
           onChange={(e) => setComment(e.target.value)}
           placeholder="Your comment"
           rows={3}
           className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary transition"
+          whileFocus={{ scale: 1.01 }}
         />
 
         <StarRating rating={rating} setRating={setRating} />
 
-        <button
+        <motion.button
           type="submit"
           disabled={loading}
           className="bg-primary text-white px-5 py-2.5 rounded-lg hover:bg-opacity-90 transition disabled:opacity-50"
+          whileHover={{ scale: 1.03 }}
+          whileTap={{ scale: 0.98 }}
         >
           {loading ? "Submitting..." : "Submit Review"}
-        </button>
-      </form>
-    </div>
+        </motion.button>
+      </motion.form>
+    </motion.div>
   );
 }

@@ -8,6 +8,7 @@ import { getBookingsByUser, cancelBooking } from "../_lib/bookingsApi";
 import { usePathname, useRouter } from "next/navigation";
 import { Booking, SupportedLang } from "../_types/types";
 import { useUser } from "../_hooks/useUser";
+import SkeletonLoader from "./SkeletonLoader";
 
 const statusColors: Record<string, string> = {
   Confirmed: "bg-green-100 text-green-600",
@@ -173,22 +174,7 @@ export default function Page() {
   }
 
   if (isLoading) {
-    return (
-      <div className="flex items-center justify-center min-h-[60vh]">
-        <div className="space-y-6 w-full max-w-3xl">
-          {[1, 2, 3].map((_, i) => (
-            <div
-              key={i}
-              className="animate-pulse bg-white border rounded-lg shadow p-6 space-y-4"
-            >
-              <div className="h-4 bg-gray-200 rounded w-1/3"></div>
-              <div className="h-3 bg-gray-100 rounded w-2/3"></div>
-              <div className="h-3 bg-gray-100 rounded w-1/2"></div>
-            </div>
-          ))}
-        </div>
-      </div>
-    );
+    return <SkeletonLoader />;
   }
 
   return (

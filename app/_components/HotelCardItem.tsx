@@ -188,15 +188,12 @@ export default function HotelCardItem({ hotel }: HotelCardItemProps) {
             {/* Book Now Button */}
             <motion.button
               onClick={() => router.push(`/${locale}/hotels/${hotel.id}`)}
-              className="bg-primary text-white text-sm px-4 py-2.5 rounded-lg flex items-center gap-2 hover:bg-primary-dark transition-colors"
-              whileHover={{ scale: 1.05 }}
+              className=" bg-primary text-white font-medium py-3 px-4 rounded-lg hover:bg-opacity-90 transition shadow-md flex items-center justify-center gap-2"
+              whileHover={{ scale: 1.03 }}
               whileTap={{ scale: 0.95 }}
             >
               <span>Book Now</span>
-              <motion.span
-                animate={{ x: isHovered ? 2 : 0 }}
-                transition={{ type: "spring", stiffness: 500 }}
-              >
+              <motion.span transition={{ type: "spring", stiffness: 500 }}>
                 <FiArrowRight />
               </motion.span>
             </motion.button>

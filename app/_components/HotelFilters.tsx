@@ -575,7 +575,7 @@ export default function HotelFilters({ filters, onApplyFilters }: Props) {
           onClick={() => toggleSection("rating")}
         >
           <span className="flex items-center gap-2 text-gray-700">
-            <FaStar className="text-primary" /> Rating
+            <FaThumbsUp className="text-primary" /> User Rating
           </span>
           {openSection === "rating" ? (
             <IoChevronUp className="text-gray-500" />
@@ -627,7 +627,7 @@ export default function HotelFilters({ filters, onApplyFilters }: Props) {
           onClick={() => toggleSection("stars")}
         >
           <span className="flex items-center gap-2 text-gray-700">
-            <FaThumbsUp className="text-primary" /> User Rating
+            <FaStar className="text-primary" /> Star Rating
           </span>
           {openSection === "stars" ? (
             <IoChevronUp className="text-gray-500" />

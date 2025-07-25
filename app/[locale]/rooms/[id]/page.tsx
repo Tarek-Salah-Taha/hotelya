@@ -9,6 +9,8 @@ import "react-datepicker/dist/react-datepicker.css";
 import toast from "react-hot-toast";
 import { use } from "react";
 import { SupportedLang } from "@/app/_types/types";
+import { motion } from "framer-motion";
+import { FaUser, FaChild } from "react-icons/fa";
 
 export default function BookingPage({
   params,
@@ -17,12 +19,9 @@ export default function BookingPage({
 }) {
   const searchParams = useSearchParams();
   const router = useRouter();
-
   const { id, locale } = use(params);
   const roomId = Number(id);
-
   const hotelId = Number(searchParams.get("hotelId"));
-
   const roomType = searchParams.get("roomType");
   const price = Number(searchParams.get("price"));
   const hotelName = searchParams.get("hotelName") || "Unknown Hotel";
@@ -40,7 +39,7 @@ export default function BookingPage({
   useEffect(() => {
     const handleResize = () => {
       const isMobile = window.innerWidth < 640;
-      setMonthsToShow(isMobile ? 1 : 2); // 1 month on mobile
+      setMonthsToShow(isMobile ? 1 : 2);
     };
     handleResize();
     window.addEventListener("resize", handleResize);
@@ -49,10 +48,9 @@ export default function BookingPage({
 
   const getNights = () => {
     if (!startDate || !endDate) return 0;
-    const diff = Math.ceil(
+    return Math.ceil(
       (endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24)
     );
-    return diff;
   };
 
   const totalNights = getNights();
@@ -80,16 +78,10 @@ export default function BookingPage({
       numChildren: children,
       totalPrice,
       createdAt: new Date().toLocaleDateString(),
-      roomType: searchParams.get("roomType") || "",
+      roomType: roomType || "",
       status: "Confirmed",
       priceNew: price,
       totalNights,
-    });
-
-    console.log("Booking payload:", {
-      roomId, // should not be null
-      checkInDate: startDate.toISOString(),
-      checkOutDate: endDate.toISOString(),
     });
 
     toast.success("Booking confirmed!");
@@ -97,13 +89,23 @@ export default function BookingPage({
   };
 
   if (loading) {
-    return <div className="w-12 h-12 rounded-full bg-gray-200 animate-pulse" />; // Or any loading UI
+    return (
+      <div className="flex justify-center py-10">
+        <div className="w-12 h-12 rounded-full bg-gray-200 animate-pulse" />
+      </div>
+    );
   }
 
   return (
-    <div className="max-w-4xl mx-auto mt-10 p-6 bg-white rounded-2xl shadow-lg space-y-8 text-text">
-      <div>
-        <h2 className="text-2xl font-semibold text-primary mb-2">
+    <motion.div
+      initial={{ opacity: 0, y: 40 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.4, ease: "easeOut" }}
+      className="max-w-4xl mx-auto mt-10 p-6 sm:p-10 bg-white rounded-3xl shadow-xl space-y-8 text-text"
+    >
+      {/* Header */}
+      <div className="space-y-1">
+        <h2 className="text-2xl sm:text-3xl font-bold text-primary">
           Book: {roomType}
         </h2>
         <p className="text-sm text-gray-500">
@@ -112,8 +114,10 @@ export default function BookingPage({
       </div>
 
       {/* Date Picker */}
-      <div className="w-full overflow-hidden">
-        <h3 className="font-medium text-lg mb-2">Select Dates</h3>
+      <div className="overflow-hidden">
+        <h3 className="font-semibold text-lg mb-2 text-gray-800">
+          Select Dates
+        </h3>
         <DatePicker
           selected={startDate}
           onChange={(dates) => {
@@ -127,63 +131,133 @@ export default function BookingPage({
           inline
           monthsShown={monthsToShow}
           minDate={new Date()}
-          calendarClassName="bg-white p-4 rounded-xl shadow-md text-sm"
+          calendarClassName="!bg-white !p-4 !rounded-xl !shadow-md !text-sm"
         />
       </div>
 
       {/* Guest Selection */}
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-end">
-        <div className="flex flex-col">
-          <label className="text-sm mb-1">Adults</label>
-          <select
-            value={adults}
-            onChange={(e) => setAdults(Number(e.target.value))}
-            className="border rounded px-3 py-2 text-sm"
-          >
-            {[1, 2, 3, 4].map((num) => (
-              <option key={num}>{num}</option>
-            ))}
-          </select>
-        </div>
-        <div className="flex flex-col">
-          <label className="text-sm mb-1">Children</label>
-          <select
-            value={children}
-            onChange={(e) => setChildren(Number(e.target.value))}
-            className="border rounded px-3 py-2 text-sm"
-          >
-            {[0, 1, 2, 3].map((num) => (
-              <option key={num}>{num}</option>
-            ))}
-          </select>
-        </div>
-      </div>
+      <motion.div
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.3 }}
+        className="grid grid-cols-1 sm:grid-cols-2 gap-4"
+      >
+        {/* Adults Select */}
+        <motion.div whileHover={{ scale: 1.01 }} className="space-y-1">
+          <label className="block text-sm font-medium text-gray-700">
+            <span className="flex items-center gap-1">
+              <FaUser className="text-primary text-xs" />
+              Adults
+            </span>
+          </label>
+          <div className="relative">
+            <select
+              value={adults}
+              onChange={(e) => setAdults(Number(e.target.value))}
+              className="block w-full pl-3 pr-10 py-2.5 text-base border border-gray-300 focus:border-primary focus:ring-2 focus:ring-success rounded-lg shadow-sm transition-all"
+            >
+              {[1, 2, 3, 4].map((num) => (
+                <option key={num} value={num}>
+                  {num} {num === 1 ? "Adult" : "Adults"}
+                </option>
+              ))}
+            </select>
+          </div>
+        </motion.div>
+
+        {/* Children Select */}
+        <motion.div whileHover={{ scale: 1.01 }} className="space-y-1">
+          <label className="block text-sm font-medium text-gray-700">
+            <span className="flex items-center gap-1">
+              <FaChild className="text-primary text-xs" />
+              Children
+            </span>
+          </label>
+          <div className="relative">
+            <select
+              value={children}
+              onChange={(e) => setChildren(Number(e.target.value))}
+              className="block w-full pl-3 pr-10 py-2.5 text-base border border-gray-300 focus:border-primary focus:ring-2 focus:ring-success rounded-lg shadow-sm transition-all"
+            >
+              {[0, 1, 2, 3].map((num) => (
+                <option key={num} value={num}>
+                  {num} {num === 1 ? "Child" : "Children"}
+                </option>
+              ))}
+            </select>
+          </div>
+        </motion.div>
+      </motion.div>
 
       {/* Price Summary */}
-      <div className="border-t pt-4">
-        <h4 className="font-medium text-lg">Booking Summary</h4>
-        <p className="text-sm text-gray-600">Nights: {totalNights}</p>
-        <p className="text-sm text-gray-600">Price per night: ${price}</p>
-        <p className="text-base font-semibold text-text">
-          Total: ${totalPrice.toFixed(2)}
-        </p>
-      </div>
+      <motion.div
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.2 }}
+        className="border-t border-gray-200 pt-6"
+      >
+        <h4 className="font-bold text-lg text-gray-800 mb-4">
+          Booking Summary
+        </h4>
+
+        <div className="space-y-3">
+          <div className="flex justify-between items-center">
+            <span className="text-gray-600">Price per night:</span>
+            <span className="font-medium">${price}</span>
+          </div>
+          <div className="flex justify-between items-center">
+            <span className="text-gray-600">Nights:</span>
+            <span className="font-medium">{totalNights}</span>
+          </div>
+
+          <div className="border-t border-gray-200 my-3"></div>
+
+          <div className="flex justify-between items-center">
+            <span className="text-gray-800 font-semibold">Total:</span>
+            <motion.span
+              className="text-xl font-bold text-primary"
+              initial={{ scale: 0.95 }}
+              animate={{ scale: 1 }}
+              transition={{ type: "spring", stiffness: 300 }}
+            >
+              ${totalPrice.toFixed(2)}
+            </motion.span>
+          </div>
+        </div>
+      </motion.div>
 
       {/* Cancellation Policy */}
-      <div className="border-t pt-4">
-        <h4 className="font-medium text-lg">Cancellation Policy</h4>
-        <p className="text-sm text-gray-600">
-          Free cancellation up to 48 hours before check-in. After that, a
-          1-night fee will be charged. No-shows will be charged the full price.
-        </p>
-      </div>
+      <motion.div
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.3 }}
+        className="border-t border-gray-200 pt-6"
+      >
+        <h4 className="font-bold text-lg text-gray-800 mb-3">
+          Cancellation Policy
+        </h4>
 
-      <button
-        className="bg-primary text-white font-medium px-6 py-3 rounded-lg hover:bg-opacity-90"
+        <motion.div
+          className="bg-gray-50 p-4 rounded-lg border border-gray-200"
+          whileHover={{ scale: 1.005 }}
+        >
+          <p className="text-sm text-gray-700 leading-relaxed">
+            Free cancellation up to 48 hours before check-in. After that, a
+            1-night fee will be charged. No-shows will be charged the full
+            price.
+          </p>
+        </motion.div>
+      </motion.div>
+
+      {/* Button */}
+      <motion.button
+        whileHover={{ scale: 1.02 }}
+        whileTap={{ scale: 0.97 }}
         onClick={handleConfirmBooking}
+        className="w-full sm:w-auto bg-primary text-white font-medium px-6 py-3 rounded-xl shadow-md hover:bg-opacity-90 transition"
       >
         Confirm Booking
-      </button>
-    </div>
+      </motion.button>
+    </motion.div>
   );
 }

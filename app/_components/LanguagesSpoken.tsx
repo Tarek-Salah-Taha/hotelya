@@ -1,14 +1,84 @@
 function LanguagesSpoken({ languages }: { languages: string[] }) {
+  // Generate a consistent color based on language name
+  const getLanguageColor = (lang: string) => {
+    const colors = [
+      "bg-blue-50 text-blue-700 hover:bg-blue-100",
+      "bg-green-50 text-green-700 hover:bg-green-100",
+      "bg-purple-50 text-purple-700 hover:bg-purple-100",
+      "bg-amber-50 text-amber-700 hover:bg-amber-100",
+      "bg-teal-50 text-teal-700 hover:bg-teal-100",
+      "bg-indigo-50 text-indigo-700 hover:bg-indigo-100",
+      "bg-pink-50 text-pink-700 hover:bg-pink-100",
+    ];
+    const index = lang.charCodeAt(0) % colors.length;
+    return colors[index];
+  };
+
   return (
-    <div className="mt-2 p-6 bg-white rounded-xl shadow text-text">
-      <h2 className="text-2xl font-semibold mb-4">Languages Spoken</h2>
-      <div className="flex flex-wrap gap-2">
+    <div
+      className="
+      bg-white p-6 rounded-xl 
+      border border-gray-100
+      shadow-sm hover:shadow-md 
+      transition-all duration-300
+      group
+    "
+    >
+      <div className="relative pb-2 mb-6 overflow-hidden">
+        <h2
+          className="
+          text-2xl font-semibold 
+          text-gray-800
+          inline-block
+          group-hover:translate-x-1 
+          transition-transform duration-300
+        "
+        >
+          Languages Spoken
+        </h2>
+        <span
+          className="
+          absolute bottom-0 left-0 
+          w-12 h-1 bg-primary rounded-full 
+          scale-x-0 group-hover:scale-x-100 
+          origin-left transition-transform duration-500
+        "
+        />
+      </div>
+
+      <div className="flex flex-wrap gap-3">
         {languages.map((lang, index) => (
           <span
             key={index}
-            className="bg-blue-50 text-blue-700 px-3 py-1 rounded-full text-sm font-medium"
+            className={`
+              ${getLanguageColor(lang)}
+              px-4 py-2 rounded-lg
+              border border-transparent
+              hover:border-current
+              transition-all duration-200
+              cursor-default
+              group/item
+              flex items-center
+            `}
           >
-            {lang}
+            <span
+              className="
+              text-sm font-medium
+              transition-transform
+              group-hover/item:translate-x-0.5
+            "
+            >
+              {lang}
+            </span>
+            <span
+              className="
+              ml-1.5 opacity-0 
+              group-hover/item:opacity-100
+              transition-opacity duration-200
+            "
+            >
+              ✓
+            </span>
           </span>
         ))}
       </div>
