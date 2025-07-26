@@ -195,7 +195,7 @@ function RoomCard({
                     date.getDate() === startDate?.getDate() ||
                     date.getDate() === endDate?.getDate()
                       ? "bg-primary text-white rounded-md"
-                      : "rounded-md transition-colors hover:bg-sucess hover:text-gray-900"
+                      : "rounded-md transition-colors hover:bg-success hover:text-gray-900"
                   }
                 />
                 <div className="flex justify-end gap-3 mt-2">

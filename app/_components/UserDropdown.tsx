@@ -64,7 +64,7 @@ export default function UserDropdown() {
     <div className="relative" ref={dropdownRef}>
       <button
         onClick={toggleDropdown}
-        className="w-12 h-12 rounded-full bg-primary text-white border-2 border-black flex items-center justify-center font-bold text-lg"
+        className="w-12 h-12 rounded-full bg-gradient-to-br from-primary to-primary-dark text-white flex items-center justify-center font-bold text-lg shadow-md hover:shadow-lg transition-all duration-200 border-2 border-white hover:border-primary-light"
       >
         {user.avatarUrl ? (
           <Image
@@ -83,13 +83,13 @@ export default function UserDropdown() {
         <div className="absolute left-0 sm:right-0 sm:left-auto mt-2 w-33 max-w-[80vw] bg-white border rounded-lg shadow-lg z-50">
           <Link
             href="/profile"
-            className="block px-4 py-2 text-text hover:bg-gray-100"
+            className="block px-4 py-3 text-gray-800 hover:bg-gray-50 rounded-lg transition-colors duration-200 font-medium text-sm"
           >
             My Account
           </Link>
           <button
             onClick={handleLogout}
-            className="w-full text-left px-4 py-2 text-red-500 hover:bg-gray-100"
+            className="w-full text-left px-4 py-3 text-red-500 hover:bg-gray-50 rounded-lg transition-colors duration-200 font-medium text-sm"
           >
             Logout
           </button>

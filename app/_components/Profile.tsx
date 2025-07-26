@@ -8,6 +8,7 @@ import { useUser } from "../_hooks/useUser";
 import toast from "react-hot-toast";
 import { updateUserProfile, uploadAvatar } from "../_lib/usersApi";
 import { FormValues } from "../_types/types";
+import { motion } from "framer-motion";
 
 export default function Profile() {
   const { user, loading } = useUser();
@@ -66,39 +67,46 @@ export default function Profile() {
 
     setIsUploading(true);
 
-    const uploadedUrl = await uploadAvatar(file);
+    try {
+      const uploadedUrl = await uploadAvatar(file);
 
-    if (uploadedUrl && typeof uploadedUrl === "string") {
-      setAvatarUrl(uploadedUrl);
-      setValue("avatarUrl", uploadedUrl);
-      toast.success("Avatar uploaded successfully!");
-    } else {
-      toast.error("Failed to upload avatar");
+      if (uploadedUrl && typeof uploadedUrl === "string") {
+        setAvatarUrl(uploadedUrl);
+        setValue("avatarUrl", uploadedUrl);
+        toast.success("Avatar uploaded successfully!");
+      } else {
+        toast.error("Failed to upload avatar");
+      }
+    } catch (error) {
+      console.error("Error uploading avatar:", error);
+      toast.error("Error uploading avatar");
+    } finally {
+      setIsUploading(false);
     }
-
-    setIsUploading(false);
   };
 
   // Submit form
   const onSubmit = async (data: FormValues) => {
     if (!user?.id) return;
 
-    // Fix: Convert empty string or null date to undefined
     const safeData = {
       ...data,
       avatarUrl,
       dateOfBirth: data.dateOfBirth || undefined,
     };
 
-    const { error } = await updateUserProfile(user.id, safeData);
+    try {
+      const { error } = await updateUserProfile(user.id, safeData);
 
-    console.log("Data being submitted:", data);
-
-    if (error) {
-      console.error("❌ Update failed:", error);
-      toast.error("Failed to update profile");
-    } else {
-      toast.success("Profile updated!");
+      if (error) {
+        console.error("❌ Update failed:", error);
+        toast.error("Failed to update profile");
+      } else {
+        toast.success("Profile updated successfully!");
+      }
+    } catch (error) {
+      console.error("❌ Error updating profile:", error);
+      toast.error("Error updating profile");
     }
   };
 
@@ -117,15 +125,32 @@ export default function Profile() {
   };
 
   if (loading) {
-    return <div className="w-12 h-12 rounded-full bg-gray-200 animate-pulse" />; // Or any loading UI
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        <div className="w-12 h-12 rounded-full bg-gradient-to-r from-primary to-primary-dark animate-pulse" />
+      </div>
+    );
   }
 
   return (
-    <div className="min-h-screen bg-[#f5f7fa] p-4 md:p-8">
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.3 }}
+      className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 p-4 md:p-8"
+    >
       <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Sidebar */}
-        <div className="bg-white rounded-xl p-6 shadow-sm text-center">
-          <div className="relative w-32 h-32 mx-auto rounded-full overflow-hidden border-4 border-white shadow-md bg-gray-200 text-4xl flex items-center justify-center">
+        <motion.div
+          initial={{ y: 20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ delay: 0.1 }}
+          className="bg-white rounded-2xl p-6 shadow-lg border border-gray-100 text-center"
+        >
+          <motion.div
+            whileHover={{ scale: 1.02 }}
+            className="relative w-32 h-32 mx-auto rounded-full overflow-hidden border-4 border-white shadow-lg bg-gradient-to-br from-gray-100 to-gray-200 text-4xl flex items-center justify-center"
+          >
             {avatarUrl ? (
               <Image
                 src={avatarUrl}
@@ -139,11 +164,15 @@ export default function Profile() {
                 {form.lastName?.[0]}
               </span>
             )}
-          </div>
-          <h2 className="mt-4 text-xl font-semibold text-gray-700">
+          </motion.div>
+
+          <motion.h2
+            className="mt-4 text-xl font-bold text-gray-800"
+            whileHover={{ scale: 1.01 }}
+          >
             {form.firstName} {form.lastName}
-          </h2>
-          <p className="text-sm text-gray-500">
+          </motion.h2>
+          <p className="text-sm text-gray-500 mt-1">
             {form.city}, {form.country}
           </p>
 
@@ -167,24 +196,37 @@ export default function Profile() {
           </div>
 
           <div className="mt-6">
-            <p className="text-sm text-gray-500">Complete Your Profile</p>
-            <div className="w-full bg-gray-200 rounded-full h-2.5 mt-1">
-              <div
-                className="bg-primary h-2.5 rounded-full transition-all duration-300"
-                style={{ width: `${getProgress()}%` }}
+            <p className="text-sm text-gray-500 mb-1">Profile Completion</p>
+            <div className="w-full bg-gray-200 rounded-full h-2.5">
+              <motion.div
+                className="bg-gradient-to-r from-primary to-primary-dark h-2.5 rounded-full"
+                initial={{ width: "0%" }}
+                animate={{ width: `${getProgress()}%` }}
+                transition={{ duration: 0.8, ease: "easeOut" }}
               />
             </div>
+            <p className="text-xs text-gray-500 mt-1">
+              {getProgress()}% complete
+            </p>
           </div>
-        </div>
+        </motion.div>
 
         {/* Form */}
-        <div className="lg:col-span-2 bg-white rounded-xl p-6 shadow-sm">
-          <h3 className="text-lg font-semibold mb-4 border-b pb-2">
+        <motion.div
+          initial={{ y: 20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ delay: 0.2 }}
+          className="lg:col-span-2 bg-white rounded-2xl p-6 shadow-lg border border-gray-100"
+        >
+          <h3 className="text-xl font-bold mb-6 pb-2 border-b border-gray-100 text-gray-800">
             Personal Information
           </h3>
 
-          <div className="flex items-center gap-4 mb-4">
-            <div className="w-16 h-16 relative rounded-full overflow-hidden">
+          <div className="flex items-center gap-4 mb-6">
+            <motion.div
+              whileHover={{ scale: 1.05 }}
+              className="w-16 h-16 relative rounded-full overflow-hidden border-2 border-white shadow-md"
+            >
               {avatarUrl ? (
                 <Image
                   src={avatarUrl}
@@ -193,19 +235,28 @@ export default function Profile() {
                   className="object-cover"
                 />
               ) : (
-                <div className="bg-gray-200 w-full h-full flex items-center justify-center text-xl font-bold text-gray-600">
+                <div className="bg-gradient-to-br from-gray-100 to-gray-200 w-full h-full flex items-center justify-center text-xl font-bold text-gray-600">
                   {form.firstName?.[0]}
                   {form.lastName?.[0]}
                 </div>
               )}
-            </div>
-            <button
+            </motion.div>
+            <motion.button
               disabled={isUploading}
               onClick={() => avatarInputRef.current?.click()}
-              className="text-sm bg-blue-100 hover:bg-blue-200 px-4 py-2 rounded-md"
+              className="text-sm bg-gradient-to-r bg-primary text-white px-4 py-2 rounded-lg shadow-sm hover:shadow-md transition-all"
+              whileHover={{ scale: 1.03 }}
+              whileTap={{ scale: 0.98 }}
             >
-              {isUploading ? "Uploading..." : "Change"}
-            </button>
+              {isUploading ? (
+                <span className="flex items-center gap-2">
+                  <span className="inline-block w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
+                  Uploading...
+                </span>
+              ) : (
+                "Change Avatar"
+              )}
+            </motion.button>
             <input
               ref={avatarInputRef}
               type="file"
@@ -217,7 +268,7 @@ export default function Profile() {
 
           <form
             onSubmit={handleSubmit(onSubmit)}
-            className="grid grid-cols-1 md:grid-cols-2 gap-4"
+            className="grid grid-cols-1 md:grid-cols-2 gap-5"
           >
             <InputField label="First Name" {...register("firstName")} />
             <InputField label="Last Name" {...register("lastName")} />
@@ -225,10 +276,9 @@ export default function Profile() {
               label="Email"
               type="email"
               disabled
-              className="bg-gray-100 text-gray-500 cursor-not-allowed"
+              className="bg-gray-50 text-gray-500 cursor-not-allowed"
               {...register("email")}
             />
-
             <InputField label="Mobile" type="tel" {...register("mobile")} />
             <InputField
               label="Date of Birth"
@@ -236,30 +286,35 @@ export default function Profile() {
               {...register("dateOfBirth")}
             />
             <div>
-              <label className="block mb-1 text-sm font-medium">Gender</label>
+              <label className="block mb-2 text-sm font-medium text-gray-700">
+                Gender
+              </label>
               <select
                 {...register("gender")}
-                className="border rounded-lg p-3 w-full"
+                className="border border-gray-200 rounded-lg p-3 w-full focus:ring-2 focus:ring-primary focus:border-transparent bg-white"
               >
-                <option value="">Select</option>
+                <option value="">Select Gender</option>
                 <option value="Male">Male</option>
                 <option value="Female">Female</option>
+                <option value="Other">Other</option>
               </select>
             </div>
             <InputField label="City" {...register("city")} />
             <InputField label="Country" {...register("country")} />
 
-            <button
+            <motion.button
               type="submit"
               disabled={isUploading}
-              className="bg-primary text-white py-2 rounded-lg hover:bg-blue-700 md:col-span-2"
+              className="bg-gradient-to-r bg-primary text-white py-3 rounded-lg shadow-sm hover:shadow-md transition-all md:col-span-2 font-medium"
+              whileHover={{ scale: 1.01 }}
+              whileTap={{ scale: 0.98 }}
             >
               Save Changes
-            </button>
+            </motion.button>
           </form>
-        </div>
+        </motion.div>
       </div>
-    </div>
+    </motion.div>
   );
 }
 
@@ -273,25 +328,35 @@ function InputField({
   className?: string;
 }) {
   return (
-    <div>
-      <label className="block mb-1 text-sm font-medium">{label}</label>
+    <motion.div
+      whileHover={{ y: -2 }}
+      transition={{ type: "spring", stiffness: 400, damping: 10 }}
+    >
+      <label className="block mb-2 text-sm font-medium text-gray-700">
+        {label}
+      </label>
       <input
         {...rest}
-        className={`border rounded-lg p-3 w-full ${className ?? ""}`}
+        className={`border border-gray-200 rounded-lg p-3 w-full focus:ring-2 focus:ring-primary focus:border-transparent transition-all ${
+          className ?? ""
+        }`}
       />
-    </div>
+    </motion.div>
   );
 }
 
 function ProfileStatus({ label, valid }: { label: string; valid: boolean }) {
   return (
-    <div className="flex items-center gap-3">
+    <motion.div
+      className="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-50"
+      whileHover={{ x: 3 }}
+    >
       <span
         className={`text-lg ${valid ? "text-green-500" : "text-yellow-500"}`}
       >
-        {valid ? "✔" : "❗"}
+        {valid ? "✓" : "!"}
       </span>
       <span className="text-sm text-gray-600">{label}</span>
-    </div>
+    </motion.div>
   );
 }

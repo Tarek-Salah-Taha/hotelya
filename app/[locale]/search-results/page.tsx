@@ -48,13 +48,15 @@ export default async function SearchResultsPage({
   );
 
   return (
-    <HotelCard
-      hotels={normalizedHotels}
-      currentPage={page}
-      totalPages={totalPages}
-      basePath="/search-results"
-      // basePath={`${locale}/search-results`}
-      destination={destination}
-    />
+    <div className="px-4 md:px-6 lg:px-8 py-6">
+      <HotelCard
+        hotels={normalizedHotels}
+        currentPage={page}
+        totalPages={totalPages}
+        basePath="/search-results"
+        // basePath={`${locale}/search-results`}
+        destination={destination}
+      />
+    </div>
   );
 }

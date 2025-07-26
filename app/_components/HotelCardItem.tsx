@@ -170,6 +170,7 @@ export default function HotelCardItem({ hotel }: HotelCardItemProps) {
         <div className="mt-auto pt-4 border-t border-gray-100">
           <div className="flex items-center justify-between">
             {/* Price */}
+
             <div>
               <div className="flex items-end gap-2">
                 <span className="text-xl font-bold text-primary">
@@ -188,7 +189,7 @@ export default function HotelCardItem({ hotel }: HotelCardItemProps) {
             {/* Book Now Button */}
             <motion.button
               onClick={() => router.push(`/${locale}/hotels/${hotel.id}`)}
-              className=" bg-primary text-white font-medium py-3 px-4 rounded-lg hover:bg-opacity-90 transition shadow-md flex items-center justify-center gap-2"
+              className="bg-primary text-sm sm:text-base text-white font-medium p-3 rounded-lg hover:bg-opacity-90 transition shadow-md flex items-center justify-center gap-2"
               whileHover={{ scale: 1.03 }}
               whileTap={{ scale: 0.95 }}
             >

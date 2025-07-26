@@ -4,6 +4,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { SupportedLang } from "../_types/types";
 import Image from "next/image";
+import { motion, AnimatePresence } from "framer-motion";
 
 const localeLabels: Record<SupportedLang, { label: string; icon: string }> = {
   en: { label: "English", icon: "https://flagcdn.com/w80/gb.png" },
@@ -17,7 +18,7 @@ const localeLabels: Record<SupportedLang, { label: string; icon: string }> = {
 export default function UserPreferences() {
   const router = useRouter();
   const pathname = usePathname();
-  const currentLocale = pathname.split("/")[1] as SupportedLang;
+  const currentLocale = (pathname.split("/")[1] as SupportedLang) || "en";
   const [open, setOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -27,7 +28,6 @@ export default function UserPreferences() {
     setOpen(false);
   };
 
-  // ⛔ Close dropdown on outside click
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
@@ -44,9 +44,11 @@ export default function UserPreferences() {
 
   return (
     <div ref={containerRef} className="relative w-40">
-      <button
+      <motion.button
+        whileHover={{ scale: 1.02 }}
+        whileTap={{ scale: 0.98 }}
         onClick={() => setOpen(!open)}
-        className="w-full bg-white border border-primary-900 text-left px-4 py-2.5 rounded-lg shadow-md flex items-center justify-between hover:bg-primary-50 transition"
+        className="w-full bg-white border border-gray-200 text-left px-4 py-3 rounded-xl shadow-sm flex items-center justify-between hover:bg-gray-50 transition-all duration-200"
       >
         <div className="flex items-center gap-3">
           <Image
@@ -56,39 +58,52 @@ export default function UserPreferences() {
             alt={localeLabels[currentLocale].label}
             className="w-6 h-6 object-cover rounded-full"
           />
-          <span className="text-base font-medium text-primary-900">
+          <span className="text-base font-medium text-gray-800">
             {localeLabels[currentLocale].label}
           </span>
         </div>
-        <span
-          className={`text-gray-500 text-sm transition-transform duration-200 ${
-            open ? "rotate-180" : ""
-          }`}
+        <motion.span
+          animate={{ rotate: open ? 180 : 0 }}
+          className="text-primary text-sm"
         >
           ▼
-        </span>
-      </button>
+        </motion.span>
+      </motion.button>
 
-      {open && (
-        <ul className="absolute z-10 mt-2 w-full bg-white border border-gray-300 rounded-md shadow-lg overflow-hidden">
-          {Object.entries(localeLabels).map(([locale, { label, icon }]) => (
-            <li
-              key={locale}
-              onClick={() => handleLanguageChange(locale as SupportedLang)}
-              className="flex items-center gap-3 px-4 py-2 hover:bg-primary-100 cursor-pointer text-sm transition"
-            >
-              <Image
-                src={icon}
-                alt={label}
-                width={24}
-                height={24}
-                className="w-6 h-6 object-cover rounded-full"
-              />
-              <span className="text-base text-primary-900">{label}</span>
-            </li>
-          ))}
-        </ul>
-      )}
+      <AnimatePresence>
+        {open && (
+          <motion.ul
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            transition={{ duration: 0.2 }}
+            className="absolute z-10 mt-2 w-full bg-white border border-gray-200 rounded-xl shadow-lg overflow-hidden"
+          >
+            {Object.entries(localeLabels).map(([locale, { label, icon }]) => (
+              <motion.li
+                key={locale}
+                whileHover={{ scale: 1.02, backgroundColor: "#f8fafc" }}
+                whileTap={{ scale: 0.98 }}
+                onClick={() => handleLanguageChange(locale as SupportedLang)}
+                className={`flex items-center gap-3 px-4 py-3 cursor-pointer transition-colors ${
+                  locale === currentLocale
+                    ? "bg-indigo-50 text-primary"
+                    : "text-gray-700 hover:bg-gray-50"
+                }`}
+              >
+                <Image
+                  src={icon}
+                  alt={label}
+                  width={24}
+                  height={24}
+                  className="w-6 h-6 object-cover rounded-full"
+                />
+                <span className="text-base font-medium">{label}</span>
+              </motion.li>
+            ))}
+          </motion.ul>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

@@ -4,16 +4,17 @@ import { useEffect, useState } from "react";
 import { FaMapMarkerAlt } from "react-icons/fa";
 import { usePathname, useRouter } from "next/navigation";
 import { fetchDestinationSuggestions } from "../_lib/suggestionsApi";
+import { motion, AnimatePresence } from "framer-motion";
 
 function SearchBox() {
   const [destination, setDestination] = useState("");
   const [showTooltip, setShowTooltip] = useState(false);
   const [touched, setTouched] = useState(false);
   const [suggestions, setSuggestions] = useState<string[]>([]);
+  const [isFocused, setIsFocused] = useState(false);
 
   const pathname = usePathname();
   const locale = pathname.split("/")[1] || "en";
-
   const router = useRouter();
 
   const handleSearchClick = () => {
@@ -35,11 +36,19 @@ function SearchBox() {
 
   useEffect(() => {
     const loadSuggestions = async () => {
-      const results = await fetchDestinationSuggestions(destination);
-      setSuggestions(results);
+      if (destination.length >= 2) {
+        const results = await fetchDestinationSuggestions(destination);
+        setSuggestions(results);
+      } else {
+        setSuggestions([]);
+      }
     };
 
-    loadSuggestions();
+    const timer = setTimeout(() => {
+      loadSuggestions();
+    }, 300);
+
+    return () => clearTimeout(timer);
   }, [destination]);
 
   const handleSelectSuggestion = (suggestion: string) => {
@@ -51,56 +60,88 @@ function SearchBox() {
   };
 
   return (
-    <div className="w-full flex justify-center">
-      <div className="bg-white shadow-lg rounded-lg p-6 grid grid-cols-1 md:grid-cols-[1fr_auto] gap-4 max-w-3xl w-full relative">
+    <div className="w-full flex justify-center px-4">
+      <motion.div
+        initial={{ y: 20, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.5 }}
+        className="bg-white shadow-xl rounded-xl p-6 grid grid-cols-1 md:grid-cols-[1fr_auto] gap-4 max-w-3xl w-full relative"
+      >
         {/* Destination Input */}
         <div className="flex flex-col w-full min-w-[240px] relative">
-          <label className="text-sm font-medium mb-2">Destination</label>
+          <label className="text-sm font-medium text-text mb-2">
+            Destination
+          </label>
           <div className="relative w-full">
-            <FaMapMarkerAlt className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+            <FaMapMarkerAlt className="absolute left-3 top-1/2 transform -translate-y-1/2 text-light" />
             <input
               value={destination}
               onChange={(e) => setDestination(e.target.value)}
-              className={`border p-3 pl-10 rounded w-full text-base h-[52px] ${
-                touched && destination.trim().length < 2 ? "border-red-500" : ""
+              onFocus={() => setIsFocused(true)}
+              onBlur={() => setTimeout(() => setIsFocused(false), 200)}
+              className={`border-2 p-3 pl-10 rounded-lg w-full text-base h-[52px] focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all ${
+                touched && destination.trim().length < 2
+                  ? "border-red-500"
+                  : "border-border"
               }`}
               placeholder="Where are you going?"
             />
 
             {/* Suggestions Dropdown */}
-            {suggestions.length > 0 && (
-              <ul className="absolute z-10 mt-1 w-full bg-white border border-gray-300 rounded shadow-md max-h-60 overflow-y-auto">
-                {suggestions.map((sug, index) => (
-                  <li
-                    key={index}
-                    onClick={() => handleSelectSuggestion(sug)}
-                    className="cursor-pointer px-4 py-2 hover:bg-gray-100 flex items-center gap-2"
-                  >
-                    <FaMapMarkerAlt className="text-primary" />
-                    <span>{sug}</span>
-                  </li>
-                ))}
-              </ul>
-            )}
+            <AnimatePresence>
+              {suggestions.length > 0 && isFocused && (
+                <motion.ul
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  transition={{ duration: 0.2 }}
+                  className="absolute z-10 mt-1 w-full bg-white border border-border rounded-lg shadow-lg max-h-60 overflow-y-auto"
+                >
+                  {suggestions.map((sug, index) => (
+                    <motion.li
+                      key={index}
+                      onClick={() => handleSelectSuggestion(sug)}
+                      whileHover={{
+                        scale: 1.01,
+                      }}
+                      className="cursor-pointer px-4 py-3 hover:bg-background flex items-center gap-2 transition-colors"
+                    >
+                      <FaMapMarkerAlt className="text-primary" />
+                      <span className="text-text">{sug}</span>
+                    </motion.li>
+                  ))}
+                </motion.ul>
+              )}
+            </AnimatePresence>
           </div>
         </div>
 
         {/* Search Button */}
-        <div className="flex flex-col justify-end w-full min-w-[200px]">
-          <button
+        <div className="flex flex-col justify-end w-full min-w-[200px] relative">
+          <motion.button
             onClick={handleSearchClick}
-            className="bg-primary text-white px-6 rounded w-full text-base font-semibold h-[52px] hover:bg-primary/90 shadow-lg transition"
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+            className="bg-primary text-white px-6 rounded-lg w-full text-base font-semibold h-[52px] hover:bg-dark shadow-md transition-all"
           >
             Search Hotels
-          </button>
-          {showTooltip && destination.trim().length < 2 && (
-            <div className="mt-2 text-sm text-red-600 bg-red-100 border border-red-300 p-2 rounded shadow-md z-10">
-              Please enter a valid <strong>destination</strong> (at least 2
-              letters).
-            </div>
-          )}
+          </motion.button>
+
+          <AnimatePresence>
+            {showTooltip && destination.trim().length < 2 && (
+              <motion.div
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                className="absolute top-full mt-2 text-sm text-red-600 bg-red-100 border border-red-300 p-2 rounded-lg shadow-md z-10 w-full"
+              >
+                Please enter a valid <strong>destination</strong> (at least 2
+                letters).
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
-      </div>
+      </motion.div>
     </div>
   );
 }

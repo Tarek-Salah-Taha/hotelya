@@ -4,7 +4,6 @@ import Link from "next/link";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { FaFacebookF, FaInstagram, FaLinkedinIn } from "react-icons/fa";
-
 import { FaXTwitter } from "react-icons/fa6";
 
 const socialLinks = [
@@ -16,131 +15,189 @@ const socialLinks = [
 
 function Footer() {
   return (
-    <motion.footer
-      initial={{ opacity: 0, y: 50 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.6 }}
-      className="bg-text text-white py-10 px-4 md:px-20"
-    >
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-        {/* Branding */}
-        <div>
-          <h3 className="text-xl font-bold mb-2">Hotelya</h3>
-          <p>
-            Your trusted partner for hotel reservations worldwide. Book with
-            confidence.
-          </p>
+    <footer className="bg-dark text-white pt-16 pb-8 px-4 sm:px-6 lg:px-8">
+      <motion.div
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.8, staggerChildren: 0.2 }}
+        className="max-w-7xl mx-auto"
+      >
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-10 lg:gap-16">
+          {/* Branding */}
+          <motion.div
+            initial={{ y: 20 }}
+            whileInView={{ y: 0 }}
+            transition={{ duration: 0.6 }}
+            viewport={{ once: true }}
+            className="space-y-6"
+          >
+            <h3 className="text-2xl font-bold">Hotelya</h3>
+            <p className="text-background/80">
+              Your trusted partner for hotel reservations worldwide. Book with
+              confidence.
+            </p>
 
-          {/* Social Media */}
-          <div className="flex gap-4 mt-4">
-            {socialLinks.map(({ icon, href }, index) => (
+            {/* Social Media */}
+            <div className="flex gap-3">
+              {socialLinks.map(({ icon, href }, index) => (
+                <motion.a
+                  key={index}
+                  href={href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  whileHover={{ y: -3 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="p-3 rounded-full bg-primary text-white hover:bg-primary/90 transition-all"
+                >
+                  {icon}
+                </motion.a>
+              ))}
+            </div>
+
+            {/* App Store Buttons */}
+            <div className="flex flex-col sm:flex-row gap-3">
               <motion.a
-                key={index}
-                href={href}
+                href="https://apps.apple.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                whileHover={{ scale: 1.2 }}
-                className="p-2 rounded-full bg-white text-text hover:bg-secondary hover:text-white transition-colors"
+                whileHover={{ y: -3 }}
+                whileTap={{ scale: 0.98 }}
               >
-                {icon}
+                <Image
+                  src="/appstore.png"
+                  alt="Download on the App Store"
+                  width={135}
+                  height={40}
+                  className="h-10 w-auto object-contain"
+                />
               </motion.a>
-            ))}
-          </div>
+              <motion.a
+                href="https://play.google.com/store"
+                target="_blank"
+                rel="noopener noreferrer"
+                whileHover={{ y: -3 }}
+                whileTap={{ scale: 0.98 }}
+              >
+                <Image
+                  src="/playstore.png"
+                  alt="Get it on Google Play"
+                  width={135}
+                  height={40}
+                  className="h-10 w-auto object-contain"
+                />
+              </motion.a>
+            </div>
+          </motion.div>
 
-          {/* App Store Buttons */}
-          <div className="flex gap-3 mt-6">
-            <a
-              href="https://apps.apple.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="transition-transform hover:scale-105 hover:shadow-lg"
-            >
-              <Image
-                src="/appstore.png"
-                alt="Download on the App Store"
-                width={200}
-                height={50}
-              />
-            </a>
-            <a
-              href="https://play.google.com/store"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="transition-transform hover:scale-105 hover:shadow-lg"
-            >
-              <Image
-                src="/playstore.png"
-                alt="Get it on Google Play"
-                width={200}
-                height={50}
-              />
-            </a>
-          </div>
+          {/* Company */}
+          <motion.div
+            initial={{ y: 20 }}
+            whileInView={{ y: 0 }}
+            transition={{ duration: 0.6, delay: 0.1 }}
+            viewport={{ once: true }}
+          >
+            <h4 className="text-lg font-semibold mb-4">Company</h4>
+            <ul className="space-y-3">
+              {[
+                { href: "/about", text: "About Hotelya" },
+                { href: "/careers", text: "Careers at Hotelya" },
+                { href: "/press", text: "Media & Press" },
+                { href: "/blog", text: "Travel Blog" },
+              ].map((item, index) => (
+                <motion.li
+                  key={index}
+                  whileHover={{ x: 5 }}
+                  transition={{ type: "spring", stiffness: 300 }}
+                >
+                  <Link
+                    href={item.href}
+                    className="text-background/80 hover:text-white transition-colors"
+                  >
+                    {item.text}
+                  </Link>
+                </motion.li>
+              ))}
+            </ul>
+          </motion.div>
+
+          {/* Support */}
+          <motion.div
+            initial={{ y: 20 }}
+            whileInView={{ y: 0 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            viewport={{ once: true }}
+          >
+            <h4 className="text-lg font-semibold mb-4">Support</h4>
+            <ul className="space-y-3">
+              {[
+                { href: "/help", text: "Help & FAQs" },
+                { href: "/contact", text: "Contact Support" },
+                { href: "/safety", text: "Travel Safety Tips" },
+                { href: "/cancellation", text: "Cancellation Guide" },
+              ].map((item, index) => (
+                <motion.li
+                  key={index}
+                  whileHover={{ x: 5 }}
+                  transition={{ type: "spring", stiffness: 300 }}
+                >
+                  <Link
+                    href={item.href}
+                    className="text-background/80 hover:text-white transition-colors"
+                  >
+                    {item.text}
+                  </Link>
+                </motion.li>
+              ))}
+            </ul>
+          </motion.div>
+
+          {/* Legal */}
+          <motion.div
+            initial={{ y: 20 }}
+            whileInView={{ y: 0 }}
+            transition={{ duration: 0.6, delay: 0.3 }}
+            viewport={{ once: true }}
+          >
+            <h4 className="text-lg font-semibold mb-4">Legal</h4>
+            <ul className="space-y-3">
+              {[
+                { href: "/privacy-policy", text: "Privacy Statement" },
+                { href: "/terms", text: "Terms & Conditions" },
+                { href: "/cookies", text: "Cookie Preferences" },
+                { href: "/accessibility", text: "Accessibility Statement" },
+              ].map((item, index) => (
+                <motion.li
+                  key={index}
+                  whileHover={{ x: 5 }}
+                  transition={{ type: "spring", stiffness: 300 }}
+                >
+                  <Link
+                    href={item.href}
+                    className="text-background/80 hover:text-white transition-colors"
+                  >
+                    {item.text}
+                  </Link>
+                </motion.li>
+              ))}
+            </ul>
+          </motion.div>
         </div>
 
-        {/* Company */}
-        <div>
-          <h4 className="font-bold mb-2">Company</h4>
-          <ul className="space-y-1">
-            <li>
-              <Link href="/about">About Hotelya</Link>
-            </li>
-            <li>
-              <Link href="/careers">Careers at Hotelya</Link>
-            </li>
-            <li>
-              <Link href="/press">Media & Press</Link>
-            </li>
-            <li>
-              <Link href="/blog">Travel Blog</Link>
-            </li>
-          </ul>
-        </div>
-
-        {/* Support */}
-        <div>
-          <h4 className="font-bold mb-2">Support</h4>
-          <ul className="space-y-1">
-            <li>
-              <Link href="/help">Help & FAQs</Link>
-            </li>
-            <li>
-              <Link href="/contact">Contact Support</Link>
-            </li>
-            <li>
-              <Link href="/safety">Travel Safety Tips</Link>
-            </li>
-            <li>
-              <Link href="/cancellation">Cancellation Guide</Link>
-            </li>
-          </ul>
-        </div>
-
-        {/* Legal */}
-        <div>
-          <h4 className="font-bold mb-2">Legal</h4>
-          <ul className="space-y-1">
-            <li>
-              <Link href="/privacy-policy">Privacy Statement</Link>
-            </li>
-            <li>
-              <Link href="/terms">Terms & Conditions</Link>
-            </li>
-            <li>
-              <Link href="/cookies">Cookie Preferences</Link>
-            </li>
-            <li>
-              <Link href="/accessibility">Accessibility Statement</Link>
-            </li>
-          </ul>
-        </div>
-      </div>
-
-      {/* Copyright */}
-      <p className="text-center mt-10 text-sm">
-        © {new Date().getFullYear()} Hotelya, Inc. All rights reserved.
-      </p>
-    </motion.footer>
+        {/* Copyright */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          transition={{ duration: 0.8, delay: 0.4 }}
+          viewport={{ once: true }}
+          className="border-t border-primary/20 mt-12 pt-8 text-center"
+        >
+          <p className="text-sm text-background/70">
+            © {new Date().getFullYear()} Hotelya, Inc. All rights reserved.
+          </p>
+        </motion.div>
+      </motion.div>
+    </footer>
   );
 }
 

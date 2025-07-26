@@ -3,46 +3,67 @@
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
+import { motion } from "framer-motion";
 
 function CallToAction() {
   const pathname = usePathname();
   const locale = pathname.split("/")[1] || "en";
 
   return (
-    <section className="bg-primary text-white pt-10 px-4 md:px-20">
-      <div className="max-w-5xl mx-auto grid md:grid-cols-2 items-center gap-10 text-center md:text-left">
-        {/* Left: Text */}
-        <div>
-          <h2 className="text-3xl md:text-4xl font-bold mb-4 leading-tight">
-            Find Your Perfect Stay — Anytime, Anywhere
-          </h2>
-          <p className="text-lg mb-6">
+    <motion.section
+      initial="hidden"
+      whileInView="show"
+      viewport={{ once: true }}
+      className="bg-primary pt-16 px-4 sm:px-6 lg:px-8 relative overflow-hidden"
+    >
+      {/* Background pattern */}
+      <motion.div className="absolute inset-0 opacity-10">
+        <div className="absolute inset-0 bg-primary"></div>
+      </motion.div>
+
+      <div className="max-w-7xl mx-auto grid md:grid-cols-2 items-center gap-12 relative z-10">
+        {/* Text content */}
+        <motion.div className="space-y-6">
+          <motion.h2 className="text-4xl sm:text-5xl font-bold text-white leading-tight">
+            Find Your Perfect Stay —<br />
+            <motion.span className="text-secondary">
+              Anytime, Anywhere
+            </motion.span>
+          </motion.h2>
+
+          <motion.p className="text-lg text-white/90 max-w-lg">
             Explore thousands of hotels worldwide with exclusive mobile deals.
             Join over 2 million travelers who book smarter with Hotelya.
-          </p>
+          </motion.p>
 
-          {/* Buttons */}
-          <div className="flex flex-col sm:flex-row sm:items-center gap-4">
+          <motion.div>
             <Link href={`${locale}/hotels`}>
-              <button className="bg-white text-primary font-semibold px-6 py-3 rounded shadow hover:bg-gray-100 transition">
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="bg-white text-primary font-semibold px-8 py-3 rounded-lg shadow-lg hover:bg-opacity-90 transition-all duration-300"
+              >
                 Search Hotels
-              </button>
+              </motion.button>
             </Link>
-          </div>
-        </div>
+          </motion.div>
+        </motion.div>
 
-        {/* Right: Responsive Image */}
-        <div className="block">
-          <Image
-            src="/travel.png"
-            alt="Travel illustration"
-            width={400}
-            height={400}
-            className="mx-auto w-full max-w-xs sm:max-w-sm md:max-w-md"
-          />
-        </div>
+        {/* Image */}
+        <motion.div className="relative">
+          <div className="relative aspect-square w-full max-w-md mx-auto">
+            <Image
+              src="/travel.png"
+              alt="Happy travelers using Hotelya"
+              fill
+              className="object-contain drop-shadow-2xl"
+              sizes="(max-width: 768px) 100vw, 50vw"
+              priority
+            />
+          </div>
+        </motion.div>
       </div>
-    </section>
+    </motion.section>
   );
 }
 
