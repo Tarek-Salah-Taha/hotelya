@@ -86,8 +86,8 @@ function Navigation() {
                 href={`/${locale}/auth/login`}
                 className="flex items-center gap-2 px-3 py-1.5 rounded text-black hover:text-border hover:bg-primary/10 transition-colors duration-200"
               >
-                <CgProfile className="text-lg text-gray-500" />
-                <span>Sign in</span>
+                <CgProfile className="text-lg" />
+                <span>{t("signin")}</span>
               </Link>
             </motion.div>
           )}

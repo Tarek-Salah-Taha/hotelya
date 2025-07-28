@@ -5,6 +5,7 @@ import Image from "next/image";
 import { motion } from "framer-motion";
 import { FaFacebookF, FaInstagram, FaLinkedinIn } from "react-icons/fa";
 import { FaXTwitter } from "react-icons/fa6";
+import { useTranslations } from "next-intl";
 
 const socialLinks = [
   { icon: <FaFacebookF />, href: "https://facebook.com" },
@@ -14,6 +15,7 @@ const socialLinks = [
 ];
 
 function Footer() {
+  const t = useTranslations("HomePage");
   return (
     <footer className="bg-dark text-white pt-16 pb-8 px-4 sm:px-6 lg:px-8">
       <motion.div
@@ -34,8 +36,7 @@ function Footer() {
           >
             <h3 className="text-2xl font-bold">Hotelya</h3>
             <p className="text-background/80">
-              Your trusted partner for hotel reservations worldwide. Book with
-              confidence.
+              {t("Your trusted partner for hotel reservations worldwide")}
             </p>
 
             {/* Social Media */}
@@ -97,13 +98,13 @@ function Footer() {
             transition={{ duration: 0.6, delay: 0.1 }}
             viewport={{ once: true }}
           >
-            <h4 className="text-lg font-semibold mb-4">Company</h4>
+            <h4 className="text-lg font-semibold mb-4">{t("Company")}</h4>
             <ul className="space-y-3">
               {[
-                { href: "/about", text: "About Hotelya" },
-                { href: "/careers", text: "Careers at Hotelya" },
-                { href: "/press", text: "Media & Press" },
-                { href: "/blog", text: "Travel Blog" },
+                { href: "/about", text: t("About Hotelya") },
+                { href: "/careers", text: t("Careers at Hotelya") },
+                { href: "/press", text: t("Media & Press") },
+                { href: "/blog", text: t("Travel Blog") },
               ].map((item, index) => (
                 <motion.li
                   key={index}
@@ -128,13 +129,13 @@ function Footer() {
             transition={{ duration: 0.6, delay: 0.2 }}
             viewport={{ once: true }}
           >
-            <h4 className="text-lg font-semibold mb-4">Support</h4>
+            <h4 className="text-lg font-semibold mb-4">{t("Support")}</h4>
             <ul className="space-y-3">
               {[
-                { href: "/help", text: "Help & FAQs" },
-                { href: "/contact", text: "Contact Support" },
-                { href: "/safety", text: "Travel Safety Tips" },
-                { href: "/cancellation", text: "Cancellation Guide" },
+                { href: "/help", text: t("Help & FAQs") },
+                { href: "/contact", text: t("Contact Support") },
+                { href: "/safety", text: t("Travel Safety Tips") },
+                { href: "/cancellation", text: t("Cancellation Guide") },
               ].map((item, index) => (
                 <motion.li
                   key={index}
@@ -159,13 +160,13 @@ function Footer() {
             transition={{ duration: 0.6, delay: 0.3 }}
             viewport={{ once: true }}
           >
-            <h4 className="text-lg font-semibold mb-4">Legal</h4>
+            <h4 className="text-lg font-semibold mb-4">{t("Legal")}</h4>
             <ul className="space-y-3">
               {[
-                { href: "/privacy-policy", text: "Privacy Statement" },
-                { href: "/terms", text: "Terms & Conditions" },
-                { href: "/cookies", text: "Cookie Preferences" },
-                { href: "/accessibility", text: "Accessibility Statement" },
+                { href: "/privacy-policy", text: t("Privacy Statement") },
+                { href: "/terms", text: t("Terms & Conditions") },
+                { href: "/cookies", text: t("Cookie Preferences") },
+                { href: "/accessibility", text: t("Accessibility Statement") },
               ].map((item, index) => (
                 <motion.li
                   key={index}
@@ -193,7 +194,8 @@ function Footer() {
           className="border-t border-primary/20 mt-12 pt-8 text-center"
         >
           <p className="text-sm text-background/70">
-            © {new Date().getFullYear()} Hotelya, Inc. All rights reserved.
+            © {new Date().getFullYear()} Hotelya, Inc.{" "}
+            {t("All rights reserved")}
           </p>
         </motion.div>
       </motion.div>

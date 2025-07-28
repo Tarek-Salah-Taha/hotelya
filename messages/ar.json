@@ -37,7 +37,24 @@
     "Emily Davis": "إميلي ديفيس",
     "Find your perfect stay": "ابحث عن إقامتك المثالية",
     "Anytime, Anywhere": "في أي وقت وفي أي مكان",
-    "Explore thousands of hotels worldwide": "استكشف آلاف الفنادق حول العالم مع عروض حصرية للهواتف المحمولة. انضم إلى أكثر من مليوني مسافر يحجزون بذكاء مع Hotelya."
+    "Explore thousands of hotels worldwide": "استكشف آلاف الفنادق حول العالم مع عروض حصرية للهواتف المحمولة. انضم إلى أكثر من مليوني مسافر يحجزون بذكاء مع Hotelya.",
+    "Your trusted partner for hotel reservations worldwide": "شريكك الموثوق لحجوزات الفنادق حول العالم. احجز بثقة.",
+    "Company": "الشركة",
+    "Support": "الدعم",
+    "Legal": "المسائل القانونية",
+    "About Hotelya": "حول Hotelya",
+    "Careers at Hotelya": "فرص العمل في Hotelya",
+    "Media & Press": "وسائل الإعلام والصحافة",
+    "Travel Blog": "مدونة السفر",
+    "Help & FAQs": "المساعدة والأسئلة الشائعة",
+    "Contact Support": "اتصل بالدعم",
+    "Travel Safety Tips": "نصائح السلامة أثناء السفر",
+    "Cancellation Guide": "دليل الإلغاء",
+    "Privacy Statement": "بيان الخصوصية",
+    "Terms & Conditions": "الشروط والأحكام",
+    "Cookie Preferences": "تفضيلات ملفات تعريف الارتباط",
+    "Accessibility Statement": "بيان إمكانية الوصول",
+    "All rights reserved": "جميع الحقوق محفوظة."
   },
   "Navigation": {
     "favorites": "المفضلة",
@@ -45,7 +62,8 @@
     "hotels": "الفنادق",
     "profile": "الملف الشخصي",
     "logout": "تسجيل الخروج",
-    "my account": "حسابي"
+    "my account": "حسابي",
+    "signin": "تسجيل الدخول"
   },
   "common": {
     "loading": "جاري التحميل...",

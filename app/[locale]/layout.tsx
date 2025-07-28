@@ -21,6 +21,9 @@ export const metadata: Metadata = {
   title: "Hotelya - Find Your Perfect Stay",
   description:
     "Discover amazing hotels worldwide with the best prices and instant booking confirmation.",
+  icons: {
+    icon: "/favicon.png",
+  },
 };
 
 export function generateStaticParams() {

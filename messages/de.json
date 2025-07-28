@@ -36,7 +36,24 @@
     "Emily Davis": "Emily Davis",
     "Find your perfect stay": "Finden Sie Ihren perfekten Aufenthalt",
     "Anytime, Anywhere": "Jederzeit und überall",
-    "Explore thousands of hotels worldwide": "Entdecken Sie Tausende von Hotels weltweit mit exklusiven mobilen Angeboten. Schließen Sie sich über 2 Millionen Reisenden an, die mit Hotelya intelligenter buchen."
+    "Explore thousands of hotels worldwide": "Entdecken Sie Tausende von Hotels weltweit mit exklusiven mobilen Angeboten. Schließen Sie sich über 2 Millionen Reisenden an, die mit Hotelya intelligenter buchen.",
+    "Your trusted partner for hotel reservations worldwide": "Ihr zuverlässiger Partner für Hotelreservierungen weltweit. Buchen Sie mit Vertrauen.",
+    "Company": "Das Unternehmen",
+    "Support": "Der Support",
+    "Legal": "Die rechtlichen Angelegenheiten",
+    "About Hotelya": "Über Hotelya",
+    "Careers at Hotelya": "Karriere bei Hotelya",
+    "Media & Press": "Medien & Presse",
+    "Travel Blog": "Reiseblog",
+    "Help & FAQs": "Hilfe und FAQs",
+    "Contact Support": "Support kontaktieren",
+    "Travel Safety Tips": "Tipps zur Reisesicherheit",
+    "Cancellation Guide": "Stornierungsleitfaden",
+    "Privacy Statement": "Datenschutzerklärung",
+    "Terms & Conditions": "Allgemeine Geschäftsbedingungen",
+    "Cookie Preferences": "Cookie-Einstellungen",
+    "Accessibility Statement": "Erklärung zur Barrierefreiheit",
+    "All rights reserved": "Alle Rechte vorbehalten."
   },
   "Navigation": {
     "favorites": "Favoriten",
@@ -44,7 +61,8 @@
     "hotels": "Hotels",
     "profile": "Profil",
     "logout": "Abmelden",
-    "my account": "Mein Konto"
+    "my account": "Mein Konto",
+    "signin": "Eintragen"
   },
   "common": {
     "loading": "Laden...",

@@ -17,7 +17,7 @@ function CallToAction() {
       initial="hidden"
       whileInView="show"
       viewport={{ once: true }}
-      className="bg-primary pt-16 px-4 sm:px-6 lg:px-8 relative overflow-hidden"
+      className="bg-primary pt-14 pb-8 px-4 sm:px-6 lg:px-8 relative overflow-hidden"
     >
       {/* Background pattern */}
       <motion.div className="absolute inset-0 opacity-10">
