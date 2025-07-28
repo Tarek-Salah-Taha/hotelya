@@ -152,7 +152,7 @@ export default function Login() {
             <motion.button
               type="submit"
               disabled={loading}
-              className="w-full bg-gradient-to-r bg-primary  text-white py-3 rounded-lg font-medium shadow-sm hover:shadow-md transition-all flex items-center justify-center gap-2"
+              className="w-full bg-gradient-to-r bg-primary text-white py-3 rounded-lg font-medium shadow-sm hover:shadow-md transition-all flex items-center justify-center gap-2"
               whileHover={{ scale: 1.01 }}
               whileTap={{ scale: 0.98 }}
             >

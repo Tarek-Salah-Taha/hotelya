@@ -9,25 +9,32 @@ import { LuHotel } from "react-icons/lu";
 import { useUser } from "../_hooks/useUser";
 import UserDropdown from "./UserDropdown";
 import { motion } from "framer-motion";
-
-const NAV_ITEMS = [
-  {
-    href: "/favorites",
-    label: "Favorites",
-    icon: <FaRegHeart className="text-lg" />,
-  },
-  {
-    href: "/bookings",
-    label: "My Bookings",
-    icon: <MdOutlineBookmarkBorder className="text-lg" />,
-  },
-  { href: "/hotels", label: "Hotels", icon: <LuHotel className="text-lg" /> },
-];
+import { useTranslations } from "next-intl";
 
 function Navigation() {
   const { user, loading } = useUser();
   const pathname = usePathname();
   const locale = pathname.split("/")[1] || "en";
+
+  const t = useTranslations("Navigation");
+
+  const NAV_ITEMS = [
+    {
+      href: "/favorites",
+      label: t("favorites"),
+      icon: <FaRegHeart className="text-lg" />,
+    },
+    {
+      href: "/bookings",
+      label: t("bookings"),
+      icon: <MdOutlineBookmarkBorder className="text-lg" />,
+    },
+    {
+      href: "/hotels",
+      label: t("hotels"),
+      icon: <LuHotel className="text-lg" />,
+    },
+  ];
 
   if (loading) {
     return (

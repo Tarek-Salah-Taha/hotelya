@@ -1,5 +1,7 @@
-/** @type {import('next').NextConfig} */
-const nextConfig = {
+import { NextConfig } from "next";
+import createNextIntlPlugin from "next-intl/plugin";
+
+const nextConfig: NextConfig = {
   images: {
     remotePatterns: [
       {
@@ -32,17 +34,8 @@ const nextConfig = {
         pathname: "/storage/v1/object/public/avatars/avatars/**",
       },
     ],
-    // unoptimized: true, // keep this if you're not using Next's image optimization
-  },
-  async redirects() {
-    return [
-      {
-        source: "/",
-        destination: "/en", // or your DEFAULT_LANGUAGE
-        permanent: true,
-      },
-    ];
   },
 };
 
-module.exports = nextConfig;
+const withNextIntl = createNextIntlPlugin();
+export default withNextIntl(nextConfig);

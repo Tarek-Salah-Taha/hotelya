@@ -7,12 +7,15 @@ import { useUser } from "../_hooks/useUser";
 import { logoutUser } from "../_lib/usersApi";
 import { usePathname, useRouter } from "next/navigation";
 import { SupportedLang } from "../_types/types";
+import { useTranslations } from "next-intl";
 
 export default function UserDropdown() {
   const router = useRouter();
   const { user, loading } = useUser();
   const [open, setOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+
+  const t = useTranslations("Navigation");
 
   const supportedLocales: SupportedLang[] = [
     "en",
@@ -85,13 +88,13 @@ export default function UserDropdown() {
             href="/profile"
             className="block px-4 py-3 text-gray-800 hover:bg-gray-50 rounded-lg transition-colors duration-200 font-medium text-sm"
           >
-            My Account
+            {t("my account")}
           </Link>
           <button
             onClick={handleLogout}
             className="w-full text-left px-4 py-3 text-red-500 hover:bg-gray-50 rounded-lg transition-colors duration-200 font-medium text-sm"
           >
-            Logout
+            {t("logout")}
           </button>
         </div>
       )}

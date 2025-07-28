@@ -4,10 +4,13 @@ import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { motion } from "framer-motion";
+import { useTranslations } from "next-intl";
 
 function CallToAction() {
   const pathname = usePathname();
   const locale = pathname.split("/")[1] || "en";
+
+  const t = useTranslations("HomePage");
 
   return (
     <motion.section
@@ -25,15 +28,14 @@ function CallToAction() {
         {/* Text content */}
         <motion.div className="space-y-6">
           <motion.h2 className="text-4xl sm:text-5xl font-bold text-white leading-tight">
-            Find Your Perfect Stay —<br />
+            {t("Find your perfect stay")} —{" "}
             <motion.span className="text-secondary">
-              Anytime, Anywhere
+              {t("Anytime, Anywhere")}
             </motion.span>
           </motion.h2>
 
           <motion.p className="text-lg text-white/90 max-w-lg">
-            Explore thousands of hotels worldwide with exclusive mobile deals.
-            Join over 2 million travelers who book smarter with Hotelya.
+            {t("Explore thousands of hotels worldwide")}
           </motion.p>
 
           <motion.div>
@@ -43,7 +45,7 @@ function CallToAction() {
                 whileTap={{ scale: 0.95 }}
                 className="bg-white text-primary font-semibold px-8 py-3 rounded-lg shadow-lg hover:bg-opacity-90 transition-all duration-300"
               >
-                Search Hotels
+                {t("search hotels")}
               </motion.button>
             </Link>
           </motion.div>

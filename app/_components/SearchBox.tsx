@@ -5,6 +5,7 @@ import { FaMapMarkerAlt } from "react-icons/fa";
 import { usePathname, useRouter } from "next/navigation";
 import { fetchDestinationSuggestions } from "../_lib/suggestionsApi";
 import { motion, AnimatePresence } from "framer-motion";
+import { useTranslations } from "next-intl";
 
 function SearchBox() {
   const [destination, setDestination] = useState("");
@@ -16,6 +17,7 @@ function SearchBox() {
   const pathname = usePathname();
   const locale = pathname.split("/")[1] || "en";
   const router = useRouter();
+  const t = useTranslations("HomePage");
 
   const handleSearchClick = () => {
     setTouched(true);
@@ -65,12 +67,12 @@ function SearchBox() {
         initial={{ y: 20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.5 }}
-        className="bg-white shadow-xl rounded-xl p-6 grid grid-cols-1 md:grid-cols-[1fr_auto] gap-4 max-w-3xl w-full relative"
+        className="bg-white shadow-xl rounded-xl p-6 grid grid-cols-1 md:grid-cols-[1fr_auto] gap-4 max-w-3xl w-full relative "
       >
         {/* Destination Input */}
         <div className="flex flex-col w-full min-w-[240px] relative">
           <label className="text-sm font-medium text-text mb-2">
-            Destination
+            {t("destination")}
           </label>
           <div className="relative w-full">
             <FaMapMarkerAlt className="absolute left-3 top-1/2 transform -translate-y-1/2 text-light" />
@@ -84,7 +86,7 @@ function SearchBox() {
                   ? "border-red-500"
                   : "border-border"
               }`}
-              placeholder="Where are you going?"
+              placeholder={t("where are you going")}
             />
 
             {/* Suggestions Dropdown */}
@@ -124,7 +126,7 @@ function SearchBox() {
             whileTap={{ scale: 0.98 }}
             className="bg-primary text-white px-6 rounded-lg w-full text-base font-semibold h-[52px] hover:bg-dark shadow-md transition-all"
           >
-            Search Hotels
+            {t("search hotels")}
           </motion.button>
 
           <AnimatePresence>

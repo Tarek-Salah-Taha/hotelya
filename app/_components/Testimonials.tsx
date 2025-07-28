@@ -1,21 +1,22 @@
+import { useTranslations } from "next-intl";
+
 function Testimonials() {
+  const t = useTranslations("HomePage");
+
   const testimonials = [
     {
-      name: "Sarah Johnson",
-      review:
-        "Amazing service! Found the perfect hotel in Paris at an unbeatable price.",
+      name: t("Sarah Johnson"),
+      review: t("amazing service"),
       rating: 5,
     },
     {
-      name: "Mike Chen",
-      review:
-        "Best hotel booking platform I've used. Great deals and excellent customer support.",
+      name: t("Mike Chen"),
+      review: t("best hotel booking platform I've used"),
       rating: 5,
     },
     {
-      name: "Emily Davis",
-      review:
-        "Instant confirmation and competitive prices. Hotelya made my business trip easy.",
+      name: t("Emily Davis"),
+      review: t("instant confirmation and competitive prices"),
       rating: 5,
     },
   ];
@@ -32,10 +33,10 @@ function Testimonials() {
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-12">
           <h2 className="text-3xl sm:text-4xl font-bold text-text mb-3">
-            What Our <span className="text-primary">Customers Say</span>
+            {t("what our customers say")}
           </h2>
           <p className="text-lg text-text opacity-90">
-            Join millions of satisfied travelers worldwide
+            {t("join millions of satisfied travelers worldwide")}
           </p>
         </div>
 
