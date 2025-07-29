@@ -14,6 +14,7 @@ import toast from "react-hot-toast";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { FiArrowRight } from "react-icons/fi";
+import { useTranslations } from "next-intl";
 
 export default function HotelCardItem({ hotel }: HotelCardItemProps) {
   const [isFavorite, setIsFavorite] = useState(false);
@@ -23,6 +24,8 @@ export default function HotelCardItem({ hotel }: HotelCardItemProps) {
 
   const pathname = usePathname();
   const locale = pathname.split("/")[1] || "en";
+
+  const t = useTranslations("FavoritesPage");
 
   const handleFavoriteToggle = async () => {
     if (!user) {
@@ -139,7 +142,7 @@ export default function HotelCardItem({ hotel }: HotelCardItemProps) {
               {hotel.rating}
             </div>
             <div className="px-3 py-1.5 text-sm font-medium text-gray-700">
-              {getRatingLabel(hotel.rating)}
+              {getRatingLabel(hotel.rating, t)}
             </div>
           </div>
         </div>

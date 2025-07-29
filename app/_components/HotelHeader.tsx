@@ -2,6 +2,7 @@ import { IoLocationSharp } from "react-icons/io5";
 import { FaStar, FaRegStar, FaStarHalfAlt } from "react-icons/fa";
 import getRatingLabel from "../_lib/getRatingLabel";
 import { LocalizedHotel } from "../_lib/transformHotel";
+import { useTranslations } from "next-intl";
 
 function renderStars(rating: number) {
   const stars = [];
@@ -23,6 +24,8 @@ function renderStars(rating: number) {
 
 function HotelHeader({ hotel }: { hotel: LocalizedHotel }) {
   const { hotelName, stars, address, city, country, rating } = hotel;
+
+  const t = useTranslations("FavoritesPage");
 
   return (
     <div className="bg-background px-4 md:px-8 pt-6 pb-1 text-text">
@@ -49,7 +52,7 @@ function HotelHeader({ hotel }: { hotel: LocalizedHotel }) {
             {rating}
           </div>
           <div className="px-3 py-1.5 text-sm font-medium text-gray-700">
-            {getRatingLabel(rating)}
+            {getRatingLabel(rating, t)}
           </div>
         </div>
       </div>

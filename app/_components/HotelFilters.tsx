@@ -25,18 +25,9 @@ import { toast } from "react-hot-toast";
 import { motion, AnimatePresence } from "framer-motion";
 import { IoMdSearch } from "react-icons/io";
 import { VscDebugRestart } from "react-icons/vsc";
+import { useTranslations } from "next-intl";
 
 const starRatings = [5, 4, 3, 2, 1];
-
-function getUniqueRatingLabelsFromData(filters: HotelFilterData[]) {
-  const ratings = new Set<string>();
-  for (const item of filters) {
-    if (item.rating !== undefined) {
-      ratings.add(getRatingLabel(item.rating));
-    }
-  }
-  return Array.from(ratings);
-}
 
 type Props = {
   filters: HotelFilterData[];
@@ -62,6 +53,18 @@ export default function HotelFilters({ filters, onApplyFilters }: Props) {
 
   const router = useRouter();
   const searchParams = useSearchParams();
+
+  const t = useTranslations("FavoritesPage");
+
+  function getUniqueRatingLabelsFromData(filters: HotelFilterData[]) {
+    const ratings = new Set<string>();
+    for (const item of filters) {
+      if (item.rating !== undefined) {
+        ratings.add(getRatingLabel(item.rating, t));
+      }
+    }
+    return Array.from(ratings);
+  }
 
   useEffect(() => {
     const newState = { ...initialState };
