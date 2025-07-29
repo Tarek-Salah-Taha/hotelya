@@ -64,6 +64,46 @@
     "my account": "Mein Konto",
     "signin": "Eintragen"
   },
+
+  "FavoritesPage": {
+    "myFavorites": "Meine Lieblingshotels",
+    "Please log in to view your favorite hotels": "Bitte melden Sie sich an, um Ihre Lieblingshotels anzuzeigen.",
+    "You have no favorite hotels yet": "Sie haben noch keine Lieblingshotels.",
+    "bookButton": "Jetzt buchen",
+    "per night": "pro Nacht",
+    "$": "$",
+    "Remove": "Löschen",
+    "instead of": "anstatt",
+    "Excellent": "Exzellent",
+    "Very Good": "Sehr gut",
+    "Good": "Gut",
+    "Average": "Durchschnitt",
+    "No Rating": "Keine Bewertung",
+    "Cancel": "Stornieren",
+    "Confirm Removal": "Entfernung bestätigen",
+    "Are you sure you want to remove this hotel?": "Möchten Sie dieses Hotel wirklich entfernen?",
+    "Removed from favorites": "Aus den Favoriten entfernt",
+    "Failed to remove": "Entfernen fehlgeschlagen"
+  },
+
+  "BookingPage": {
+    "bookings": "Meine Buchungen",
+    "Upcoming stays": "Kommende Aufenthalte",
+    "Past reservations": "Frühere Reservierungen",
+    "Booking Date": "Buchungsdatum",
+    "Check-in": "Anreisedatum",
+    "Check-out": "Abreisedatum",
+    "Duration": "Aufenthaltsdauer",
+    "Room Type": "Zimmertyp",
+    "Price/Night": "Preis/Nacht",
+    "Guests": "Gäste",
+    "Total Price": "Gesamtpreis",
+    "Cancel Booking": "Buchung stornieren",
+    "Rebook": "Umbuchen",
+    "Past": "Die Vergangenheit",
+    "Upcoming": "Das Kommende"
+  },
+
   "common": {
     "loading": "Laden...",
     "error": "Ein Fehler ist aufgetreten",

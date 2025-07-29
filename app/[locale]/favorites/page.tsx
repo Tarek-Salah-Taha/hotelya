@@ -13,8 +13,9 @@ import { usePathname } from "next/navigation";
 import { IoLocationSharp } from "react-icons/io5";
 import { availableTags, iconMap } from "@/app/_constants/availableTags";
 import getRatingLabel from "@/app/_lib/getRatingLabel";
-import { FiArrowRight } from "react-icons/fi";
+import { FiArrowRight, FiArrowLeft } from "react-icons/fi";
 import { FaRegTrashAlt } from "react-icons/fa";
+import { useTranslations } from "next-intl";
 
 export default function FavoritesPage() {
   const { user, loading } = useUser();
@@ -23,6 +24,8 @@ export default function FavoritesPage() {
 
   const pathname = usePathname();
   const locale = pathname.split("/")[1] || "en";
+
+  const t = useTranslations("FavoritesPage");
 
   useEffect(() => {
     if (!user) return;
@@ -49,9 +52,9 @@ export default function FavoritesPage() {
     try {
       await removeFavorite(user.id, hotelId);
       setFavorites((prev) => prev.filter((hotel) => hotel.id !== hotelId));
-      toast.success("Removed from favorites");
+      toast.success(t("Removed from favorites"));
     } catch {
-      toast.error("Failed to remove");
+      toast.error(t("Failed to remove"));
     }
   };
 
@@ -61,39 +64,39 @@ export default function FavoritesPage() {
 
   const handleRemoveWithConfirmation = (hotelId: number) => {
     toast.custom(
-      (t) => (
+      (toastObj) => (
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -20 }}
-          className={`${t.visible ? "animate-enter" : "animate-leave"} 
+          className={`${toastObj.visible ? "animate-enter" : "animate-leave"} 
             max-w-md w-full bg-white shadow-lg rounded-lg pointer-events-auto flex flex-col p-4 border border-red-100`}
         >
           <div className="text-sm font-medium text-gray-900 mb-2">
-            Confirm Removal
+            {t("Confirm Removal")}
           </div>
           <div className="text-sm text-gray-500 mb-4">
-            Are you sure you want to remove this hotel?
+            {t("Are you sure you want to remove this hotel?")}
           </div>
           <div className="flex gap-2 justify-end">
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              onClick={() => toast.dismiss(t.id)}
+              onClick={() => toast.dismiss(toastObj.id)}
               className="px-3 py-1.5 text-sm text-gray-600 hover:bg-gray-100 rounded-lg transition"
             >
-              Cancel
+              {t("Cancel")}
             </motion.button>
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               onClick={() => {
                 handleRemove(hotelId);
-                toast.dismiss(t.id);
+                toast.dismiss(toastObj.id);
               }}
               className="px-3 py-1.5 text-sm bg-red-500 text-white hover:bg-red-600 rounded-lg transition"
             >
-              Remove
+              {t("Remove")}
             </motion.button>
           </div>
         </motion.div>
@@ -117,7 +120,7 @@ export default function FavoritesPage() {
         animate={{ opacity: 1 }}
         className="text-center mt-10 text-gray-600"
       >
-        Please log in to view your favorite hotels.
+        {t("Please log in to view your favorite hotels")}
       </motion.div>
     );
 
@@ -129,7 +132,7 @@ export default function FavoritesPage() {
         transition={{ duration: 0.4 }}
         className="text-3xl font-bold text-center mb-8 text-text"
       >
-        My Favorite Hotels
+        {t("myFavorites")}
       </motion.h1>
 
       {favorites.length === 0 ? (
@@ -138,7 +141,7 @@ export default function FavoritesPage() {
           animate={{ opacity: 1 }}
           className="text-center text-gray-500"
         >
-          You have no favorite hotels yet.
+          {t("You have no favorite hotels yet")}
         </motion.p>
       ) : (
         <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
@@ -164,13 +167,17 @@ export default function FavoritesPage() {
                     className="object-cover transition-transform duration-500 hover:scale-105"
                     loading="lazy"
                   />
-                  <div className="absolute top-3 right-3">
+                  <div
+                    className={`absolute top-3 ${
+                      locale === "ar" ? "left" : "right"
+                    }-3`}
+                  >
                     <div className="flex items-center bg-gradient-to-br from-white/90 to-white/70 backdrop-blur-sm rounded-lg shadow-sm border border-white/20 overflow-hidden">
                       <div className="bg-primary px-3 py-1.5 text-white font-bold">
                         {hotel.rating}
                       </div>
                       <div className="px-3 py-1.5 text-sm font-medium text-gray-700">
-                        {getRatingLabel(hotel.rating)}
+                        {getRatingLabel(hotel.rating, t)}
                       </div>
                     </div>
                   </div>
@@ -224,16 +231,34 @@ export default function FavoritesPage() {
                     </div>
                   </div>
 
-                  <div className="flex items-center mb-2">
-                    <span className="text-lg font-bold text-primary">
-                      ${hotel.priceNew}
-                    </span>
-                    {hotel.priceOld && (
-                      <span className="ml-2 text-sm text-gray-500 line-through">
-                        ${hotel.priceOld}
+                  <div className="flex items-center mb-2 flex-row gap-1">
+                    {/* Current Price */}
+                    <div className="flex items-center space-x-1">
+                      <span className="text-xl font-bold text-primary">
+                        {hotel.priceNew}
                       </span>
+                      <span className="text-xl font-bold text-primary">
+                        {t("$")}
+                      </span>
+                    </div>
+
+                    {/* Original Price (if exists) */}
+                    {hotel.priceOld && (
+                      <div className="flex items-center space-x-1 ">
+                        <span className="text-sm text-gray-500">
+                          {t("instead of")}
+                        </span>
+                        <span className="text-sm text-gray-500">
+                          {hotel.priceOld}
+                        </span>
+                        <span className="text-sm text-gray-500">{t("$")}</span>
+                      </div>
                     )}
-                    <span className="ml-2 text-sm text-gray-500">/night</span>
+
+                    {/* Per night text */}
+                    <span className="text-sm text-gray-500 ">
+                      {t("per night")}
+                    </span>
                   </div>
 
                   <div className="flex sm:flex-row gap-5 mt-4">
@@ -241,27 +266,26 @@ export default function FavoritesPage() {
                       whileHover={{ scale: 1.03 }}
                       whileTap={{ scale: 0.98 }}
                       onClick={() => handleBookNow(hotel.id)}
-                      className="flex-1 bg-primary text-white font-medium py-2 px-4 rounded-lg hover:bg-opacity-90 transition shadow-md flex items-center justify-center gap-2"
+                      className="flex-1 bg-primary text-white font-medium py-2 px-4 rounded-lg hover:bg-opacity-90 transition shadow-md flex items-center justify-center gap-2 text-sm"
                     >
-                      <span>Book Now</span>
+                      <span>{t("bookButton")}</span>
                       <motion.span
                         transition={{ type: "spring", stiffness: 500 }}
                       >
-                        <FiArrowRight />
+                        {locale === "ar" ? <FiArrowLeft /> : <FiArrowRight />}
                       </motion.span>
                     </motion.button>
                     <motion.button
                       whileHover={{ scale: 1.03 }}
                       whileTap={{ scale: 0.98 }}
                       onClick={() => handleRemoveWithConfirmation(hotel.id)}
-                      className="flex-1 bg-white border border-red-300 text-red-500 font-medium py-2 px-4 rounded-lg hover:bg-accent transition flex items-center justify-center gap-1 hover:text-white"
+                      className="flex-1 bg-white border border-red-300 text-red-500 font-medium py-2 px-4 rounded-lg hover:bg-accent transition flex items-center justify-center gap-2 hover:text-white text-sm"
                     >
                       <motion.span
                         transition={{ type: "spring", stiffness: 500 }}
-                      >
-                        <FaRegTrashAlt />
-                      </motion.span>
-                      <span>Remove</span>
+                      ></motion.span>
+                      <span>{t("Remove")}</span>
+                      <FaRegTrashAlt />
                     </motion.button>
                   </div>
                 </div>

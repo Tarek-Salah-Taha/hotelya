@@ -9,6 +9,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { Booking, SupportedLang } from "../_types/types";
 import { useUser } from "../_hooks/useUser";
 import SkeletonLoader from "./SkeletonLoader";
+import { useTranslations } from "next-intl";
 
 const statusColors: Record<string, string> = {
   Confirmed: "bg-green-100 text-green-600",
@@ -56,6 +57,8 @@ export default function Page() {
   const locale = pathname.split("/")[1] || "en";
 
   const router = useRouter();
+
+  const t = useTranslations("BookingPage");
 
   console.log(bookings);
 
@@ -181,10 +184,12 @@ export default function Page() {
     <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8 sm:py-12">
       <div className="text-center mb-10">
         <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-2">
-          My Bookings
+          {t("bookings")}
         </h1>
         <p className="text-gray-600">
-          {activeTab === "upcoming" ? "Upcoming stays" : "Past reservations"}
+          {activeTab === "upcoming"
+            ? t("Upcoming stays")
+            : t("Past reservations")}
         </p>
       </div>
 
@@ -202,7 +207,7 @@ export default function Page() {
                     : "text-gray-600 hover:text-gray-800"
                 }`}
             >
-              {tab === "upcoming" ? "Upcoming" : "Past"}
+              {tab === "upcoming" ? t("Upcoming") : t("Past")}
             </button>
           ))}
         </div>
@@ -315,7 +320,7 @@ export default function Page() {
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-5">
                       <div>
                         <h3 className="text-xs font-medium text-gray-500 uppercase tracking-wider mb-1">
-                          Booking Date
+                          {t("Booking Date")}
                         </h3>
                         <p className="text-gray-900">
                           {formatDate(
@@ -326,7 +331,7 @@ export default function Page() {
                       </div>
                       <div>
                         <h3 className="text-xs font-medium text-gray-500 uppercase tracking-wider mb-1">
-                          Check-in
+                          {t("Check-in")}
                         </h3>
                         <p className="text-gray-900">
                           {formatDate(
@@ -337,7 +342,7 @@ export default function Page() {
                       </div>
                       <div>
                         <h3 className="text-xs font-medium text-gray-500 uppercase tracking-wider mb-1">
-                          Check-out
+                          {t("Check-out")}
                         </h3>
                         <p className="text-gray-900">
                           {formatDate(
@@ -348,7 +353,7 @@ export default function Page() {
                       </div>
                       <div>
                         <h3 className="text-xs font-medium text-gray-500 uppercase tracking-wider mb-1">
-                          Duration
+                          {t("Duration")}
                         </h3>
                         <p className="text-gray-900">
                           {totalNights} night{totalNights !== 1 ? "s" : ""}
@@ -356,7 +361,7 @@ export default function Page() {
                       </div>
                       <div>
                         <h3 className="text-xs font-medium text-gray-500 uppercase tracking-wider mb-1">
-                          Room Type
+                          {t("Room Type")}
                         </h3>
                         <p className="text-gray-900 capitalize">
                           {booking.roomType || "Standard"}
@@ -364,7 +369,7 @@ export default function Page() {
                       </div>
                       <div>
                         <h3 className="text-xs font-medium text-gray-500 uppercase tracking-wider mb-1">
-                          Price/Night
+                          {t("Price/Night")}
                         </h3>
                         <p className="text-gray-900">
                           ${pricePerNight.toFixed(2)}
@@ -372,7 +377,7 @@ export default function Page() {
                       </div>
                       <div className="md:col-span-2">
                         <h3 className="text-xs font-medium text-gray-500 uppercase tracking-wider mb-1">
-                          Guests
+                          {t("Guests")}
                         </h3>
                         <p className="text-gray-900">
                           {booking.numAdults} adult
@@ -391,7 +396,7 @@ export default function Page() {
                       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                         <div>
                           <h3 className="text-xs font-medium text-gray-500 uppercase tracking-wider mb-1">
-                            Total Price
+                            {t("Total Price")}
                           </h3>
                           <p className="text-xl font-semibold text-primary">
                             ${booking.totalPrice.toFixed(2)}
@@ -405,15 +410,15 @@ export default function Page() {
                                 onClick={() => handleCancelClick(booking.id)}
                                 className="flex-1 bg-white border border-red-300 text-red-500 font-medium py-2 px-4 rounded-lg hover:bg-accent transition flex items-center justify-center gap-1 hover:text-white"
                               >
-                                Cancel Booking
+                                {t("Cancel Booking")}
                               </button>
                             )}
                           {activeTab === "past" && (
                             <button
                               onClick={() => handleRebook(booking.hotelId)}
-                              className="px-4 py-2 bg-primary text-white rounded hover:bg-primary-dark transition-colors text-sm font-medium"
+                              className="px-4 py-2 bg-primary text-white rounded hover:bg-primary-dark transition-colors text-sm font-medium hover:shadow-lg"
                             >
-                              Rebook
+                              {t("Rebook")}
                             </button>
                           )}
                         </div>

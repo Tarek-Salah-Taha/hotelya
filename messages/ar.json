@@ -65,6 +65,46 @@
     "my account": "حسابي",
     "signin": "تسجيل الدخول"
   },
+
+  "FavoritesPage": {
+    "myFavorites": "فنادقي المفضلة",
+    "Please log in to view your favorite hotels": "يرجى تسجيل الدخول لعرض الفنادق المفضلة لديك.",
+    "You have no favorite hotels yet": "ليس لديك فنادق مفضلة حتى الآن.",
+    "bookButton": "احجز الآن",
+    "per night": "في الليلة",
+    "$": "دولاراً ",
+    "Remove": "حذف",
+    "instead of": " بدلاً من ",
+    "Excellent": "ممتاز",
+    "Very Good": "جيد جدًا",
+    "Good": "جيد",
+    "Average": "متوسط",
+    "No Rating": "لا يوجد تقييم",
+    "Cancel": "إلغاء",
+    "Confirm Removal": "تأكيد الإزالة",
+    "Are you sure you want to remove this hotel?": "هل أنت متأكد أنك تريد إزالة هذا الفندق؟",
+    "Removed from favorites": "تمت إزالته من المفضلة",
+    "Failed to remove": "فشل في الإزالة"
+  },
+
+  "BookingPage": {
+    "bookings": "حجوزاتي",
+    "Upcoming stays": "الإقامات القادمة",
+    "Past reservations": "الحجوزات السابقة",
+    "Booking Date": "تاريخ الحجز",
+    "Check-in": "تاريخ الوصول",
+    "Check-out": "تاريخ المغادرة",
+    "Duration": "مدة الإقامة",
+    "Room Type": "نوع الغرفة",
+    "Price/Night": "السعر/الليلة",
+    "Guests": "الضيوف",
+    "Total Price": "السعر الإجمالي",
+    "Cancel Booking": "إلغاء الحجز",
+    "Rebook": "إعادة الحجز",
+    "Past": "السابق",
+    "Upcoming": "القادم"
+  },
+
   "common": {
     "loading": "جاري التحميل...",
     "error": "حدث خطأ",

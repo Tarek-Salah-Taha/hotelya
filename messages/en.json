@@ -53,6 +53,28 @@
     "Accessibility Statement": "Accessibility Statement",
     "All rights reserved": "All rights reserved."
   },
+
+  "FavoritesPage": {
+    "myFavorites": "My Favorite Hotels",
+    "Please log in to view your favorite hotels": "Please log in to view your favorite hotels.",
+    "You have no favorite hotels yet": "You have no favorite hotels yet.",
+    "bookButton": "Book Now",
+    "Remove": "Remove",
+    "per night": "per night",
+    "$": "$",
+    "instead of": "instead of",
+    "Excellent": "Excellent",
+    "Very Good": "Very Good",
+    "Good": "Good",
+    "Average": "Average",
+    "No Rating": "No Rating",
+    "Cancel": "Cancel",
+    "Confirm Removal": "Confirm Removal",
+    "Are you sure you want to remove this hotel?": "Are you sure you want to remove this hotel?",
+    "Removed from favorites": "Removed from favorites",
+    "Failed to remove": "Failed to remove"
+  },
+
   "Navigation": {
     "favorites": "Favorites",
     "bookings": "My Bookings",
@@ -62,6 +84,25 @@
     "my account": "My Account",
     "signin": "Sign in"
   },
+
+  "BookingPage": {
+    "bookings": "My Bookings",
+    "Upcoming stays": "Upcoming stays",
+    "Past reservations": "Past reservations",
+    "Booking Date": "Booking Date",
+    "Check-in": "Check-in",
+    "Check-out": "out",
+    "Duration": "Duration",
+    "Room Type": "Room Type",
+    "Price/Night": "Price/Night",
+    "Guests": "Guests",
+    "Total Price": "Total Price",
+    "Cancel Booking": "Cancel Booking",
+    "Rebook": "Rebook",
+    "Past": "Past",
+    "Upcoming": "Upcoming"
+  },
+
   "common": {
     "loading": "Loading...",
     "error": "An error occurred",
