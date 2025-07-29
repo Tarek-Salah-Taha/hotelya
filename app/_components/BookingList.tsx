@@ -14,8 +14,6 @@ import { useTranslations } from "next-intl";
 const statusColors: Record<string, string> = {
   Confirmed: "bg-green-100 text-green-600",
   Cancelled: "bg-red-100 text-red-600",
-  completed: "bg-blue-100 text-blue-600",
-  pending: "bg-yellow-100 text-yellow-600",
 };
 
 const getDateLocale = (locale: SupportedLang) => {
@@ -36,10 +34,11 @@ const getDateLocale = (locale: SupportedLang) => {
 };
 
 const formatDate = (dateString: string, locale: SupportedLang) => {
-  return new Date(dateString).toLocaleDateString(getDateLocale(locale), {
+  return new Date(dateString).toLocaleString(getDateLocale(locale), {
     month: "short",
     day: "numeric",
     year: "numeric",
+    numberingSystem: "latn", // 👈 Force 0-9 digits
   });
 };
 
@@ -58,7 +57,9 @@ export default function Page() {
 
   const router = useRouter();
 
-  const t = useTranslations("BookingPage");
+  const tBooking = useTranslations("BookingPage");
+
+  const tRoom = useTranslations("RoomTypes");
 
   console.log(bookings);
 
@@ -128,32 +129,32 @@ export default function Page() {
 
   const handleCancelClick = (bookingId: string) => {
     toast.custom(
-      (t) => (
+      (tObj) => (
         <div
-          className={`${t.visible ? "animate-enter" : "animate-leave"} 
+          className={`${tObj.visible ? "animate-enter" : "animate-leave"} 
       max-w-md w-full bg-white shadow-lg rounded-lg pointer-events-auto flex flex-col p-4`}
         >
           <div className="text-sm font-medium text-gray-900 mb-2">
-            Confirm Cancellation
+            {tBooking("Confirm Cancellation")}
           </div>
           <div className="text-sm text-gray-500 mb-4">
-            Are you sure you want to cancel this booking?
+            {tBooking("Are you sure you want to cancel this booking?")}
           </div>
           <div className="flex gap-2 justify-end">
             <button
-              onClick={() => toast.dismiss(t.id)}
+              onClick={() => toast.dismiss(tObj.id)}
               className="px-3 py-1.5 text-sm text-gray-600 hover:bg-gray-100 rounded"
             >
-              No
+              {tBooking("No")}
             </button>
             <button
               onClick={() => {
                 handleCancelBooking(bookingId);
-                toast.dismiss(t.id);
+                toast.dismiss(tObj.id);
               }}
               className="px-3 py-1.5 text-sm bg-red-500 text-white hover:bg-red-600 rounded"
             >
-              Yes, Cancel
+              {tBooking("Yes, Cancel")}
             </button>
           </div>
         </div>
@@ -170,7 +171,7 @@ export default function Page() {
     return (
       <div className="flex items-center justify-center min-h-[60vh]">
         <p className="text-center text-gray-500 text-lg">
-          Please log in to view your bookings.
+          {tBooking("Please log in to view your bookings")}
         </p>
       </div>
     );
@@ -184,12 +185,12 @@ export default function Page() {
     <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8 sm:py-12">
       <div className="text-center mb-10">
         <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-2">
-          {t("bookings")}
+          {tBooking("bookings")}
         </h1>
         <p className="text-gray-600">
           {activeTab === "upcoming"
-            ? t("Upcoming stays")
-            : t("Past reservations")}
+            ? tBooking("Upcoming stays")
+            : tBooking("Past reservations")}
         </p>
       </div>
 
@@ -207,13 +208,13 @@ export default function Page() {
                     : "text-gray-600 hover:text-gray-800"
                 }`}
             >
-              {tab === "upcoming" ? t("Upcoming") : t("Past")}
+              {tab === "upcoming" ? tBooking("Upcoming") : tBooking("Past")}
             </button>
           ))}
         </div>
 
         <div className="flex items-center gap-2">
-          <span className="text-sm text-gray-600">Status:</span>
+          <span className="text-sm text-gray-600">{tBooking("Status")}:</span>
           <select
             value={statusFilter}
             onChange={(e) =>
@@ -223,14 +224,14 @@ export default function Page() {
             }
             className="border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary] focus:border-transparent"
           >
-            <option value="all">All</option>
-            <option value="Confirmed">Confirmed</option>
-            <option value="Cancelled">Cancelled</option>
+            <option value="all">{tBooking("All")}</option>
+            <option value="Confirmed">{tBooking("Confirmed")}</option>
+            <option value="Cancelled">{tBooking("Cancelled")}</option>
           </select>
         </div>
 
         <div className="flex items-center gap-2">
-          <span className="text-sm text-gray-600">Sort by:</span>
+          <span className="text-sm text-gray-600">{tBooking("Sort by")}:</span>
           <select
             value={sortBy}
             onChange={(e) =>
@@ -238,9 +239,9 @@ export default function Page() {
             }
             className="border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary] focus:border-transparent"
           >
-            <option value="latest">Latest</option>
-            <option value="oldest">Oldest</option>
-            <option value="name">Hotel Name</option>
+            <option value="latest">{tBooking("Latest")}</option>
+            <option value="oldest">{tBooking("Oldest")}</option>
+            <option value="name">{tBooking("Hotel Name")}</option>
           </select>
         </div>
       </div>
@@ -305,7 +306,7 @@ export default function Page() {
                           {hotelName}
                         </h2>
                         <p className="text-gray-600">
-                          {city}, {country}
+                          {city} • {country}
                         </p>
                       </div>
                       <span
@@ -313,14 +314,14 @@ export default function Page() {
                           statusColors[status] || "bg-gray-100 text-gray-600"
                         }`}
                       >
-                        {status}
+                        {tBooking(status)}
                       </span>
                     </div>
 
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-5">
                       <div>
                         <h3 className="text-xs font-medium text-gray-500 uppercase tracking-wider mb-1">
-                          {t("Booking Date")}
+                          {tBooking("Booking Date")}
                         </h3>
                         <p className="text-gray-900">
                           {formatDate(
@@ -331,7 +332,7 @@ export default function Page() {
                       </div>
                       <div>
                         <h3 className="text-xs font-medium text-gray-500 uppercase tracking-wider mb-1">
-                          {t("Check-in")}
+                          {tBooking("Check-in")}
                         </h3>
                         <p className="text-gray-900">
                           {formatDate(
@@ -342,7 +343,7 @@ export default function Page() {
                       </div>
                       <div>
                         <h3 className="text-xs font-medium text-gray-500 uppercase tracking-wider mb-1">
-                          {t("Check-out")}
+                          {tBooking("Check-out")}
                         </h3>
                         <p className="text-gray-900">
                           {formatDate(
@@ -353,39 +354,47 @@ export default function Page() {
                       </div>
                       <div>
                         <h3 className="text-xs font-medium text-gray-500 uppercase tracking-wider mb-1">
-                          {t("Duration")}
+                          {tBooking("Duration")}
                         </h3>
                         <p className="text-gray-900">
-                          {totalNights} night{totalNights !== 1 ? "s" : ""}
+                          {totalNights === 1
+                            ? tBooking("One night")
+                            : `${totalNights} ${tBooking("nights")}`}
                         </p>
                       </div>
                       <div>
                         <h3 className="text-xs font-medium text-gray-500 uppercase tracking-wider mb-1">
-                          {t("Room Type")}
+                          {tBooking("Room Type")}
                         </h3>
                         <p className="text-gray-900 capitalize">
-                          {booking.roomType || "Standard"}
+                          {tRoom(booking.roomType) || "Standard"}
                         </p>
                       </div>
                       <div>
                         <h3 className="text-xs font-medium text-gray-500 uppercase tracking-wider mb-1">
-                          {t("Price/Night")}
+                          {tBooking("Price/Night")}
                         </h3>
                         <p className="text-gray-900">
-                          ${pricePerNight.toFixed(2)}
+                          {pricePerNight.toFixed(2)} {tBooking("$")}
                         </p>
                       </div>
                       <div className="md:col-span-2">
                         <h3 className="text-xs font-medium text-gray-500 uppercase tracking-wider mb-1">
-                          {t("Guests")}
+                          {tBooking("Guests")}
                         </h3>
                         <p className="text-gray-900">
-                          {booking.numAdults} adult
-                          {booking.numAdults !== 1 ? "s" : ""}
+                          {booking.numAdults === 1
+                            ? tBooking("One adult")
+                            : `${booking.numAdults} ${tBooking("adults")}`}
                           {booking.numChildren > 0 && (
                             <span>
-                              , {booking.numChildren} child
-                              {booking.numChildren !== 1 ? "ren" : ""}
+                              {" "}
+                              •{" "}
+                              {booking.numChildren === 1
+                                ? tBooking("One child")
+                                : `${booking.numChildren} ${tBooking(
+                                    "children"
+                                  )}`}
                             </span>
                           )}
                         </p>
@@ -396,10 +405,10 @@ export default function Page() {
                       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                         <div>
                           <h3 className="text-xs font-medium text-gray-500 uppercase tracking-wider mb-1">
-                            {t("Total Price")}
+                            {tBooking("Total Price")}
                           </h3>
                           <p className="text-xl font-semibold text-primary">
-                            ${booking.totalPrice.toFixed(2)}
+                            {booking.totalPrice.toFixed(2)} {tBooking("$")}
                           </p>
                         </div>
 
@@ -410,15 +419,15 @@ export default function Page() {
                                 onClick={() => handleCancelClick(booking.id)}
                                 className="flex-1 bg-white border border-red-300 text-red-500 font-medium py-2 px-4 rounded-lg hover:bg-accent transition flex items-center justify-center gap-1 hover:text-white"
                               >
-                                {t("Cancel Booking")}
+                                {tBooking("Cancel Booking")}
                               </button>
                             )}
                           {activeTab === "past" && (
                             <button
                               onClick={() => handleRebook(booking.hotelId)}
-                              className="px-4 py-2 bg-primary text-white rounded hover:bg-primary-dark transition-colors text-sm font-medium hover:shadow-lg"
+                              className="flex items-center justify-center gap-2 px-6 py-3 bg-primary text-white border border-transparent rounded-xl text-base font-semibold transition-all duration-200 hover:bg-white hover:text-primary hover:border-primary active:bg-white active:text-primary active:border-primary hover:shadow-lg"
                             >
-                              {t("Rebook")}
+                              {tBooking("Rebook")}
                             </button>
                           )}
                         </div>

@@ -101,7 +101,36 @@
     "Cancel Booking": "Buchung stornieren",
     "Rebook": "Umbuchen",
     "Past": "Die Vergangenheit",
-    "Upcoming": "Das Kommende"
+    "Upcoming": "Das Kommende",
+    "$": "$",
+    "Please log in to view your bookings": "Bitte melden Sie sich an, um Ihre Buchungen anzuzeigen.",
+    "Confirm Cancellation": "Stornierung bestätigen",
+    "Are you sure you want to cancel this booking?": "Möchten Sie diese Buchung wirklich stornieren?",
+    "No": "NEIN",
+    "Yes, Cancel": "Ja, Abbrechen",
+    "Status": "Status",
+    "All": "Alle",
+    "Confirmed": "Bestätigt",
+    "Cancelled": "Abgesagt",
+    "Sort by": "Sortieren nach",
+    "Latest": "Letzte",
+    "Oldest": "Älteste",
+    "Hotel Name": "Hotelname",
+    "One night": "Eine Nacht",
+    "nights": "Nächte",
+    "One child": "Ein Kind",
+    "children": "Kinder",
+    "One adult": "Ein Erwachsener",
+    "adults": "Erwachsene"
+  },
+
+  "RoomTypes": {
+    "Deluxe Room": "Deluxe-Zimmer",
+    "Suite": "Suite",
+    "Executive Room": "Executive-Zimmer",
+    "Family Room": "Familienzimmer",
+    "Standard Single Room": "Standard-Einzelzimmer",
+    "Standard Twin Room": "Standard-Zweibettzimmer"
   },
 
   "common": {

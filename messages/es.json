@@ -99,7 +99,36 @@
     "Cancel Booking": "Cancelar reserva",
     "Rebook": "Volver a reservar",
     "Past": "El pasado",
-    "Upcoming": "El Próximo"
+    "Upcoming": "El Próximo",
+    "$": "$",
+    "Please log in to view your bookings": "Inicie sesión para ver sus reservas.",
+    "Confirm Cancellation": "Confirmar cancelación",
+    "Are you sure you want to cancel this booking?": "¿Está seguro de que desea cancelar esta reserva?",
+    "No": "No",
+    "Yes, Cancel": "Sí, Cancelar",
+    "Status": "Estado",
+    "All": "Todo",
+    "Confirmed": "Confirmado",
+    "Cancelled": "Cancelado",
+    "Sort by": "Ordenar por",
+    "Latest": "El último",
+    "Oldest": "El más antiguo",
+    "Hotel Name": "Nombre del hotel",
+    "One night": "Una noche",
+    "nights": "noches",
+    "One child": "Un niño",
+    "children": "niños",
+    "One adult": "Un adulto",
+    "adults": "adultos"
+  },
+
+  "RoomTypes": {
+    "Deluxe Room": "Habitación de lujo",
+    "Suite": "Suite",
+    "Executive Room": "Habitación ejecutiva",
+    "Family Room": "Habitación familiar",
+    "Standard Single Room": "Habitación individual estándar",
+    "Standard Twin Room": "Habitación doble estándar"
   },
 
   "common": {

@@ -91,7 +91,7 @@
     "Past reservations": "Past reservations",
     "Booking Date": "Booking Date",
     "Check-in": "Check-in",
-    "Check-out": "out",
+    "Check-out": "Check-out",
     "Duration": "Duration",
     "Room Type": "Room Type",
     "Price/Night": "Price/Night",
@@ -100,7 +100,36 @@
     "Cancel Booking": "Cancel Booking",
     "Rebook": "Rebook",
     "Past": "Past",
-    "Upcoming": "Upcoming"
+    "Upcoming": "Upcoming",
+    "$": "$",
+    "Please log in to view your bookings": "Please log in to view your bookings.",
+    "Confirm Cancellation": "Confirm Cancellation",
+    "Are you sure you want to cancel this booking?": "Are you sure you want to cancel this booking?",
+    "No": "No",
+    "Yes, Cancel": "Yes, Cancel",
+    "Status": "Status",
+    "All": "All",
+    "Confirmed": "Confirmed",
+    "Cancelled": "Cancelled",
+    "Sort by": "Sort by",
+    "Latest": "Latest",
+    "Oldest": "Oldest",
+    "Hotel Name": "Hotel Name",
+    "One night": "One night",
+    "nights": "nights",
+    "One child": "One child",
+    "children": "children",
+    "One adult": "One adult",
+    "adults": "adults"
+  },
+
+  "RoomTypes": {
+    "Deluxe Room": "Deluxe Room",
+    "Suite": "Suite",
+    "Executive Room": "Executive Room",
+    "Family Room": "Family Room",
+    "Standard Single Room": "Standard Single Room",
+    "Standard Twin Room": "Standard Twin Room"
   },
 
   "common": {

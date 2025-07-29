@@ -102,7 +102,36 @@
     "Cancel Booking": "إلغاء الحجز",
     "Rebook": "إعادة الحجز",
     "Past": "السابق",
-    "Upcoming": "القادم"
+    "Upcoming": "القادم",
+    "$": "دولاراً",
+    "Please log in to view your bookings": "يرجى تسجيل الدخول لعرض حجوزاتك.",
+    "Confirm Cancellation": "تأكيد الإلغاء",
+    "Are you sure you want to cancel this booking?": "هل أنت متأكد أنك تريد إلغاء هذا الحجز؟",
+    "No": "لا",
+    "Yes, Cancel": "نعم، إلغاء",
+    "Status": "الحالة",
+    "All": "الكل",
+    "Confirmed": "مؤكد",
+    "Cancelled": "تم الإلغاء",
+    "Sort by": "فرز حسب",
+    "Latest": "الأحدث",
+    "Oldest": "الأقدم",
+    "Hotel Name": "اسم الفندق",
+    "One night": "ليلة واحدة",
+    "nights": "ليالي",
+    "One child": "طفل واحد",
+    "children": "أطفال",
+    "One adult": "شخص بالغ واحد",
+    "adults": "بالغين"
+  },
+
+  "RoomTypes": {
+    "Deluxe Room": "غرفة فاخرة",
+    "Suite": "جناح",
+    "Executive Room": "غرفة تنفيذية",
+    "Family Room": "غرفة عائلية",
+    "Standard Single Room": "غرفة مفردة عادية",
+    "Standard Twin Room": "غرفة مزدوجة عادية"
   },
 
   "common": {

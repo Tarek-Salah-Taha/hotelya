@@ -99,7 +99,36 @@
     "Cancel Booking": "Annulla prenotazione",
     "Rebook": "Riprenota",
     "Past": "Il passato",
-    "Upcoming": "Il prossimo"
+    "Upcoming": "Il prossimo",
+    "$": "$",
+    "Please log in to view your bookings": "Effettua il login per visualizzare le tue prenotazioni.",
+    "Confirm Cancellation": "Conferma annullamento",
+    "Are you sure you want to cancel this booking?": "Sei sicuro di voler annullare questa prenotazione?",
+    "No": "NO",
+    "Yes, Cancel": "Sì, annulla",
+    "Status": "Statut",
+    "All": "Tous",
+    "Confirmed": "Confirmé",
+    "Cancelled": "Annulé",
+    "Sort by": "Trier par",
+    "Latest": "Dernier",
+    "Oldest": "Le plus ancien",
+    "Hotel Name": "Nom de l'hôtel",
+    "One night": "Una notte",
+    "nights": "notti",
+    "One child": "Un bambino",
+    "children": "bambini",
+    "One adult": "Un adulto",
+    "adults": "adulti"
+  },
+
+  "RoomTypes": {
+    "Deluxe Room": "Camera deluxe",
+    "Suite": "Suite",
+    "Executive Room": "Camera Executive",
+    "Family Room": "Camera familiare",
+    "Standard Single Room": "Camera singola standard",
+    "Standard Twin Room": "Camera doppia standard"
   },
 
   "common": {
