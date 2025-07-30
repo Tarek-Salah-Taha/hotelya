@@ -152,6 +152,37 @@
     "Welcome": "Welcome"
   },
 
+  "ProfilePage": {
+    "Personal Information": "Personal Information",
+    "Avatar uploaded successfully!": "Avatar uploaded successfully!",
+    "Failed to upload avatar": "Failed to upload avatar",
+    "Error uploading avatar": "Error uploading avatar",
+    "Change Avatar": "Change Avatar",
+    "First Name": "First Name",
+    "Last Name": "Last Name",
+    "Email": "Email",
+    "Mobile": "Mobile Number",
+    "Date of Birth": "Date of Birth",
+    "Gender": "Gender",
+    "Select Gender": "Select Gender",
+    "Male": "Male",
+    "Female": "Female",
+    "Prefer not to say": "Prefer not to say",
+    "City": "City",
+    "Country": "Country",
+    "Verified Email": "Verified Email",
+    "Verified Mobile Number": "Verified Mobile Number",
+    "Complete Basic Info": "Complete Basic Info",
+    "Profile Completion": "Profile Completion",
+    "complete": "complete",
+    "Save Changes": "Save Changes",
+    "Failed to update profile": "Failed to update profile",
+    "Profile updated successfully!": "Profile updated successfully!",
+    "Error updating profile": "Error updating profile",
+    "User avatar": "User avatar",
+    "Uploading": "Uploading..."
+  },
+
   "RoomTypes": {
     "Deluxe Room": "Deluxe Room",
     "Suite": "Suite",

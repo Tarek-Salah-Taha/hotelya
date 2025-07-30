@@ -154,6 +154,37 @@
     "Welcome": "مرحباً"
   },
 
+  "ProfilePage": {
+    "Personal Information": "المعلومات الشخصية",
+    "Avatar uploaded successfully!": "تم تحميل الصورة الرمزية بنجاح!",
+    "Failed to upload avatar": "فشل تحميل الصورة الرمزية",
+    "Error uploading avatar": "خطأ في تحميل الصورة الرمزية",
+    "Change Avatar": "تغيير الصورة الرمزية",
+    "First Name": "الاسم الأول",
+    "Last Name": "اسم العائلة",
+    "Email": "بريد إلكتروني",
+    "Mobile": "رقم الهاتف المحمول",
+    "Date of Birth": "تاريخ الميلاد",
+    "Gender": "الجنس",
+    "Select Gender": "حدد الجنس",
+    "Male": "ذكر",
+    "Female": "أنثى",
+    "Prefer not to say": "أفضل عدم القول",
+    "City": "المدينة",
+    "Country": "الدولة",
+    "Verified Email": "البريد الإلكتروني تم التحقق منه",
+    "Verified Mobile Number": "رقم الهاتف المحمول الذي تم التحقق منه",
+    "Complete Basic Info": "معلومات أساسية كاملة",
+    "Profile Completion": "إكمال الملف الشخصي",
+    "complete": "مكتمل",
+    "Save Changes": "حفظ التغييرات",
+    "Failed to update profile": "فشل تحديث الملف الشخصي",
+    "Profile updated successfully!": "تم تحديث الملف الشخصي بنجاح!",
+    "Error updating profile": "خطأ في تحديث الملف الشخصي",
+    "User avatar": "صورة المستخدم الرمزية",
+    "Uploading": "جاري التحميل..."
+  },
+
   "RoomTypes": {
     "Deluxe Room": "غرفة فاخرة",
     "Suite": "جناح",

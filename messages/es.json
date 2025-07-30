@@ -151,6 +151,37 @@
     "Welcome": "Bienvenido"
   },
 
+  "ProfilePage": {
+    "Personal Information": "La información personal",
+    "Avatar uploaded successfully!": "¡Avatar cargado exitosamente!",
+    "Failed to upload avatar": "No se pudo cargar el avatar",
+    "Error uploading avatar": "Error al cargar el avatar",
+    "Change Avatar": "Cambiar avatar",
+    "First Name": "Nombre de pila",
+    "Last Name": "Apellido",
+    "Email": "Correo electrónico",
+    "Mobile": "Número de teléfono móvil",
+    "Date of Birth": "Fecha de nacimiento",
+    "Gender": "El género",
+    "Select Gender": "Seleccione género",
+    "Male": "Masculino",
+    "Female": "Femenino",
+    "Prefer not to say": "Prefiero no decirlo",
+    "City": "La ciudad",
+    "Country": "El País",
+    "Verified Email": "Correo electrónico verificado",
+    "Verified Mobile Number": "Número de móvil verificado",
+    "Complete Basic Info": "Información básica completa",
+    "Profile Completion": "Completar perfil",
+    "complete": "completo",
+    "Save Changes": "Guardar cambios",
+    "Failed to update profile": "No se pudo actualizar el perfil",
+    "Profile updated successfully!": "¡Perfil actualizado exitosamente!",
+    "Error updating profile": "Error al actualizar el perfil",
+    "User avatar": "Avatar de usuario",
+    "Uploading": "Subiendo..."
+  },
+
   "RoomTypes": {
     "Deluxe Room": "Habitación de lujo",
     "Suite": "Suite",

@@ -3,12 +3,16 @@
 import { useRef, useState, useEffect } from "react";
 import Image from "next/image";
 import { useForm } from "react-hook-form";
-import supabase from "../_lib/supabase";
 import { useUser } from "../_hooks/useUser";
 import toast from "react-hot-toast";
-import { updateUserProfile, uploadAvatar } from "../_lib/usersApi";
+import {
+  getUserProfile,
+  updateUserProfile,
+  uploadAvatar,
+} from "../_lib/usersApi";
 import { FormValues } from "../_types/types";
 import { motion } from "framer-motion";
+import { useTranslations } from "next-intl";
 
 export default function Profile() {
   const { user, loading } = useUser();
@@ -18,6 +22,8 @@ export default function Profile() {
 
   const { register, setValue, handleSubmit, watch } = useForm<FormValues>();
 
+  const t = useTranslations("ProfilePage");
+
   const form = watch();
 
   // Load profile data
@@ -25,11 +31,7 @@ export default function Profile() {
     if (!user?.id) return;
 
     const loadProfile = async () => {
-      const { data } = await supabase
-        .from("users")
-        .select("*")
-        .eq("id", user.id)
-        .single();
+      const data = await getUserProfile(user.id);
 
       if (data) {
         const fields: (keyof FormValues)[] = [
@@ -73,13 +75,13 @@ export default function Profile() {
       if (uploadedUrl && typeof uploadedUrl === "string") {
         setAvatarUrl(uploadedUrl);
         setValue("avatarUrl", uploadedUrl);
-        toast.success("Avatar uploaded successfully!");
+        toast.success(t("Avatar uploaded successfully!"));
       } else {
-        toast.error("Failed to upload avatar");
+        toast.error(t("Failed to upload avatar"));
       }
     } catch (error) {
-      console.error("Error uploading avatar:", error);
-      toast.error("Error uploading avatar");
+      console.error("Error uploading avatar", error);
+      toast.error(t("Error uploading avatar"));
     } finally {
       setIsUploading(false);
     }
@@ -100,13 +102,13 @@ export default function Profile() {
 
       if (error) {
         console.error("❌ Update failed:", error);
-        toast.error("Failed to update profile");
+        toast.error(t("Failed to update profile"));
       } else {
-        toast.success("Profile updated successfully!");
+        toast.success(t("Profile updated successfully!"));
       }
     } catch (error) {
       console.error("❌ Error updating profile:", error);
-      toast.error("Error updating profile");
+      toast.error(t("Error updating profile"));
     }
   };
 
@@ -154,7 +156,7 @@ export default function Profile() {
             {avatarUrl ? (
               <Image
                 src={avatarUrl}
-                alt="User avatar"
+                alt={t("User avatar")}
                 fill
                 className="object-cover"
               />
@@ -173,17 +175,17 @@ export default function Profile() {
             {form.firstName} {form.lastName}
           </motion.h2>
           <p className="text-sm text-gray-500 mt-1">
-            {form.city}, {form.country}
+            {form.city} • {form.country}
           </p>
 
           <div className="mt-6 space-y-3 text-left">
-            <ProfileStatus label="Verified Email" valid={!!form.email} />
+            <ProfileStatus label={t("Verified Email")} valid={!!form.email} />
             <ProfileStatus
-              label="Verified Mobile Number"
+              label={t("Verified Mobile Number")}
               valid={!!form.mobile}
             />
             <ProfileStatus
-              label="Complete Basic Info"
+              label={t("Complete Basic Info")}
               valid={
                 !!form.firstName &&
                 !!form.lastName &&
@@ -196,7 +198,9 @@ export default function Profile() {
           </div>
 
           <div className="mt-6">
-            <p className="text-sm text-gray-500 mb-1">Profile Completion</p>
+            <p className="text-sm text-gray-500 mb-1">
+              {t("Profile Completion")}
+            </p>
             <div className="w-full bg-gray-200 rounded-full h-2.5">
               <motion.div
                 className="bg-gradient-to-r from-primary to-primary-dark h-2.5 rounded-full"
@@ -206,7 +210,7 @@ export default function Profile() {
               />
             </div>
             <p className="text-xs text-gray-500 mt-1">
-              {getProgress()}% complete
+              {getProgress()}% {t("complete")}
             </p>
           </div>
         </motion.div>
@@ -219,7 +223,7 @@ export default function Profile() {
           className="lg:col-span-2 bg-white rounded-2xl p-6 shadow-lg border border-gray-100"
         >
           <h3 className="text-xl font-bold mb-6 pb-2 border-b border-gray-100 text-gray-800">
-            Personal Information
+            {t("Personal Information")}
           </h3>
 
           <div className="flex items-center gap-4 mb-6">
@@ -230,7 +234,7 @@ export default function Profile() {
               {avatarUrl ? (
                 <Image
                   src={avatarUrl}
-                  alt="Avatar"
+                  alt={t("User Avatar")}
                   fill
                   className="object-cover"
                 />
@@ -251,10 +255,10 @@ export default function Profile() {
               {isUploading ? (
                 <span className="flex items-center gap-2">
                   <span className="inline-block w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
-                  Uploading...
+                  {t("Uploading")}
                 </span>
               ) : (
-                "Change Avatar"
+                t("Change Avatar")
               )}
             </motion.button>
             <input
@@ -270,37 +274,41 @@ export default function Profile() {
             onSubmit={handleSubmit(onSubmit)}
             className="grid grid-cols-1 md:grid-cols-2 gap-5"
           >
-            <InputField label="First Name" {...register("firstName")} />
-            <InputField label="Last Name" {...register("lastName")} />
+            <InputField label={t("First Name")} {...register("firstName")} />
+            <InputField label={t("Last Name")} {...register("lastName")} />
             <InputField
-              label="Email"
+              label={t("Email")}
               type="email"
               disabled
               className="bg-gray-50 text-gray-500 cursor-not-allowed"
               {...register("email")}
             />
-            <InputField label="Mobile" type="tel" {...register("mobile")} />
             <InputField
-              label="Date of Birth"
+              label={t("Mobile")}
+              type="tel"
+              {...register("mobile")}
+            />
+            <InputField
+              label={t("Date of Birth")}
               type="date"
               {...register("dateOfBirth")}
             />
             <div>
               <label className="block mb-2 text-sm font-medium text-gray-700">
-                Gender
+                {t("Gender")}
               </label>
               <select
                 {...register("gender")}
                 className="border border-gray-200 rounded-lg p-3 w-full focus:ring-2 focus:ring-primary focus:border-transparent bg-white"
               >
-                <option value="">Select Gender</option>
-                <option value="Male">Male</option>
-                <option value="Female">Female</option>
-                <option value="Other">Other</option>
+                <option value="">{t("Select Gender")}</option>
+                <option value="Male">{t("Male")}</option>
+                <option value="Female">{t("Female")}</option>
+                <option value="Other">{t("Prefer not to say")}</option>
               </select>
             </div>
-            <InputField label="City" {...register("city")} />
-            <InputField label="Country" {...register("country")} />
+            <InputField label={t("City")} {...register("city")} />
+            <InputField label={t("Country")} {...register("country")} />
 
             <motion.button
               type="submit"
@@ -309,7 +317,7 @@ export default function Profile() {
               whileHover={{ scale: 1.01 }}
               whileTap={{ scale: 0.98 }}
             >
-              Save Changes
+              {t("Save Changes")}
             </motion.button>
           </form>
         </motion.div>

@@ -1,4 +1,4 @@
-import { LoginData, RegisterData } from "../_types/types";
+import { FormValues, LoginData, RegisterData } from "../_types/types";
 import supabase from "./supabase";
 
 export async function registerUser({
@@ -69,18 +69,23 @@ export async function logoutUser() {
   return { success: true };
 }
 
+export async function getUserProfile(userId: string) {
+  const { data, error } = await supabase
+    .from("users")
+    .select("*")
+    .eq("id", userId)
+    .single();
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  return data;
+}
+
 export async function updateUserProfile(
   userId: string,
-  data: Partial<{
-    firstName: string;
-    lastName: string;
-    mobile: string;
-    gender: string;
-    dateOfBirth: string;
-    avatarUrl: string;
-    city: string;
-    country: string;
-  }>
+  data: Partial<FormValues>
 ) {
   const { error } = await supabase.from("users").update(data).eq("id", userId);
 
