@@ -46,7 +46,17 @@ export async function loginUser({ email, password }: LoginData) {
     return { error: error.message };
   }
 
-  return { user: data.user, session: data.session };
+  const { data: profileData } = await supabase
+    .from("users")
+    .select("firstName")
+    .eq("id", data.user.id)
+    .single();
+
+  return {
+    user: data.user,
+    session: data.session,
+    userName: profileData?.firstName || "",
+  };
 }
 
 export async function logoutUser() {

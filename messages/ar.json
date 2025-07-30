@@ -54,7 +54,8 @@
     "Terms & Conditions": "الشروط والأحكام",
     "Cookie Preferences": "تفضيلات ملفات تعريف الارتباط",
     "Accessibility Statement": "بيان إمكانية الوصول",
-    "All rights reserved": "جميع الحقوق محفوظة."
+    "All rights reserved": "جميع الحقوق محفوظة.",
+    "Please enter a valid destination (at least 2 letters)": "الرجاء إدخال وجهة صالحة (حرفين على الأقل)."
   },
   "Navigation": {
     "favorites": "المفضلة",
@@ -123,6 +124,34 @@
     "children": "أطفال",
     "One adult": "شخص بالغ واحد",
     "adults": "بالغين"
+  },
+
+  "SigninPage": {
+    "Welcome!": "مرحباً!",
+    "Sign in to your account": "تسجيل الدخول إلى حسابك",
+    "Email Address": "عنوان البريد الإلكتروني",
+    "Password": "كلمة المرور",
+    "Sign In": "تسجيل الدخول",
+    "Don't have an account?": "ليس لديك حساب؟",
+    "Create one": "إنشاء حساب جديد",
+    "Welcome back": "مرحبًا بعودتك،",
+    "An unexpected error occurred": "حدث خطأ غير متوقع",
+    "Signing in": "جاري تسجيل الدخول..."
+  },
+
+  "RegisterPage": {
+    "Join Us": "انضم إلينا!",
+    "Create your account to get started": "قم بإنشاء حسابك للبدء",
+    "First Name": "الاسم الأول",
+    "Last Name": "اسم العائلة",
+    "Email Address": "عنوان البريد الإلكتروني",
+    "Password": "كلمة المرور",
+    "An unexpected error occurred": "حدث خطأ غير متوقع",
+    "Creating account": "إنشاء الحساب...",
+    "Register": "جاري التسجيل",
+    "Already have an account?": "هل لديك حساب بالفعل؟",
+    "Sign In": "تسجيل الدخول",
+    "Welcome": "مرحباً"
   },
 
   "RoomTypes": {

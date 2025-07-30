@@ -137,8 +137,7 @@ function SearchBox() {
                 exit={{ opacity: 0, y: -10 }}
                 className="absolute top-full mt-2 text-sm text-red-600 bg-red-100 border border-red-300 p-2 rounded-lg shadow-md z-10 w-full"
               >
-                Please enter a valid <strong>destination</strong> (at least 2
-                letters).
+                {t("Please enter a valid destination (at least 2 letters)")}
               </motion.div>
             )}
           </AnimatePresence>

@@ -9,6 +9,7 @@ import { FiEye, FiEyeOff, FiLoader } from "react-icons/fi";
 import { usePathname } from "next/navigation";
 import { SupportedLang } from "../_types/types";
 import { motion } from "framer-motion";
+import { useTranslations } from "next-intl";
 
 const supportedLocales: SupportedLang[] = ["en", "ar", "fr", "de", "es", "it"];
 
@@ -23,6 +24,9 @@ export default function Login() {
   const [error, setError] = useState("");
 
   const pathname = usePathname();
+
+  const t = useTranslations("SigninPage");
+
   const localeFromPath = pathname.split("/")[1] as SupportedLang;
   const locale: SupportedLang = supportedLocales.includes(localeFromPath)
     ? localeFromPath
@@ -38,7 +42,7 @@ export default function Login() {
     setError("");
 
     try {
-      const { user, error } = await loginUser(form);
+      const { user, error, userName } = await loginUser(form);
 
       if (error) {
         setError(error);
@@ -47,7 +51,7 @@ export default function Login() {
       }
 
       if (user) {
-        toast.success(`Welcome back, ${user.email}!`);
+        toast.success(`${t("Welcome back")} ${userName}!`);
         router.push(`/${locale}`);
       }
     } catch (err) {
@@ -73,9 +77,9 @@ export default function Login() {
             animate={{ opacity: 1 }}
             transition={{ delay: 0.1 }}
           >
-            Welcome!
+            {t("Welcome!")}
           </motion.h1>
-          <p className="text-gray-500">Sign in to your account</p>
+          <p className="text-gray-500">{t("Sign in to your account")}</p>
         </div>
 
         <form onSubmit={handleLogin} className="space-y-6">
@@ -88,7 +92,7 @@ export default function Login() {
               htmlFor="email"
               className="block text-sm font-medium text-gray-700 mb-1"
             >
-              Email Address
+              {t("Email Address")}
             </label>
             <input
               id="email"
@@ -112,7 +116,7 @@ export default function Login() {
               htmlFor="password"
               className="block text-sm font-medium text-gray-700 mb-1"
             >
-              Password
+              {t("Password")}
             </label>
             <input
               id="password"
@@ -126,7 +130,9 @@ export default function Login() {
             />
             <motion.span
               onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-3 top-[42px] text-gray-400 hover:text-gray-600 cursor-pointer transition-colors"
+              className={`absolute ${
+                locale === "ar" ? "left" : "right"
+              }-3 top-[42px] text-gray-400 hover:text-gray-600 cursor-pointer transition-colors`}
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.95 }}
             >
@@ -159,10 +165,10 @@ export default function Login() {
               {loading ? (
                 <>
                   <FiLoader className="animate-spin" />
-                  Signing in...
+                  {t("Signing in")}
                 </>
               ) : (
-                "Sign In"
+                t("Sign In")
               )}
             </motion.button>
           </motion.div>
@@ -175,12 +181,12 @@ export default function Login() {
           className="mt-6 text-center"
         >
           <p className="text-sm text-gray-600">
-            Don&apos;t have an account?{" "}
+            {t("Don't have an account?")}{" "}
             <Link
               href={`/${locale}/auth/register`}
               className="text-primary hover:underline font-medium transition-colors"
             >
-              Create one
+              {t("Create one")}
             </Link>
           </p>
         </motion.div>

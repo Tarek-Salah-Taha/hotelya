@@ -9,6 +9,7 @@ import { FiEye, FiEyeOff, FiLoader } from "react-icons/fi";
 import { SupportedLang } from "../_types/types";
 import { usePathname } from "next/navigation";
 import { motion } from "framer-motion";
+import { useTranslations } from "next-intl";
 
 const supportedLocales: SupportedLang[] = ["en", "ar", "fr", "de", "es", "it"];
 
@@ -23,6 +24,8 @@ export default function Register() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+
+  const t = useTranslations("RegisterPage");
 
   const pathname = usePathname();
   const localeFromPath = pathname.split("/")[1] as SupportedLang;
@@ -49,12 +52,12 @@ export default function Register() {
       }
 
       if (user) {
-        toast.success(`Welcome ${form.firstName}!`);
+        toast.success(`${t("Welcome")} ${form.firstName}!`);
         router.push(`/${locale}/auth/login`);
       }
     } catch (err) {
       console.error(err);
-      toast.error("An unexpected error occurred");
+      toast.error(t("An unexpected error occurred"));
     } finally {
       setLoading(false);
     }
@@ -75,9 +78,11 @@ export default function Register() {
             animate={{ opacity: 1 }}
             transition={{ delay: 0.1 }}
           >
-            Join Us
+            {t("Join Us")}
           </motion.h1>
-          <p className="text-gray-500">Create your account to get started</p>
+          <p className="text-gray-500">
+            {t("Create your account to get started")}
+          </p>
         </div>
 
         <form onSubmit={handleRegister} className="space-y-5">
@@ -92,7 +97,7 @@ export default function Register() {
                 htmlFor="firstName"
                 className="block text-sm font-medium text-gray-700 mb-1"
               >
-                First Name
+                {t("First Name")}
               </label>
               <input
                 id="firstName"
@@ -109,7 +114,7 @@ export default function Register() {
                 htmlFor="lastName"
                 className="block text-sm font-medium text-gray-700 mb-1"
               >
-                Last Name
+                {t("Last Name")}
               </label>
               <input
                 id="lastName"
@@ -132,7 +137,7 @@ export default function Register() {
               htmlFor="email"
               className="block text-sm font-medium text-gray-700 mb-1"
             >
-              Email Address
+              {t("Email Address")}
             </label>
             <input
               id="email"
@@ -156,7 +161,7 @@ export default function Register() {
               htmlFor="password"
               className="block text-sm font-medium text-gray-700 mb-1"
             >
-              Password
+              {t("Password")}
             </label>
             <input
               id="password"
@@ -170,7 +175,9 @@ export default function Register() {
             />
             <motion.span
               onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-3 top-[42px] text-gray-400 hover:text-gray-600 cursor-pointer transition-colors"
+              className={`absolute ${
+                locale === "ar" ? "left" : "right"
+              }-3 top-[42px] text-gray-400 hover:text-gray-600 cursor-pointer transition-colors`}
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.95 }}
             >
@@ -203,10 +210,10 @@ export default function Register() {
               {loading ? (
                 <>
                   <FiLoader className="animate-spin" />
-                  Creating account...
+                  {t("Creating account")}
                 </>
               ) : (
-                "Register"
+                t("Register")
               )}
             </motion.button>
           </motion.div>
@@ -219,12 +226,12 @@ export default function Register() {
           className="mt-6 text-center"
         >
           <p className="text-sm text-gray-600">
-            Already have an account?{" "}
+            {t("Already have an account?")}{" "}
             <Link
               href={`/${locale}/auth/login`}
               className="text-primary hover:underline font-medium transition-colors"
             >
-              Sign in
+              {t("Sign In")}
             </Link>
           </p>
         </motion.div>

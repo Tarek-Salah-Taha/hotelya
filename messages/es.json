@@ -51,7 +51,8 @@
     "Terms & Conditions": "Términos y condiciones",
     "Cookie Preferences": "Preferencias de cookies",
     "Accessibility Statement": "Declaración de accesibilidad",
-    "All rights reserved": "Reservados todos los derechos."
+    "All rights reserved": "Reservados todos los derechos.",
+    "Please enter a valid destination (at least 2 letters)": "Introduzca un destino válido (al menos 2 letras)."
   },
   "Navigation": {
     "favorites": "Favoritos",
@@ -120,6 +121,34 @@
     "children": "niños",
     "One adult": "Un adulto",
     "adults": "adultos"
+  },
+
+  "SigninPage": {
+    "Welcome!": "¡Bienvenido!",
+    "Sign in to your account": "Inicia sesión en tu cuenta",
+    "Email Address": "Dirección de correo electrónico",
+    "Password": "Contraseña",
+    "Sign In": "Iniciar sesión",
+    "Don't have an account?": "¿No tienes una cuenta?",
+    "Create one": "Crear nueva cuenta",
+    "Welcome back": "Bienvenido de nuevo,",
+    "An unexpected error occurred": "Se produjo un error inesperado",
+    "Signing in": "Iniciando sesión..."
+  },
+
+  "RegisterPage": {
+    "Join Us": "¡Únete a nosotros!",
+    "Create your account to get started": "Crea tu cuenta para comenzar",
+    "First Name": "Nombre de pila",
+    "Last Name": "Apellido",
+    "Email Address": "Dirección de correo electrónico",
+    "Password": "Contraseña",
+    "An unexpected error occurred": "Se produjo un error inesperado",
+    "Creating account": "Creando cuenta...",
+    "Register": "Registro",
+    "Already have an account?": "¿Ya tienes una cuenta?",
+    "Sign In": "Iniciar sesión",
+    "Welcome": "Bienvenido"
   },
 
   "RoomTypes": {

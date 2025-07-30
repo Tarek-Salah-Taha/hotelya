@@ -51,7 +51,8 @@
     "Terms & Conditions": "Terms & Conditions",
     "Cookie Preferences": "Cookie Preferences",
     "Accessibility Statement": "Accessibility Statement",
-    "All rights reserved": "All rights reserved."
+    "All rights reserved": "All rights reserved.",
+    "Please enter a valid destination (at least 2 letters)": "Please enter a valid destination (at least 2 letters)."
   },
 
   "FavoritesPage": {
@@ -121,6 +122,34 @@
     "children": "children",
     "One adult": "One adult",
     "adults": "adults"
+  },
+
+  "SigninPage": {
+    "Welcome!": "Welcome!",
+    "Sign in to your account": "Sign in to your account",
+    "Email Address": "Email Address",
+    "Password": "Password",
+    "Sign In": "Sign In",
+    "Don't have an account?": "Don't have an account?",
+    "Create one": "Create new account",
+    "Welcome back": "Welcome back,",
+    "An unexpected error occurred": "An unexpected error occurred",
+    "Signing in": "Signing in..."
+  },
+
+  "RegisterPage": {
+    "Join Us": "Join Us!",
+    "Create your account to get started": "Create your account to get started",
+    "First Name": "First Name",
+    "Last Name": "Last Name",
+    "Email Address": "Email Address",
+    "Password": "Password",
+    "An unexpected error occurred": "An unexpected error occurred",
+    "Creating account": "Creating account...",
+    "Register": "Register",
+    "Already have an account?": "Already have an account?",
+    "Sign In": "Sign In",
+    "Welcome": "Welcome"
   },
 
   "RoomTypes": {
