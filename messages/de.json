@@ -184,6 +184,33 @@
     "Uploading": "Hochladen..."
   },
 
+  "FiltersPage": {
+    "Filters": "Filter",
+    "Sort by": "Sortieren nach",
+    "No filters selected to apply": "Es wurden keine Filter zum Anwenden ausgewählt.",
+    "There are no filters to reset": "Es gibt keine Filter zum Zurücksetzen.",
+    "Default": "Standard",
+    "Price: Low to High": "Preis: Niedrig bis Hoch",
+    "Price: High to Low": "Preis: Absteigend",
+    "Rating: Low to High": "Bewertung: Niedrig bis Hoch",
+    "Rating: High to Low": "Bewertung: Absteigend",
+    "Stars: Low to High": "Sterne: Niedrig bis Hoch",
+    "Stars: High to Low": "Sterne: Absteigend",
+    "Continent": "Kontinent",
+    "Country": "Das Land",
+    "City": "Die Stadt",
+    "All Cities": "Alle Städte",
+    "Price Range": "Preisklasse",
+    "User Rating": "Benutzerbewertung",
+    "Star Rating": "Sternebewertung",
+    "Payment Methods": "Zahlungsarten",
+    "Languages Spoken": "Gesprochene Sprachen",
+    "Apply Filters": "Filter anwenden",
+    "Reset": "Zurücksetzen",
+    "Hide filters": "Filter ausblenden",
+    "Show filters": "Filter anzeigen"
+  },
+
   "RoomTypes": {
     "Deluxe Room": "Deluxe-Zimmer",
     "Suite": "Suite",

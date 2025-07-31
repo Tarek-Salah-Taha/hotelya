@@ -182,6 +182,33 @@
     "Uploading": "Téléchargement en cours..."
   },
 
+  "FiltersPage": {
+    "Filters": "Filtres",
+    "Sort by": "Trier par",
+    "No filters selected to apply": "Aucun filtre sélectionné à appliquer.",
+    "There are no filters to reset": "Il n'y a aucun filtre à réinitialiser.",
+    "Default": "Défaut",
+    "Price: Low to High": "Prix : du plus bas au plus élevé",
+    "Price: High to Low": "Prix : du plus élevé au plus bas",
+    "Rating: Low to High": "Évaluation : du plus bas au plus élevé",
+    "Rating: High to Low": "Évaluation : du plus élevé au plus bas",
+    "Stars: Low to High": "Étoiles : du plus bas au plus élevé",
+    "Stars: High to Low": "Étoiles : du plus élevé au plus bas",
+    "Continent": "Continent",
+    "Country": "Le pays",
+    "City": "La ville",
+    "All Cities": "Toutes les villes",
+    "Price Range": "Gamme de prix",
+    "User Rating": "Évaluation des utilisateurs",
+    "Star Rating": "Évaluation par étoiles",
+    "Payment Methods": "Modes de paiement",
+    "Languages Spoken": "Langues parlées",
+    "Apply Filters": "Appliquer des filtres",
+    "Reset": "Réinitialiser",
+    "Hide filters": "Masquer les filtres",
+    "Show filters": "Afficher les filtres"
+  },
+
   "RoomTypes": {
     "Deluxe Room": "Chambre de luxe",
     "Suite": "Suite",

@@ -185,6 +185,33 @@
     "Uploading": "جاري التحميل..."
   },
 
+  "FiltersPage": {
+    "Filters": "خيارات التصفية",
+    "Sort by": "فرز حسب",
+    "No filters selected to apply": "لم يتم اختيار أي تصفية للتطبيق.",
+    "There are no filters to reset": "لا توجد تصفيات لإعادة تعيينها.",
+    "Default": " الافتراضي",
+    "Price: Low to High": "السعر: من الأدنى إلى الأعلى",
+    "Price: High to Low": "السعر: من الأعلى إلى الأدنى",
+    "Rating: Low to High": "التقييم: من الأدنى إلى الأعلى",
+    "Rating: High to Low": "التقييم: من الأعلى إلى الأدنى",
+    "Stars: Low to High": "النجوم: من الأدنى إلى الأعلى",
+    "Stars: High to Low": "النجوم: من الأعلى إلى الأدنى",
+    "Continent": "القارة",
+    "Country": "البلد",
+    "City": "المدينة",
+    "All Cities": "جميع المدن",
+    "Price Range": "نطاق السعر",
+    "User Rating": "تقييم المستخدم",
+    "Star Rating": "تصنيف النجوم",
+    "Payment Methods": "طرق الدفع",
+    "Languages Spoken": "اللغات المنطوقة",
+    "Apply Filters": "تطبيق التصفية",
+    "Reset": "إعادة ضبط",
+    "Hide filters": "إخفاء التصفيات",
+    "Show filters": "إظهار التصفيات"
+  },
+
   "RoomTypes": {
     "Deluxe Room": "غرفة فاخرة",
     "Suite": "جناح",

@@ -183,6 +183,33 @@
     "Uploading": "Uploading..."
   },
 
+  "FiltersPage": {
+    "Filters": "Filters",
+    "Sort by": "Sort by",
+    "No filters selected to apply": "No filters selected to apply.",
+    "There are no filters to reset": "There are no filters to reset.",
+    "Default": " Default",
+    "Price: Low to High": "Price: Low to High",
+    "Price: High to Low": "Price: High to Low",
+    "Rating: Low to High": "Rating: Low to High",
+    "Rating: High to Low": "Rating: High to Low",
+    "Stars: Low to High": "Stars: Low to High",
+    "Stars: High to Low": "Stars: High to Low",
+    "Continent": "Continent",
+    "Country": "Country",
+    "City": "City",
+    "All Cities": "All Cities",
+    "Price Range": "Price Range",
+    "User Rating": "User Rating",
+    "Star Rating": "Star Rating",
+    "Payment Methods": "Payment Methods",
+    "Languages Spoken": "Languages Spoken",
+    "Apply Filters": "Apply Filters",
+    "Reset": "Reset",
+    "Hide filters": "Hide filters",
+    "Show filters": "Show filters"
+  },
+
   "RoomTypes": {
     "Deluxe Room": "Deluxe Room",
     "Suite": "Suite",

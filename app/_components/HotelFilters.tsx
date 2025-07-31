@@ -54,13 +54,14 @@ export default function HotelFilters({ filters, onApplyFilters }: Props) {
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  const t = useTranslations("FavoritesPage");
+  const tFavorites = useTranslations("FavoritesPage");
+  const tFilters = useTranslations("FiltersPage");
 
   function getUniqueRatingLabelsFromData(filters: HotelFilterData[]) {
     const ratings = new Set<string>();
     for (const item of filters) {
       if (item.rating !== undefined) {
-        ratings.add(getRatingLabel(item.rating, t));
+        ratings.add(getRatingLabel(item.rating, tFavorites));
       }
     }
     return Array.from(ratings);
@@ -176,7 +177,7 @@ export default function HotelFilters({ filters, onApplyFilters }: Props) {
       filterState.selectedLanguages.length === 0;
 
     if (isEmpty) {
-      toast("No filters selected to apply.", { icon: "⚠️" });
+      toast(tFilters("No filters selected to apply"), { icon: "⚠️" });
       return;
     }
 
@@ -237,7 +238,7 @@ export default function HotelFilters({ filters, onApplyFilters }: Props) {
       filterState.selectedLanguages.length === 0;
 
     if (isEmpty) {
-      toast("There are no filters to reset.", { icon: "ℹ️" });
+      toast(tFilters("There are no filters to reset"), { icon: "ℹ️" });
       return;
     }
 
@@ -297,7 +298,7 @@ export default function HotelFilters({ filters, onApplyFilters }: Props) {
     >
       <div className="flex justify-between items-center">
         <h2 className="text-xl font-bold flex items-center gap-3 text-gray-800">
-          <FaFilter className="text-primary" /> Filters
+          <FaFilter className="text-primary" /> {tFilters("Filters")}
         </h2>
         {loading && (
           <motion.div
@@ -345,7 +346,7 @@ export default function HotelFilters({ filters, onApplyFilters }: Props) {
           htmlFor="sortBy"
           className="flex items-center gap-2 font-semibold mb-2 text-base p-2 rounded-lg hover:bg-gray-50 transition-colors cursor-pointer"
         >
-          <FaSort className="text-primary" /> Sort by:
+          <FaSort className="text-primary" /> {tFilters("Sort by")}:
         </label>
         <select
           id="sortBy"
@@ -362,13 +363,17 @@ export default function HotelFilters({ filters, onApplyFilters }: Props) {
             router.replace(`?${params.toString()}`);
           }}
         >
-          <option value="">Default</option>
-          <option value="price-asc">▲ Price: Low to High</option>
-          <option value="price-desc">▼ Price: High to Low</option>
-          <option value="rating-asc">▲ Rating: Low to High</option>
-          <option value="rating-desc">▼ Rating: High to Low</option>
-          <option value="stars-asc">▲ Stars: Low to High</option>
-          <option value="stars-desc">▼ Stars: High to Low</option>
+          <option value="">{tFilters("Default")}</option>
+          <option value="price-asc">▲ {tFilters("Price: Low to High")}</option>
+          <option value="price-desc">▼ {tFilters("Price: High to Low")}</option>
+          <option value="rating-asc">
+            ▲ {tFilters("Rating: Low to High")}
+          </option>
+          <option value="rating-desc">
+            ▼ {tFilters("Rating: High to Low")}
+          </option>
+          <option value="stars-asc">▲ {tFilters("Stars: Low to High")}</option>
+          <option value="stars-desc">▼ {tFilters("Stars: High to Low")}</option>
         </select>
       </div>
 
@@ -380,7 +385,7 @@ export default function HotelFilters({ filters, onApplyFilters }: Props) {
           onClick={() => toggleSection("continent")}
         >
           <span className="flex items-center gap-2 text-gray-700">
-            <FaGlobe className="text-primary" /> Continent
+            <FaGlobe className="text-primary" /> {tFilters("Continent")}
           </span>
           {openSection === "continent" ? (
             <IoChevronUp className="text-gray-500" />
@@ -441,7 +446,7 @@ export default function HotelFilters({ filters, onApplyFilters }: Props) {
           onClick={() => toggleSection("country")}
         >
           <span className="flex items-center gap-2 text-gray-700">
-            <FaFlag className="text-primary" /> Country
+            <FaFlag className="text-primary" /> {tFilters("Country")}
           </span>
           {openSection === "country" ? (
             <IoChevronUp className="text-gray-500" />
@@ -464,7 +469,7 @@ export default function HotelFilters({ filters, onApplyFilters }: Props) {
                   }))
                 }
               >
-                <option value="">All Countries</option>
+                <option value="">{tFilters("All Countries")}</option>
                 {countries.map((item) => (
                   <option key={item}>{item}</option>
                 ))}
@@ -482,7 +487,7 @@ export default function HotelFilters({ filters, onApplyFilters }: Props) {
           onClick={() => toggleSection("city")}
         >
           <span className="flex items-center gap-2 text-gray-700">
-            <FaCity className="text-primary" /> City
+            <FaCity className="text-primary" /> {tFilters("City")}
           </span>
           {openSection === "city" ? (
             <IoChevronUp className="text-gray-500" />
@@ -504,7 +509,7 @@ export default function HotelFilters({ filters, onApplyFilters }: Props) {
                   }))
                 }
               >
-                <option value="">All Cities</option>
+                <option value="">{tFilters("All Cities")}</option>
                 {cities.map((item) => (
                   <option key={item}>{item}</option>
                 ))}
@@ -522,7 +527,7 @@ export default function HotelFilters({ filters, onApplyFilters }: Props) {
           onClick={() => toggleSection("price")}
         >
           <span className="flex items-center gap-2 text-gray-700">
-            <FaMoneyBill className="text-primary" /> Price Range
+            <FaMoneyBill className="text-primary" /> {tFilters("Price Range")}
           </span>
           {openSection === "price" ? (
             <IoChevronUp className="text-gray-500" />
@@ -578,7 +583,7 @@ export default function HotelFilters({ filters, onApplyFilters }: Props) {
           onClick={() => toggleSection("rating")}
         >
           <span className="flex items-center gap-2 text-gray-700">
-            <FaThumbsUp className="text-primary" /> User Rating
+            <FaThumbsUp className="text-primary" /> {tFilters("User Rating")}
           </span>
           {openSection === "rating" ? (
             <IoChevronUp className="text-gray-500" />
@@ -630,7 +635,7 @@ export default function HotelFilters({ filters, onApplyFilters }: Props) {
           onClick={() => toggleSection("stars")}
         >
           <span className="flex items-center gap-2 text-gray-700">
-            <FaStar className="text-primary" /> Star Rating
+            <FaStar className="text-primary" /> {tFilters("Star Rating")}
           </span>
           {openSection === "stars" ? (
             <IoChevronUp className="text-gray-500" />
@@ -672,10 +677,6 @@ export default function HotelFilters({ filters, onApplyFilters }: Props) {
                     {Array.from({ length: stars }, (_, i) => (
                       <FaStar key={i} className="text-yellow-400 text-sm" />
                     ))}
-                    {/* Optional text */}
-                    <span className="ml-1 text-sm text-gray-500">
-                      ({stars} Star{stars > 1 ? "s" : ""})
-                    </span>
                   </span>
                 </motion.label>
               ))}
@@ -692,7 +693,8 @@ export default function HotelFilters({ filters, onApplyFilters }: Props) {
           onClick={() => toggleSection("payment")}
         >
           <span className="flex items-center gap-2 text-gray-700">
-            <FaMoneyBill className="text-primary" /> Payment Methods
+            <FaMoneyBill className="text-primary" />{" "}
+            {tFilters("Payment Methods")}
           </span>
           {openSection === "payment" ? (
             <IoChevronUp className="text-gray-500" />
@@ -744,7 +746,8 @@ export default function HotelFilters({ filters, onApplyFilters }: Props) {
           onClick={() => toggleSection("languages")}
         >
           <span className="flex items-center gap-2 text-gray-700">
-            <FaLanguage className="text-primary" /> Languages Spoken
+            <FaLanguage className="text-primary" />{" "}
+            {tFilters("Languages Spoken")}
           </span>
           {openSection === "languages" ? (
             <IoChevronUp className="text-gray-500" />
@@ -801,7 +804,7 @@ export default function HotelFilters({ filters, onApplyFilters }: Props) {
           onClick={handleApplyFilters}
           className="w-full bg-primary text-white px-2 py-3 rounded-lg font-semibold hover:bg-success transition-all shadow-md hover:shadow-lg flex items-center justify-center gap-1"
         >
-          <IoMdSearch className="text-base" /> Apply Filters
+          <IoMdSearch className="text-base" /> {tFilters("Apply Filters")}
         </motion.button>
         <motion.button
           whileHover={{ scale: 1.02 }}
@@ -809,7 +812,7 @@ export default function HotelFilters({ filters, onApplyFilters }: Props) {
           onClick={resetFilters}
           className="w-full border gap-1 border-gray-300 text-gray-700 px-2 py-3 rounded-lg font-semibold hover:bg-gray-50 transition-all shadow-sm hover:shadow-md flex items-center justify-center"
         >
-          <VscDebugRestart className="text-base" /> Reset
+          <VscDebugRestart className="text-base" /> {tFilters("Reset")}
         </motion.button>
       </motion.div>
     </motion.section>

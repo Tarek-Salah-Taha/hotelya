@@ -10,6 +10,7 @@ import { fetchFilteredHotels } from "../_lib/hotelsApi";
 import { HotelFilterData, HotelCardData, SupportedLang } from "../_types/types";
 import { motion, AnimatePresence } from "framer-motion";
 import { FaChevronCircleDown, FaChevronCircleUp } from "react-icons/fa";
+import { useTranslations } from "next-intl";
 
 type Props = {
   filters: HotelFilterData[];
@@ -36,6 +37,8 @@ export default function FilteredHotelList({
     parseInt(searchParams.get("page") || "1", 10)
   );
   const [isLoading, setIsLoading] = useState(true);
+
+  const tFilters = useTranslations("FiltersPage");
 
   // Add this effect to update currentPage when URL changes
   useEffect(() => {
@@ -121,7 +124,7 @@ export default function FilteredHotelList({
             aria-expanded={isOpen}
           >
             <div className="font-semibold text-gray-800 flex items-center gap-3">
-              {isOpen ? "Hide filters" : "Show filters"}
+              {isOpen ? tFilters("Hide filters") : tFilters("Show filters")}
             </div>
             {isOpen ? (
               <>
