@@ -82,7 +82,42 @@
     "Confirm Removal": "Confirmer la suppression",
     "Are you sure you want to remove this hotel?": "Êtes-vous sûr de vouloir supprimer cet hôtel ?",
     "Removed from favorites": "Supprimé des favoris",
-    "Failed to remove": "Échec de la suppression"
+    "Failed to remove": "Échec de la suppression",
+    "Please sign in to save/remove favorites": "Veuillez vous connecter pour enregistrer/supprimer les favoris",
+    "Added to favorites": "Ajouté aux favoris",
+    "Something went wrong": "Quelque chose s'est mal passé",
+    "Includes taxes and fees": "Comprend les taxes et les frais",
+    "Failed to load favorites": "Échec du chargement des favoris."
+  },
+
+  "HotelPage": {
+    "Overview": "Aperçu",
+    "Popular Amenities": "Équipements populaires",
+    "Amenities": "Équipements",
+    "Room Types": "Types de chambres",
+    "Contact Information": "Coordonnées",
+    "Policies": "Politiques d'Hotelya",
+    "Payment Options": "Options de paiement",
+    "Languages Spoken": "Langues parlées",
+    "Guest Reviews": "Avis des clients",
+    "Explore our comfortable accommodations": "Découvrez nos hébergements confortables.",
+    "Check-in: From": "Arrivée : à partir de",
+    "Check-out: Until": "Départ : jusqu'au",
+    "AM": "matin",
+    "PM": "après-midi",
+    "Minimum age for check-in": "Âge minimum pour l'enregistrement",
+    "Pets are allowed": "Les animaux de compagnie sont admis.",
+    "Pets are not allowed": "Les animaux ne sont pas admis.",
+    "Smoking is allowed": "Il est permis de fumer.",
+    "Smoking is not allowed": "Il est interdit de fumer.",
+    "years": "années",
+    "Leave a Review": "Laisser un avis",
+    "Your Rating": "Votre note",
+    "Submit Review": "Soumettre un avis",
+    "Your Name": "Votre nom",
+    "Your Comment": "Votre commentaire",
+    "No description available for this hotel": "Aucune description disponible pour cet hôtel.",
+    "Submitting": "Soumission..."
   },
 
   "BookingPage": {
@@ -206,7 +241,13 @@
     "Apply Filters": "Appliquer des filtres",
     "Reset": "Réinitialiser",
     "Hide filters": "Masquer les filtres",
-    "Show filters": "Afficher les filtres"
+    "Show filters": "Afficher les filtres",
+    "All Countries": "Tous les pays"
+  },
+
+  "HotelsPage": {
+    "Next": "Suivant",
+    "Prev": "Précédent"
   },
 
   "RoomTypes": {

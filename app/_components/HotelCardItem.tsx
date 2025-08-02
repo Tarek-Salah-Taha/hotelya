@@ -13,7 +13,7 @@ import { useUser } from "../_hooks/useUser";
 import toast from "react-hot-toast";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { FiArrowRight } from "react-icons/fi";
+import { FiArrowRight, FiArrowLeft } from "react-icons/fi";
 import { useTranslations } from "next-intl";
 
 export default function HotelCardItem({ hotel }: HotelCardItemProps) {
@@ -25,11 +25,11 @@ export default function HotelCardItem({ hotel }: HotelCardItemProps) {
   const pathname = usePathname();
   const locale = pathname.split("/")[1] || "en";
 
-  const t = useTranslations("FavoritesPage");
+  const tFavorites = useTranslations("FavoritesPage");
 
   const handleFavoriteToggle = async () => {
     if (!user) {
-      toast.error("Please sign in to save/remove favorites");
+      toast.error(tFavorites("Please sign in to save/remove favorites"));
       return;
     }
 
@@ -38,13 +38,13 @@ export default function HotelCardItem({ hotel }: HotelCardItemProps) {
     try {
       if (!isFavorite) {
         await addFavorite(user.id, hotel.id);
-        toast.success("Added to favorites");
+        toast.success(tFavorites("Added to favorites"));
       } else {
         await removeFavorite(user.id, hotel.id);
-        toast.success("Removed from favorites");
+        toast.success(tFavorites("Removed from favorites"));
       }
     } catch (err) {
-      toast.error("Something went wrong");
+      toast.error(tFavorites("Something went wrong"));
       console.error(err);
     }
   };
@@ -66,7 +66,9 @@ export default function HotelCardItem({ hotel }: HotelCardItemProps) {
       {/* Favorite icon */}
       <motion.button
         onClick={handleFavoriteToggle}
-        className="absolute top-4 right-4 z-10"
+        className={`absolute top-4 ${
+          locale === "ar" ? "left-4" : "right-4"
+        }  z-10`}
         whileTap={{ scale: 0.9 }}
       >
         <motion.div
@@ -85,15 +87,27 @@ export default function HotelCardItem({ hotel }: HotelCardItemProps) {
       </motion.button>
 
       {/* Hotel image with hover effect */}
-      <div className="relative overflow-hidden">
+      <div className="relative h-56 w-full overflow-hidden">
         <Image
           src={hotel.exteriorImages || "/placeholder.jpg"}
           alt={hotel.hotelName}
-          className="w-full h-48 object-cover rounded-t-xl"
-          width={500}
-          height={300}
+          className="object-cover transition-transform duration-500 hover:scale-105"
+          fill
           loading="lazy"
         />
+        <div
+          className={`absolute top-3 ${locale === "ar" ? "right-3" : "left-3"}`}
+        >
+          <div className="flex items-center bg-gradient-to-br from-white/90 to-white/70 backdrop-blur-sm rounded-lg shadow-sm border border-white/20 overflow-hidden">
+            <div className="bg-primary px-3 py-1.5 text-white font-bold">
+              {hotel.rating}
+            </div>
+            <div className="px-3 py-1.5 text-sm font-medium text-gray-700">
+              {getRatingLabel(hotel.rating, tFavorites)}
+            </div>
+          </div>
+        </div>
+
         <AnimatePresence>
           {isHovered && (
             <motion.div
@@ -136,15 +150,6 @@ export default function HotelCardItem({ hotel }: HotelCardItemProps) {
               </motion.span>
             ))}
           </div>
-
-          <div className="flex items-center bg-gradient-to-br from-white/90 to-white/70 backdrop-blur-sm rounded-lg shadow-sm border border-white/20 overflow-hidden">
-            <div className="bg-primary px-3 py-1.5 text-white font-bold">
-              {hotel.rating}
-            </div>
-            <div className="px-3 py-1.5 text-sm font-medium text-gray-700">
-              {getRatingLabel(hotel.rating, t)}
-            </div>
-          </div>
         </div>
 
         {/* Tags */}
@@ -171,34 +176,35 @@ export default function HotelCardItem({ hotel }: HotelCardItemProps) {
 
         {/* Bottom section */}
         <div className="mt-auto pt-4 border-t border-gray-100">
-          <div className="flex items-center justify-between">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
             {/* Price */}
-
-            <div>
-              <div className="flex items-end gap-2">
-                <span className="text-xl font-bold text-primary">
-                  ${hotel.priceNew}
+            <div className="flex-1">
+              <div className="flex flex-wrap items-center gap-1 mb-1 sm:mb-2">
+                <span className="text-lg sm:text-xl font-bold text-primary">
+                  {hotel.priceNew} {tFavorites("$")}
                 </span>
-                <span className="text-sm text-gray-500 line-through">
-                  ${hotel.priceOld}
+                <span className="text-xs sm:text-sm text-gray-500 line-through">
+                  {hotel.priceOld} {tFavorites("$")}
                 </span>
-                <span className="text-sm text-gray-500">/night</span>
+                <span className="text-xs sm:text-sm text-primary">
+                  {tFavorites("per night")}
+                </span>
               </div>
-              <div className="text-xs text-gray-500 mt-1">
-                includes taxes & fees
+              <div className="text-xs text-gray-500">
+                {tFavorites("Includes taxes and fees")}
               </div>
             </div>
 
             {/* Book Now Button */}
             <motion.button
               onClick={() => router.push(`/${locale}/hotels/${hotel.id}`)}
-              className="bg-primary text-sm sm:text-base text-white font-medium p-3 rounded-lg hover:bg-opacity-90 transition shadow-md flex items-center justify-center gap-2"
+              className="w-full sm:w-auto bg-primary text-sm sm:text-base text-white font-medium px-4 py-2 sm:p-4 rounded-lg hover:bg-opacity-90 transition shadow-md flex items-center justify-center gap-2"
               whileHover={{ scale: 1.03 }}
               whileTap={{ scale: 0.95 }}
             >
-              <span>Book Now</span>
+              <span>{tFavorites("bookButton")}</span>
               <motion.span transition={{ type: "spring", stiffness: 500 }}>
-                <FiArrowRight />
+                {locale === "ar" ? <FiArrowLeft /> : <FiArrowRight />}
               </motion.span>
             </motion.button>
           </div>

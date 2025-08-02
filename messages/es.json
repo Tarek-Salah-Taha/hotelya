@@ -82,7 +82,12 @@
     "Confirm Removal": "Confirmar eliminación",
     "Are you sure you want to remove this hotel?": "¿Estás seguro que deseas eliminar este hotel?",
     "Removed from favorites": "Eliminado de favoritos",
-    "Failed to remove": "No se pudo eliminar"
+    "Failed to remove": "No se pudo eliminar",
+    "Please sign in to save/remove favorites": "Inicie sesión para guardar o eliminar favoritos.",
+    "Added to favorites": "Añadido a favoritos",
+    "Something went wrong": "Algo salió mal",
+    "Includes taxes and fees": "Incluye impuestos y tasas",
+    "Failed to load favorites": "Error al cargar favoritos."
   },
 
   "BookingPage": {
@@ -206,7 +211,43 @@
     "Apply Filters": "Aplicar filtros",
     "Reset": "Reiniciar",
     "Hide filters": "Ocultar filtros",
-    "Show filters": "Mostrar filtros"
+    "Show filters": "Mostrar filtros",
+    "All Countries": "Todos los países"
+  },
+
+  "HotelsPage": {
+    "Next": "Próximo",
+    "Prev": "Anterior"
+  },
+
+  "HotelPage": {
+    "Overview": "Descripción general",
+    "Popular Amenities": "Servicios populares",
+    "Amenities": "Servicios",
+    "Room Types": "Tipos de habitaciones",
+    "Contact Information": "Información del contacto",
+    "Policies": "Políticas de Hotelya",
+    "Payment Options": "Opciones de pago",
+    "Languages Spoken": "Idiomas hablados",
+    "Guest Reviews": "Reseñas de huéspedes",
+    "Explore our comfortable accommodations": "Explora nuestros cómodos alojamientos.",
+    "Check-in: From": "Check-in: Desde",
+    "Check-out: Until": "Hora de salida: Hasta",
+    "AM": "a. m",
+    "PM": "p. m",
+    "Minimum age for check-in": "Edad mínima para el check-in",
+    "Pets are allowed": "Se admiten mascotas.",
+    "Pets are not allowed": "No se admiten mascotas.",
+    "Smoking is allowed": "Se permite fumar.",
+    "Smoking is not allowed": "No se permite fumar.",
+    "years": "años",
+    "Leave a Review": "Deja una reseña",
+    "Your Rating": "Tu calificación",
+    "Submit Review": "Enviar reseña",
+    "Your Name": "Su nombre",
+    "Your Comment": "Tu comentario",
+    "No description available for this hotel": "No hay descripción disponible para este hotel.",
+    "Submitting": "Sumisión..."
   },
 
   "RoomTypes": {

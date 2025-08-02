@@ -63,7 +63,6 @@
     "Remove": "Remove",
     "per night": "per night",
     "$": "$",
-    "instead of": "instead of",
     "Excellent": "Excellent",
     "Very Good": "Very Good",
     "Good": "Good",
@@ -73,7 +72,12 @@
     "Confirm Removal": "Confirm Removal",
     "Are you sure you want to remove this hotel?": "Are you sure you want to remove this hotel?",
     "Removed from favorites": "Removed from favorites",
-    "Failed to remove": "Failed to remove"
+    "Failed to remove": "Failed to remove",
+    "Please sign in to save/remove favorites": "Please sign in to save/remove favorites",
+    "Added to favorites": "Added to favorites",
+    "Something went wrong": "Something went wrong",
+    "Includes taxes and fees": "Includes taxes and fees",
+    "Failed to load favorites": "Failed to load favorites."
   },
 
   "Navigation": {
@@ -207,7 +211,43 @@
     "Apply Filters": "Apply Filters",
     "Reset": "Reset",
     "Hide filters": "Hide filters",
-    "Show filters": "Show filters"
+    "Show filters": "Show filters",
+    "All Countries": "All Countries"
+  },
+
+  "HotelsPage": {
+    "Next": "Next",
+    "Prev": "Prev"
+  },
+
+  "HotelPage": {
+    "Overview": "Overview",
+    "Popular Amenities": "Popular Amenities",
+    "Amenities": "Amenities",
+    "Room Types": "Room Types",
+    "Contact Information": "Contact Information",
+    "Policies": "Hotelya Policies",
+    "Payment Options": "Payment Options",
+    "Languages Spoken": "Languages Spoken",
+    "Guest Reviews": "Guest Reviews",
+    "Explore our comfortable accommodations": "Explore our comfortable accommodations.",
+    "Check-in: From": "Check-in: From",
+    "Check-out: Until": "Check-out: Until",
+    "AM": "AM",
+    "PM": "PM",
+    "Minimum age for check-in": "Minimum age for check-in",
+    "Pets are allowed": "Pets are allowed.",
+    "Pets are not allowed": "Pets are not allowed.",
+    "Smoking is allowed": "Smoking is allowed.",
+    "Smoking is not allowed": "Smoking is not allowed.",
+    "years": "years",
+    "Leave a Review": "Leave a Review",
+    "Your Rating": "Your Rating",
+    "Submit Review": "Submit Review",
+    "Your Name": "Your Name",
+    "Your Comment": "Your Comment",
+    "No description available for this hotel": "No description available for this hotel.",
+    "Submitting": "Submitting..."
   },
 
   "RoomTypes": {

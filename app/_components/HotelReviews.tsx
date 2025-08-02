@@ -6,6 +6,7 @@ import { toast } from "react-hot-toast";
 import { addHotelReview, getHotelReviews } from "../_lib/reviewsApi";
 import StarRating from "./StarRating";
 import { HotelReviewsProps } from "../_types/types";
+import { useTranslations } from "next-intl";
 
 function getInitials(name: string) {
   const parts = name.trim().split(" ");
@@ -49,6 +50,8 @@ export default function HotelReviews({
   const [comment, setComment] = useState("");
   const [loading, setLoading] = useState(false);
 
+  const t = useTranslations("HotelPage");
+
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (!author || !comment) return toast.error("Please fill in all fields");
@@ -86,14 +89,14 @@ export default function HotelReviews({
           className="text-2xl font-semibold text-gray-800 inline-block"
           whileHover={{ scale: 1.01 }}
         >
-          Guest Reviews
+          {t("Guest Reviews")}
         </motion.h2>
-        <span
+        <div
           className="
-            absolute bottom-0 left-0 
-            w-12 h-1 bg-primary rounded-full 
+            absolute bottom-0 w-12 h-1 bg-primary rounded-full 
             scale-x-0 group-hover:scale-x-100 
             origin-left transition-transform duration-500
+            
           "
         />
       </div>
@@ -118,7 +121,7 @@ export default function HotelReviews({
                 animate="visible"
                 exit="exit"
                 whileHover={{ scale: 1.01 }}
-                className="flex gap-4 items-start bg-gray-50 p-4 rounded-lg hover:shadow-sm transition-shadow"
+                className="flex gap-4 items-start bg-gray-50 p-4 rounded-lg hover:shadow-sm transition-shadow rtl:flex-row-reverse"
               >
                 <motion.div
                   className="w-10 h-10 rounded-full bg-primary text-white flex items-center justify-center font-semibold text-sm"
@@ -127,7 +130,7 @@ export default function HotelReviews({
                   {getInitials(review.author).toUpperCase()}
                 </motion.div>
                 <div className="flex-1">
-                  <div className="flex justify-between items-center mb-1">
+                  <div className="flex justify-between items-center mb-1 rtl:flex-row-reverse">
                     <p className="font-medium">{review.author}</p>
                     <motion.span
                       className="text-xs text-gray-400"
@@ -170,14 +173,14 @@ export default function HotelReviews({
             className="text-lg font-semibold text-gray-800 inline-block"
             whileHover={{ scale: 1.01 }}
           >
-            Leave a Review
+            {t("Leave a Review")}
           </motion.h3>
-          <span
+          <div
             className="
-              absolute bottom-0 left-0 
-              w-8 h-0.5 bg-primary rounded-full 
+              absolute bottom-0 w-8 h-0.5 bg-primary rounded-full 
               scale-x-0 group-hover:scale-x-100 
               origin-left transition-transform duration-500
+              
             "
           />
         </div>
@@ -186,7 +189,7 @@ export default function HotelReviews({
           type="text"
           value={author}
           onChange={(e) => setAuthor(e.target.value)}
-          placeholder="Your name"
+          placeholder={t("Your Name")}
           className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary transition"
           whileFocus={{ scale: 1.01 }}
         />
@@ -194,7 +197,7 @@ export default function HotelReviews({
         <motion.textarea
           value={comment}
           onChange={(e) => setComment(e.target.value)}
-          placeholder="Your comment"
+          placeholder={t("Your Comment")}
           rows={3}
           className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary transition"
           whileFocus={{ scale: 1.01 }}
@@ -209,7 +212,7 @@ export default function HotelReviews({
           whileHover={{ scale: 1.03 }}
           whileTap={{ scale: 0.98 }}
         >
-          {loading ? "Submitting..." : "Submit Review"}
+          {loading ? t("Submitting") : t("Submit Review")}
         </motion.button>
       </motion.form>
     </motion.div>

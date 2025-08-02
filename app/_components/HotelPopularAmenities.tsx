@@ -1,6 +1,9 @@
 import { iconMap, availableTags } from "../_constants/availableTags";
+import { useTranslations } from "next-intl";
 
 function HotelPopularAmenities({ tags }: { tags: string[] }) {
+  const t = useTranslations("HotelPage");
+
   return (
     <div
       className="
@@ -18,17 +21,18 @@ function HotelPopularAmenities({ tags }: { tags: string[] }) {
           text-gray-800
           inline-block
           group-hover:translate-x-1 
+          rtl:group-hover:-translate-x-1
           transition-transform duration-300
         "
         >
-          Popular Amenities
+          {t("Popular Amenities")}
         </h2>
-        <span
+        <div
           className="
-          absolute bottom-0 left-0 
-          w-12 h-1 bg-primary rounded-full 
+          absolute bottom-0 w-12 h-1 bg-primary rounded-full 
           scale-x-0 group-hover:scale-x-100 
           origin-left transition-transform duration-500
+          rtl:origin-right
         "
         />
       </div>

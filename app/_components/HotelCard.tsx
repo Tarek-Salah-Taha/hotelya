@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import HotelCardItem from "./HotelCardItem";
 import { HotelCardProps } from "../_types/types";
+import { useTranslations } from "next-intl";
 
 export default function HotelCard({
   hotels,
@@ -15,6 +16,8 @@ export default function HotelCard({
 }: HotelCardProps) {
   const pathname = usePathname();
   const locale = pathname.split("/")[1] || "en";
+
+  const t = useTranslations("HotelsPage");
 
   const createQuery = (page: number) => {
     const query: Record<string, string | number> = { page };
@@ -52,7 +55,7 @@ export default function HotelCard({
             }`}
             aria-disabled={currentPage === 1}
           >
-            Prev
+            {t("Prev")}
           </Link>
 
           {/* Page Numbers */}
@@ -102,7 +105,7 @@ export default function HotelCard({
             }`}
             aria-disabled={currentPage === totalPages}
           >
-            Next
+            {t("Next")}
           </Link>
         </div>
       )}

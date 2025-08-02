@@ -1,4 +1,8 @@
+import { useTranslations } from "next-intl";
+
 function LanguagesSpoken({ languages }: { languages: string[] }) {
+  const t = useTranslations("HotelPage");
+
   // Generate a consistent color based on language name
   const getLanguageColor = (lang: string) => {
     const colors = [
@@ -10,7 +14,10 @@ function LanguagesSpoken({ languages }: { languages: string[] }) {
       "bg-indigo-50 text-indigo-700 hover:bg-indigo-100",
       "bg-pink-50 text-pink-700 hover:bg-pink-100",
     ];
-    const index = lang.charCodeAt(0) % colors.length;
+
+    // Create a simple hash based on all characters
+    const hash = [...lang].reduce((acc, char) => acc + char.charCodeAt(0), 0);
+    const index = hash % colors.length;
     return colors[index];
   };
 
@@ -21,8 +28,7 @@ function LanguagesSpoken({ languages }: { languages: string[] }) {
       border border-gray-100
       shadow-sm hover:shadow-md 
       transition-all duration-300
-      group
-    "
+      group"
     >
       <div className="relative pb-2 mb-6 overflow-hidden">
         <h2
@@ -31,17 +37,18 @@ function LanguagesSpoken({ languages }: { languages: string[] }) {
           text-gray-800
           inline-block
           group-hover:translate-x-1 
+          rtl:group-hover:-translate-x-1
           transition-transform duration-300
         "
         >
-          Languages Spoken
+          {t("Languages Spoken")}
         </h2>
-        <span
+        <div
           className="
-          absolute bottom-0 left-0 
-          w-12 h-1 bg-primary rounded-full 
+          absolute bottom-0 w-12 h-1 bg-primary rounded-full 
           scale-x-0 group-hover:scale-x-100 
           origin-left transition-transform duration-500
+          rtl:origin-right
         "
         />
       </div>
@@ -59,6 +66,7 @@ function LanguagesSpoken({ languages }: { languages: string[] }) {
               cursor-default
               group/item
               flex items-center
+              rtl:flex-row-reverse
             `}
           >
             <span
@@ -66,6 +74,7 @@ function LanguagesSpoken({ languages }: { languages: string[] }) {
               text-sm font-medium
               transition-transform
               group-hover/item:translate-x-0.5
+              rtl:group-hover/item:-translate-x-0.5
             "
             >
               {lang}
@@ -75,6 +84,7 @@ function LanguagesSpoken({ languages }: { languages: string[] }) {
               ml-1.5 opacity-0 
               group-hover/item:opacity-100
               transition-opacity duration-200
+              rtl:ml-0 rtl:mr-1.5
             "
             >
               ✓

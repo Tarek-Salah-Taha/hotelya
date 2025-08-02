@@ -4,8 +4,11 @@ import { FaSignInAlt, FaSignOutAlt, FaSmoking } from "react-icons/fa";
 import { TbCalendarCancel } from "react-icons/tb";
 import { MdOutlinePets } from "react-icons/md";
 import { convertTo12Hour } from "../_lib/convertTo12Hour";
+import { useTranslations } from "next-intl";
 
 function HotelPolicies({ policies, checkIn, checkOut }: HotelPoliciesProps) {
+  const t = useTranslations("HotelPage");
+
   const { minAge, petsAllowed, smokingAllowed, cancellationPolicy } =
     policies[0] || {};
 
@@ -26,22 +29,23 @@ function HotelPolicies({ policies, checkIn, checkOut }: HotelPoliciesProps) {
           text-gray-800
           inline-block
           group-hover:translate-x-1 
+          rtl:group-hover:-translate-x-1
           transition-transform duration-300
         "
         >
-          Policies
+          {t("Policies")}
         </h2>
-        <span
+        <div
           className="
-          absolute bottom-0 left-0 
-          w-12 h-1 bg-primary rounded-full 
+          absolute bottom-0 w-12 h-1 bg-primary rounded-full 
           scale-x-0 group-hover:scale-x-100 
           origin-left transition-transform duration-500
+          rtl:origin-right
         "
         />
       </div>
 
-      <div className="space-y-4 pl-1">
+      <div className="space-y-4 pl-1 rtl:pr-1 rtl:pl-0">
         {/* Check-in */}
         <div className="flex items-start gap-3 group/item">
           <FaSignInAlt
@@ -53,8 +57,8 @@ function HotelPolicies({ policies, checkIn, checkOut }: HotelPoliciesProps) {
           "
           />
           <span className="text-gray-700 leading-relaxed">
-            Check-in: From{" "}
-            <span className="font-medium">{convertTo12Hour(checkIn)}</span>
+            {t("Check-in: From")}{" "}
+            <span className="font-medium">{convertTo12Hour(checkIn, t)}.</span>
           </span>
         </div>
 
@@ -65,12 +69,11 @@ function HotelPolicies({ policies, checkIn, checkOut }: HotelPoliciesProps) {
             w-6 h-6 shrink-0 text-primary 
             mt-0.5
             transition-transform
-            group-hover/item:scale-110
-          "
+            group-hover/item:scale-110"
           />
           <span className="text-gray-700 leading-relaxed">
-            Check-out: Until{" "}
-            <span className="font-medium">{convertTo12Hour(checkOut)}</span>
+            {t("Check-out: Until")}{" "}
+            <span className="font-medium">{convertTo12Hour(checkOut, t)}.</span>
           </span>
         </div>
 
@@ -85,8 +88,10 @@ function HotelPolicies({ policies, checkIn, checkOut }: HotelPoliciesProps) {
           "
           />
           <span className="text-gray-700 leading-relaxed">
-            Minimum age for check-in:{" "}
-            <span className="font-medium">{minAge} years</span>
+            {t("Minimum age for check-in")}:{" "}
+            <span className="font-medium">
+              {minAge} {t("years")}.
+            </span>
           </span>
         </div>
 
@@ -97,8 +102,7 @@ function HotelPolicies({ policies, checkIn, checkOut }: HotelPoliciesProps) {
             w-6 h-6 shrink-0 text-primary 
             mt-0.5
             transition-transform
-            group-hover/item:scale-110
-          "
+            group-hover/item:scale-110"
           />
           <span className="text-gray-700 leading-relaxed">
             {cancellationPolicy.includes("Free cancellation") ? (
@@ -123,10 +127,12 @@ function HotelPolicies({ policies, checkIn, checkOut }: HotelPoliciesProps) {
           />
           <span
             className={`text-gray-700 leading-relaxed ${
-              petsAllowed ? "text-green-600 font-medium" : "text-gray-600"
+              petsAllowed
+                ? "text-green-600 font-medium"
+                : "text-red-600 font-medium"
             }`}
           >
-            {petsAllowed ? "Pets are allowed." : "Pets are not allowed."}
+            {petsAllowed ? t("Pets are allowed") : t("Pets are not allowed")}
           </span>
         </div>
 
@@ -137,15 +143,18 @@ function HotelPolicies({ policies, checkIn, checkOut }: HotelPoliciesProps) {
             w-6 h-6 shrink-0 text-primary 
             mt-0.5
             transition-transform
-            group-hover/item:scale-110
-          "
+            group-hover/item:scale-110"
           />
           <span
             className={`text-gray-700 leading-relaxed ${
-              smokingAllowed ? "text-red-600 font-medium" : "text-gray-600"
+              smokingAllowed
+                ? "text-green-600 font-medium"
+                : "text-red-600 font-medium"
             }`}
           >
-            {smokingAllowed ? "Smoking is allowed." : "Smoking is not allowed."}
+            {smokingAllowed
+              ? t("Smoking is allowed")
+              : t("Smoking is not allowed")}
           </span>
         </div>
       </div>

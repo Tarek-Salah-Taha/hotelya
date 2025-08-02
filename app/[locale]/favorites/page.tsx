@@ -39,13 +39,13 @@ export default function FavoritesPage() {
         );
         setFavorites(hotels);
       } catch (err) {
-        toast.error("Failed to load favorites.");
+        toast.error(t("Failed to load favorites"));
         console.error(err);
       }
     };
 
     loadFavorites();
-  }, [user, locale]);
+  }, [user, locale, t]);
 
   const handleRemove = async (hotelId: number) => {
     if (!user) return;
@@ -169,8 +169,8 @@ export default function FavoritesPage() {
                   />
                   <div
                     className={`absolute top-3 ${
-                      locale === "ar" ? "left" : "right"
-                    }-3`}
+                      locale === "ar" ? "left-3" : "right-3"
+                    }`}
                   >
                     <div className="flex items-center bg-gradient-to-br from-white/90 to-white/70 backdrop-blur-sm rounded-lg shadow-sm border border-white/20 overflow-hidden">
                       <div className="bg-primary px-3 py-1.5 text-white font-bold">
@@ -232,33 +232,21 @@ export default function FavoritesPage() {
                   </div>
 
                   <div className="flex items-center mb-2 flex-row gap-1">
-                    {/* Current Price */}
-                    <div className="flex items-center space-x-1">
+                    <div className="flex items-end gap-2">
                       <span className="text-xl font-bold text-primary">
-                        {hotel.priceNew}
+                        {hotel.priceNew} {t("$")}
                       </span>
-                      <span className="text-xl font-bold text-primary">
-                        {t("$")}
+                      <span className="text-sm text-gray-500 line-through">
+                        {hotel.priceOld} {t("$")}
+                      </span>
+                      <span className="text-sm text-primary">
+                        {t("per night")}
                       </span>
                     </div>
+                  </div>
 
-                    {/* Original Price (if exists) */}
-                    {hotel.priceOld && (
-                      <div className="flex items-center space-x-1 ">
-                        <span className="text-sm text-gray-500">
-                          {t("instead of")}
-                        </span>
-                        <span className="text-sm text-gray-500">
-                          {hotel.priceOld}
-                        </span>
-                        <span className="text-sm text-gray-500">{t("$")}</span>
-                      </div>
-                    )}
-
-                    {/* Per night text */}
-                    <span className="text-sm text-gray-500 ">
-                      {t("per night")}
-                    </span>
+                  <div className="text-xs text-gray-500 mt-1">
+                    {t("Includes taxes and fees")}
                   </div>
 
                   <div className="flex sm:flex-row gap-5 mt-4">
@@ -266,7 +254,7 @@ export default function FavoritesPage() {
                       whileHover={{ scale: 1.03 }}
                       whileTap={{ scale: 0.98 }}
                       onClick={() => handleBookNow(hotel.id)}
-                      className="flex-1 bg-primary text-white font-medium py-2 px-4 rounded-lg hover:bg-opacity-90 transition shadow-md flex items-center justify-center gap-2 text-sm"
+                      className="flex-1 bg-primary text-white font-medium p-4 rounded-lg hover:bg-opacity-90 transition shadow-md flex items-center justify-center gap-2 text-sm"
                     >
                       <span>{t("bookButton")}</span>
                       <motion.span

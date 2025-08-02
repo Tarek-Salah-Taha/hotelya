@@ -36,22 +36,24 @@ function HotelHeader({ hotel }: { hotel: LocalizedHotel }) {
             {hotelName}
           </h1>
 
-          <div className="flex items-center gap-1">{renderStars(stars)}</div>
+          <div className="group flex items-center gap-1 transition-all duration-300 hover:scale-105 hover:text-yellow-500">
+            {renderStars(stars)}
+          </div>
 
           <div className="flex items-center gap-1 text-lg text-gray-600">
             <IoLocationSharp className="text-xl text-primary" />
             <span>
-              {address}, {city}, {country}
+              {address} • {city} • {country}
             </span>
           </div>
         </div>
 
         {/* Rating Box */}
-        <div className="flex items-center bg-gradient-to-br from-white/90 to-white/70 backdrop-blur-sm rounded-lg shadow-sm border border-white/20 overflow-hidden transition-transform duration-300 hover:scale-105">
-          <div className="bg-primary px-3 py-1.5 text-white font-bold">
+        <div className="flex items-center bg-gradient-to-br from-white/90 to-white/70 backdrop-blur-sm rounded-lg shadow-sm border border-white/20 overflow-hidden transition-all duration-300 hover:scale-[1.02] hover:shadow-md active:scale-100 group">
+          <div className="bg-primary px-3 py-1.5 text-white font-bold rounded-l-[5px] transition-colors duration-300 group-hover:bg-primary-dark">
             {rating}
           </div>
-          <div className="px-3 py-1.5 text-sm font-medium text-gray-700">
+          <div className="px-3 py-1.5 text-sm font-medium text-gray-700 whitespace-nowrap">
             {getRatingLabel(rating, t)}
           </div>
         </div>

@@ -1,13 +1,18 @@
 import { useState } from "react";
 import { FaStar } from "react-icons/fa";
 import { StarRatingProps } from "../_types/types";
+import { useTranslations } from "next-intl";
 
 export default function StarRating({ rating, setRating }: StarRatingProps) {
+  const t = useTranslations("HotelPage");
+
   const [hovered, setHovered] = useState(0);
 
   return (
     <div className="flex items-center gap-2">
-      <label className="text-sm font-medium text-gray-700">Your Rating:</label>
+      <label className="text-sm font-medium text-gray-700">
+        {t("Your Rating")}:
+      </label>
       <div className="flex gap-1">
         {Array.from({ length: 10 }, (_, i) => {
           const starValue = i + 1;

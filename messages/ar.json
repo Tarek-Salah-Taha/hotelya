@@ -85,7 +85,12 @@
     "Confirm Removal": "تأكيد الإزالة",
     "Are you sure you want to remove this hotel?": "هل أنت متأكد أنك تريد إزالة هذا الفندق؟",
     "Removed from favorites": "تمت إزالته من المفضلة",
-    "Failed to remove": "فشل في الإزالة"
+    "Failed to remove": "فشل في الإزالة",
+    "Please sign in to save/remove favorites": "يرجى تسجيل الدخول لحفظ/إزالة المفضلة",
+    "Added to favorites": "تمت الإضافة إلى المفضلة",
+    "Something went wrong": "لقد حدث خطأ ما",
+    "Includes taxes and fees": "يشمل الضرائب والرسوم",
+    "Failed to load favorites": "فشل تحميل المفضلة."
   },
 
   "BookingPage": {
@@ -209,7 +214,43 @@
     "Apply Filters": "تطبيق التصفية",
     "Reset": "إعادة ضبط",
     "Hide filters": "إخفاء التصفيات",
-    "Show filters": "إظهار التصفيات"
+    "Show filters": "إظهار التصفيات",
+    "All Countries": "جميع البلدان"
+  },
+
+  "HotelsPage": {
+    "Next": "التالي",
+    "Prev": "السابق"
+  },
+
+  "HotelPage": {
+    "Overview": "نظرة عامة",
+    "Popular Amenities": "وسائل الراحة الشائعة",
+    "Amenities": "وسائل الراحة",
+    "Room Types": "أنواع الغرف",
+    "Contact Information": "معلومات الاتصال",
+    "Policies": "سياسات Hotelya",
+    "Payment Options": "خيارات الدفع",
+    "Languages Spoken": "اللغات المنطوقة",
+    "Guest Reviews": "آراء الضيوف",
+    "Explore our comfortable accommodations": "اكتشف أماكن الإقامة المريحة لدينا.",
+    "Check-in: From": "تسجيل الوصول: من",
+    "Check-out: Until": "المغادرة: حتى",
+    "AM": "صباحًا",
+    "PM": "مساءً",
+    "Minimum age for check-in": "الحد الأدنى لسن تسجيل الوصول",
+    "Pets are allowed": "مسموح بالحيوانات الأليفة.",
+    "Pets are not allowed": "لا يسمح بإصطحاب الحيوانات الأليفة.",
+    "Smoking is allowed": "التدخين مسموح.",
+    "Smoking is not allowed": "ممنوع التدخين.",
+    "years": "سنة",
+    "Leave a Review": "اترك تعليقا",
+    "Your Rating": "تقييمك",
+    "Submit Review": "إضافة التعليق",
+    "Your Name": "اسمك",
+    "Your Comment": "تعليقك",
+    "No description available for this hotel": "لا يوجد وصف متاح لهذا الفندق.",
+    "Submitting": "إرسال..."
   },
 
   "RoomTypes": {

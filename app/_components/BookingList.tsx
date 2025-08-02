@@ -417,7 +417,7 @@ export default function Page() {
                             status === "Confirmed" && (
                               <button
                                 onClick={() => handleCancelClick(booking.id)}
-                                className="flex-1 bg-white border border-red-300 text-red-500 font-medium py-2 px-4 rounded-lg hover:bg-accent transition flex items-center justify-center gap-1 hover:text-white"
+                                className="flex-1 bg-white border border-red-300 text-red-500 font-medium px-4 py-3 rounded-lg hover:bg-accent transition flex items-center justify-center gap-1 hover:text-white"
                               >
                                 {tBooking("Cancel Booking")}
                               </button>
@@ -425,7 +425,7 @@ export default function Page() {
                           {activeTab === "past" && (
                             <button
                               onClick={() => handleRebook(booking.hotelId)}
-                              className="flex items-center justify-center gap-2 px-6 py-3 bg-primary text-white border border-transparent rounded-xl text-base font-semibold transition-all duration-200 hover:bg-white hover:text-primary hover:border-primary active:bg-white active:text-primary active:border-primary hover:shadow-lg"
+                              className="flex flex-1 items-center justify-center gap-2 px-4 py-3 bg-primary text-white border border-transparent rounded-xl text-base font-semibold transition-all duration-200 hover:bg-white hover:text-primary hover:border-primary active:bg-white active:text-primary active:border-primary hover:shadow-lg"
                             >
                               {tBooking("Rebook")}
                             </button>

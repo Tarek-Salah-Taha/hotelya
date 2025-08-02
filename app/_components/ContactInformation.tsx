@@ -3,8 +3,11 @@ import { FaPhone } from "react-icons/fa6";
 import { MdEmail } from "react-icons/md";
 import { FaGlobe } from "react-icons/fa";
 import { LocalizedHotel } from "../_lib/transformHotel";
+import { useTranslations } from "next-intl";
 
 function ContactInformation({ hotel }: { hotel: LocalizedHotel }) {
+  const t = useTranslations("HotelPage");
+
   const { address, city, country, phone, email, website } = hotel;
 
   return (
@@ -24,22 +27,23 @@ function ContactInformation({ hotel }: { hotel: LocalizedHotel }) {
           text-gray-800
           inline-block
           group-hover:translate-x-1 
+          rtl:group-hover:-translate-x-1
           transition-transform duration-300
         "
         >
-          Contact Information
+          {t("Contact Information")}
         </h2>
-        <span
+        <div
           className="
-          absolute bottom-0 left-0 
-          w-12 h-1 bg-primary rounded-full 
+          absolute bottom-0 w-12 h-1 bg-primary rounded-full 
           scale-x-0 group-hover:scale-x-100 
           origin-left transition-transform duration-500
+          rtl:origin-right
         "
         />
       </div>
 
-      <div className="space-y-4 pl-1">
+      <div className="space-y-4 pl-1 rtl:pr-1 rtl:pl-0">
         {/* Address */}
         <div className="flex items-start gap-3 group/item">
           <IoLocationSharp
@@ -47,11 +51,10 @@ function ContactInformation({ hotel }: { hotel: LocalizedHotel }) {
             w-6 h-6 shrink-0 text-primary 
             mt-0.5
             transition-transform
-            group-hover/item:scale-110
-          "
+            group-hover/item:scale-110          "
           />
           <span className="text-gray-700 leading-relaxed">
-            {address}, {city}, {country}
+            {address} • {city} • {country}
           </span>
         </div>
 
@@ -82,8 +85,7 @@ function ContactInformation({ hotel }: { hotel: LocalizedHotel }) {
             className="
             w-6 h-6 shrink-0 text-primary
             transition-transform
-            group-hover/item:scale-110
-          "
+            group-hover/item:scale-110          "
           />
           <a
             href={`mailto:${email}`}
@@ -105,8 +107,7 @@ function ContactInformation({ hotel }: { hotel: LocalizedHotel }) {
             className="
             w-6 h-6 shrink-0 text-primary
             transition-transform
-            group-hover/item:scale-110
-          "
+            group-hover/item:scale-110          "
           />
           <a
             href={website}
