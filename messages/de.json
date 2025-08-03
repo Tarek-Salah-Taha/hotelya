@@ -249,7 +249,11 @@
     "Your Name": "Ihr Name",
     "Your Comment": "Ihr Kommentar",
     "No description available for this hotel": "Für dieses Hotel ist keine Beschreibung verfügbar.",
-    "Submitting": "Senden..."
+    "Submitting": "Senden...",
+    "Please fill in all fields": "Bitte füllen Sie alle Felder aus.",
+    "Review posted": "Bewertung veröffentlicht!",
+    "Error posting review": "Fehler beim Posten der Bewertung",
+    "No reviews yet": "Noch keine Bewertungen."
   },
 
   "RoomTypes": {
@@ -259,6 +263,47 @@
     "Family Room": "Familienzimmer",
     "Standard Single Room": "Standard-Einzelzimmer",
     "Standard Twin Room": "Standard-Zweibettzimmer"
+  },
+
+  "RoomDescriptions": {
+    "Spacious room with elegant furnishings and city views": "Geräumiges Zimmer mit eleganter Einrichtung und Blick auf die Stadt.",
+    "Includes a living area and luxury bathroom, ideal for families": "Verfügt über einen Wohnbereich und ein luxuriöses Badezimmer, ideal für Familien.",
+    "Modern room with high-speed Wi-Fi and ergonomic desk": "Modernes Zimmer mit Highspeed-WLAN und ergonomischem Schreibtisch.",
+    "A large room with space for the whole family": "Ein großer Raum mit Platz für die ganze Familie.",
+    "Cozy room with modern amenities": "Gemütliches Zimmer mit modernen Annehmlichkeiten.",
+    "Comfortable room with modern decor and essential amenities": "Komfortables Zimmer mit moderner Einrichtung und den wichtigsten Annehmlichkeiten.",
+    "Save": "Speichern",
+    "$": "$",
+    "m²": "m²",
+    "Bath": "Ein Bad",
+    "Baths": "2 Bäder",
+    "Adult": "Ein Erwachsener",
+    "Adults": "Erwachsene",
+    "Child": "Ein Kind",
+    "Children": "Kinder",
+    "Free crib": "Kostenloses Kinderbett",
+    "per night + taxes": "pro Nacht + Steuern",
+    "Check Availability": "Verfügbarkeit prüfen",
+    "Single": "Einzelbett",
+    "Double": "Doppelbett",
+    "King": "Kingsize-Bett",
+    "Complete Your Booking": "Schließen Sie Ihre Buchung ab!",
+    "You must be logged in to book a room": "Sie müssen angemeldet sein, um ein Zimmer zu buchen.",
+    "Please select dates": "Bitte wählen Sie Daten aus.",
+    "Booking confirmed": "Buchung bestätigt!",
+    "Failed to create booking": "Die Buchung konnte nicht erstellt werden. Bitte versuchen Sie es erneut.",
+    "Room Details": "Zimmerdetails",
+    "Room Type": "Zimmertyp",
+    "Price Per Night": "Preis pro Nacht",
+    "Select Dates": "Datum auswählen",
+    "Booking Summary": "Buchungsübersicht",
+    "Nights": "Nächte:",
+    "Subtotal": "Zwischensumme:",
+    "Taxes & Fees": "Steuern und Gebühren:",
+    "Total": "Gesamt:",
+    "General Cancellation Policy": "Allgemeine Stornierungsbedingungen",
+    "Free cancellation": "Kostenlose Stornierung bis 48 Stunden vor Check-in. Danach wird eine Gebühr für eine Nacht berechnet. Bei Nichterscheinen wird der volle Preis berechnet.",
+    "Confirm Booking": "Buchung bestätigen"
   },
 
   "common": {

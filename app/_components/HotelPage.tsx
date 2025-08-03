@@ -28,7 +28,12 @@ function HotelPage({ hotel, rooms }: HotelPageProps) {
           Array.isArray(hotel.amenities) ? hotel.amenities : [hotel.amenities]
         }
       />
-      <RoomListing rooms={rooms} />
+      <RoomListing
+        rooms={rooms}
+        hotelName={hotel.hotelName}
+        city={hotel.city}
+        country={hotel.country}
+      />
       <ContactInformation hotel={hotel} />
       <HotelPolicies
         policies={

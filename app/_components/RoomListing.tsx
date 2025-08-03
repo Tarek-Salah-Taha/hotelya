@@ -2,7 +2,7 @@ import { RoomListingProps } from "../_types/types";
 import RoomCard from "./RoomCard";
 import { useTranslations } from "next-intl";
 
-function RoomListing({ rooms }: RoomListingProps) {
+function RoomListing({ rooms, hotelName, city, country }: RoomListingProps) {
   const t = useTranslations("HotelPage");
 
   return (
@@ -55,6 +55,9 @@ function RoomListing({ rooms }: RoomListingProps) {
                 extraBed: room.extraBed,
               }}
               roomDescription={room.roomDescription}
+              hotelName={hotelName}
+              city={city}
+              country={country}
             />
           );
         })}

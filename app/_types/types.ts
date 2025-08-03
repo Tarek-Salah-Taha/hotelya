@@ -472,10 +472,16 @@ export type RoomCardProps = {
     extraBed: boolean;
   };
   roomDescription: string;
+  hotelName: string;
+  city: string;
+  country: string;
 };
 
 export type RoomListingProps = {
   rooms: Room[];
+  hotelName: string;
+  city: string;
+  country: string;
 };
 
 export type StarRatingProps = {

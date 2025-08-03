@@ -247,7 +247,11 @@
     "Your Name": "Your Name",
     "Your Comment": "Your Comment",
     "No description available for this hotel": "No description available for this hotel.",
-    "Submitting": "Submitting..."
+    "Submitting": "Submitting...",
+    "Please fill in all fields": "Please fill in all fields.",
+    "Review posted": "Review posted!",
+    "Error posting review": "Error posting review",
+    "No reviews yet": "No reviews yet."
   },
 
   "RoomTypes": {
@@ -257,6 +261,47 @@
     "Family Room": "Family Room",
     "Standard Single Room": "Standard Single Room",
     "Standard Twin Room": "Standard Twin Room"
+  },
+
+  "RoomDescriptions": {
+    "Spacious room with elegant furnishings and city views": "Spacious room with elegant furnishings and city views.",
+    "Includes a living area and luxury bathroom, ideal for families": "Includes a living area and luxury bathroom, ideal for families",
+    "Modern room with high-speed Wi-Fi and ergonomic desk": "Modern room with high-speed Wi-Fi and ergonomic desk.",
+    "A large room with space for the whole family": "A large room with space for the whole family.",
+    "Cozy room with modern amenities": "Cozy room with modern amenities.",
+    "Comfortable room with modern decor and essential amenities": "Comfortable room with modern decor and essential amenities.",
+    "Save": "Save",
+    "$": "$",
+    "m²": "m²",
+    "Bath": "One Bath",
+    "Baths": "2 Baths",
+    "Adult": "One Adult",
+    "Adults": "Adults",
+    "Child": "One Child",
+    "Children": "Children",
+    "Free crib": "Free crib",
+    "per night + taxes": "per night + taxes",
+    "Check Availability": "Check Availability",
+    "Single": "Single",
+    "Double": "Double",
+    "King": "King",
+    "Complete Your Booking": "Complete Your Booking!",
+    "You must be logged in to book a room": "You must be logged in to book a room.",
+    "Please select dates": "Please select dates.",
+    "Booking confirmed": "Booking confirmed!",
+    "Failed to create booking": "Failed to create booking. Please try again.",
+    "Room Details": "Room Details",
+    "Room Type": "Room Type",
+    "Price Per Night": "Price Per Night",
+    "Select Dates": "Select Dates",
+    "Booking Summary": "Booking Summary",
+    "Nights": "Nights:",
+    "Subtotal": "Subtotal:",
+    "Taxes & Fees": "Taxes & Fees:",
+    "Total": "Total:",
+    "General Cancellation Policy": "General Cancellation Policy",
+    "Free cancellation": "Free cancellation up to 48 hours before check-in. After that, a 1-night fee will be charged. No-shows will be charged the full price.",
+    "Confirm Booking": "Confirm Booking"
   },
 
   "common": {

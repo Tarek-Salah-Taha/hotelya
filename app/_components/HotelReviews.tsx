@@ -54,11 +54,7 @@ export default function HotelReviews({
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    if (!author || !comment) return toast.error("Please fill in all fields");
-    if (rating < 1 || rating > 10) {
-      toast.error("Rating must be between 1 and 10");
-      return;
-    }
+    if (!author || !comment) return toast.error(t("Please fill in all fields"));
 
     setLoading(true);
     try {
@@ -68,9 +64,9 @@ export default function HotelReviews({
       setAuthor("");
       setRating(10);
       setComment("");
-      toast.success("Review posted!");
+      toast.success(t("Review posted"));
     } catch (err) {
-      toast.error("Error posting review");
+      toast.error(t("Error posting review"));
       console.error(err);
     } finally {
       setLoading(false);
@@ -109,7 +105,7 @@ export default function HotelReviews({
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
           >
-            No reviews yet.
+            {t("No reviews yet")}
           </motion.p>
         ) : (
           <AnimatePresence>
