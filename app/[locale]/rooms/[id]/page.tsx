@@ -70,7 +70,7 @@ export default function BookingPage({
 
   const handleConfirmBooking = async () => {
     if (!user) {
-      toast.error(tRoomDescriptions("You must be logged in to book a room."));
+      toast.error(tRoomDescriptions("You must be logged in to book a room"));
       router.push(`/${locale}/auth/login`);
       return;
     }

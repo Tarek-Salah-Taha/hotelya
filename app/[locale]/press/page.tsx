@@ -1,37 +1,41 @@
+import { useTranslations } from "next-intl";
+
 export default function PressPage() {
+  const t = useTranslations("PressPage");
+
   const pressReleases = [
     {
-      title: "Hotelya Raises $20M Series B to Expand Global Hotel Network",
-      date: "May 15, 2023",
-      source: "TechCrunch",
+      title: t("Hotelya Raises $20M Series B to Expand Global Hotel Network"),
+      date: t("May 15, 2025"),
+      source: t("TechCrunch"),
     },
     {
-      title: "Hotelya Named One of Fastest Growing Travel Startups",
-      date: "March 2, 2023",
-      source: "Forbes",
+      title: t("Hotelya Named One of Fastest Growing Travel Startups"),
+      date: t("March 2, 2024"),
+      source: t("Forbes"),
     },
     {
-      title: "How Hotelya is Changing the Way We Book Hotels",
-      date: "January 10, 2023",
-      source: "Travel Weekly",
+      title: t("How Hotelya is Changing the Way We Book Hotels"),
+      date: t("January 10, 2023"),
+      source: t("Travel Weekly"),
     },
   ];
 
   const mediaCoverage = [
     {
-      title: "The Future of Travel Tech: Interview with Hotelya CEO",
-      source: "Bloomberg",
-      date: "April 5, 2023",
+      title: t("The Future of Travel Tech: Interview with Hotelya CEO"),
+      source: t("Bloomberg"),
+      date: t("April 5, 2024"),
     },
     {
-      title: "Hotelya's Innovative Approach to Hotel Booking",
-      source: "Skift",
-      date: "February 18, 2023",
+      title: t("Hotelya's Innovative Approach to Hotel Booking"),
+      source: t("Skift"),
+      date: t("February 18, 2023"),
     },
     {
-      title: "Why Travelers Are Switching to Hotelya",
-      source: "Condé Nast Traveler",
-      date: "December 5, 2022",
+      title: t("Why Travelers Are Switching to Hotelya"),
+      source: t("Condé Nast Traveler"),
+      date: t("December 5, 2022"),
     },
   ];
 
@@ -40,11 +44,12 @@ export default function PressPage() {
       {/* Hero Section */}
       <div className="text-center mb-16">
         <h1 className="text-4xl sm:text-5xl font-bold text-dark mb-4">
-          Press & <span className="text-primary">Media</span>
+          {t("Press & Media")}
         </h1>
         <p className="text-xl text-text max-w-3xl mx-auto">
-          For media inquiries, interviews, or partnerships, please contact our
-          press team.
+          {t(
+            "For media inquiries, interviews, or partnerships, please contact our press team"
+          )}
         </p>
       </div>
 
@@ -52,7 +57,9 @@ export default function PressPage() {
 
       {/* Press Releases */}
       <div className="mb-16">
-        <h2 className="text-3xl font-bold text-dark mb-8">Press Releases</h2>
+        <h2 className="text-3xl font-bold text-dark mb-8">
+          {t("Press Releases")}
+        </h2>
         <div className="space-y-6">
           {pressReleases.map((release, index) => (
             <div
@@ -72,7 +79,9 @@ export default function PressPage() {
 
       {/* Media Coverage */}
       <div className="mb-16">
-        <h2 className="text-3xl font-bold text-dark mb-8">Media Coverage</h2>
+        <h2 className="text-3xl font-bold text-dark mb-8">
+          {t("Media Coverage")}
+        </h2>
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           {mediaCoverage.map((item, index) => (
             <div
@@ -93,31 +102,35 @@ export default function PressPage() {
 
       {/* Leadership Bios */}
       <div>
-        <h2 className="text-3xl font-bold text-dark mb-8">Leadership Team</h2>
+        <h2 className="text-3xl font-bold text-dark mb-8">
+          {t("Leadership Team")}
+        </h2>
         <p className="text-text mb-6">
-          Available for interviews and commentary on travel industry trends.
+          {t(
+            "Available for interviews and commentary on travel industry trends"
+          )}
         </p>
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {[
             {
               name: "Alex Chen",
-              title: "CEO & Founder",
-              bio: "Travel tech entrepreneur with 15+ years experience",
+              title: t("CEO & Founder"),
+              bio: t("Travel tech entrepreneur with 15+ years experience"),
             },
             {
               name: "Maria Garcia",
-              title: "Chief Operations Officer",
-              bio: "Former hospitality executive",
+              title: t("Chief Operations Officer"),
+              bio: t("Former hospitality executive"),
             },
             {
               name: "James Wilson",
-              title: "Chief Technology Officer",
-              bio: "Software architect and AI specialist",
+              title: t("Chief Technology Officer"),
+              bio: t("Software architect and AI specialist"),
             },
             {
               name: "Sarah Johnson",
-              title: "Chief Marketing Officer",
-              bio: "Brand strategist and growth expert",
+              title: t("Chief Marketing Officer"),
+              bio: t("Brand strategist and growth expert"),
             },
           ].map((person, index) => (
             <div
@@ -139,9 +152,11 @@ export default function PressPage() {
       </div>
 
       <div className="bg-light/10 rounded-xl p-8 m-8 text-center">
-        <h2 className="text-2xl font-bold text-dark mb-2">Media Inquiries</h2>
+        <h2 className="text-2xl font-bold text-dark mb-2">
+          {t("Media Inquiries")}
+        </h2>
         <p className="text-text mb-4">
-          Email:{" "}
+          {t("Email")}{" "}
           <a
             href="mailto:press@hotelya.com"
             className="text-primary hover:underline"

@@ -1,39 +1,39 @@
+import { useTranslations } from "next-intl";
+
 export default function SafetyPage() {
+  const t = useTranslations("SafetyPage");
+
   const safetyTips = [
     {
-      title: "Research Your Destination",
-      content:
-        "Check travel advisories and local laws before your trip. Be aware of any health requirements, visa needs, or safety concerns in your destination.",
+      title: t("Research Your Destination"),
+      content: t("Check travel advisories and local laws before your trip"),
       icon: "🌍",
     },
     {
-      title: "Secure Accommodations",
-      content:
-        "Choose reputable hotels with good security measures. Verify they have 24/7 front desk service, secure entry, and in-room safes.",
+      title: t("Secure Accommodations"),
+      content: t("Choose reputable hotels with good security measures"),
       icon: "🏨",
     },
     {
-      title: "Emergency Preparedness",
-      content:
-        "Save local emergency numbers and your country's embassy contacts. Know the nearest hospital and keep a basic first-aid kit.",
+      title: t("Emergency Preparedness"),
+      content: t(
+        "Save local emergency numbers and your country's embassy contacts"
+      ),
       icon: "🆘",
     },
     {
-      title: "Digital Security",
-      content:
-        "Use VPNs on public WiFi, enable two-factor authentication, and avoid sharing travel plans on social media in real-time.",
+      title: t("Digital Security"),
+      content: t("Use VPNs on public WiFi"),
       icon: "🔒",
     },
     {
-      title: "Transportation Safety",
-      content:
-        "Use licensed taxis or reputable ride-sharing services. Avoid traveling alone at night and always share your route with someone.",
+      title: t("Transportation Safety"),
+      content: t("Use licensed taxis or reputable ride-sharing services"),
       icon: "🚖",
     },
     {
-      title: "Health Precautions",
-      content:
-        "Pack necessary medications, check if vaccinations are required, and have travel insurance that covers medical emergencies.",
+      title: t("Health Precautions"),
+      content: t("Pack necessary medications"),
       icon: "💊",
     },
   ];
@@ -42,11 +42,10 @@ export default function SafetyPage() {
     <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
       <div className="text-center mb-12">
         <h1 className="text-4xl font-bold text-gray-900 mb-4">
-          Travel Safety Tips
+          {t("Travel Safety Tips")}
         </h1>
         <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-          Your safety is our priority. Explore our comprehensive guide to secure
-          and worry-free travels.
+          {t("Your safety is our priority")}
         </p>
       </div>
 
@@ -67,29 +66,33 @@ export default function SafetyPage() {
 
       <div className="bg-blue-50 rounded-xl p-8 border border-blue-100">
         <h2 className="text-2xl font-bold text-gray-900 mb-4">
-          Emergency Resources
+          {t("Emergency Resources")}
         </h2>
         <div className="grid sm:grid-cols-2 gap-6">
           <div>
             <h3 className="font-medium text-gray-900 mb-2">
-              Global Emergency Numbers
+              {t("Global Emergency Numbers")}
             </h3>
             <ul className="space-y-2">
-              <li className="text-gray-600">Police: 112 (most countries)</li>
-              <li className="text-gray-600">Medical: 911 or 112</li>
-              <li className="text-gray-600">Fire: 911 or 112</li>
+              <li className="text-gray-600">
+                {t("Police: 112 (most countries)")}
+              </li>
+              <li className="text-gray-600">{t("Medical: 911 or 112")}</li>
+              <li className="text-gray-600">{t("Fire: 911 or 112")}</li>
             </ul>
           </div>
           <div>
-            <h3 className="font-medium text-gray-900 mb-2">Hotelya Support</h3>
+            <h3 className="font-medium text-gray-900 mb-2">
+              {t("Hotelya Support")}
+            </h3>
             <ul className="space-y-2">
               <li className="text-gray-600">
-                24/7 Safety Hotline: +1 (800) 555-SAFE
+                {t("24/7 Safety Hotline:")} +1 (800) 555-SAFE
               </li>
               <li className="text-gray-600">
-                Emergency email: safety@hotelya.com
+                {t("Emergency email:")} safety@hotelya.com
               </li>
-              <li className="text-gray-600">In-app emergency button</li>
+              <li className="text-gray-600">{t("In-app emergency button")}</li>
             </ul>
           </div>
         </div>

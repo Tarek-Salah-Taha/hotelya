@@ -1,4 +1,8 @@
+import { useTranslations } from "next-intl";
+
 export default function AboutPage() {
+  const t = useTranslations("AboutPage");
+
   return (
     <main className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
       <div className="bg-white rounded-xl shadow-lg overflow-hidden">
@@ -7,7 +11,7 @@ export default function AboutPage() {
           <div className="absolute inset-0 bg-gradient-to-r from-primary/30 to-transparent" />
           <div className="relative h-full flex items-center justify-center">
             <h1 className="text-4xl sm:text-5xl font-bold text-dark text-center px-4">
-              About <span className="text-primary">Hotelya</span>
+              {t("About")} <span className="text-primary">Hotelya</span>
             </h1>
           </div>
         </div>
@@ -16,31 +20,29 @@ export default function AboutPage() {
         <div className="p-8 md:p-12 space-y-8">
           <div className="prose max-w-none">
             <p className="text-lg text-text leading-relaxed">
-              Hotelya was founded to help travelers find reliable, affordable,
-              and unique accommodations around the globe. We partner with
-              thousands of hotels to bring you exclusive deals and the smoothest
-              booking experience.
+              {t("Hotelya was founded to help travelers find reliable")}
             </p>
           </div>
 
           {/* Mission Section */}
-          <div className="bg-light/10 p-6 rounded-lg border-l-4 border-primary">
-            <h2 className="text-2xl font-bold text-dark mb-4">Our Mission</h2>
+          <div className="bg-light/10 p-6 rounded-lg border-s-4 border-primary">
+            <h2 className="text-2xl font-bold text-dark mb-4">
+              {t("Our Mission")}
+            </h2>
             <p className="text-text">
-              To simplify travel by connecting people with the perfect places to
-              stay, while building meaningful partnerships with hotels
-              worldwide. We&#39;re committed to transparency, value, and
-              exceptional customer experiences.
+              {t(
+                "To simplify travel by connecting people with the perfect places to stay"
+              )}
             </p>
           </div>
 
           {/* Stats Section */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-8">
             {[
-              { value: "5M+", label: "Happy Travelers" },
-              { value: "50K+", label: "Hotels Worldwide" },
-              { value: "24/7", label: "Customer Support" },
-              { value: "150+", label: "Countries Covered" },
+              { value: "5M+", label: t("Happy Travelers") },
+              { value: "50K+", label: t("Hotels Worldwide") },
+              { value: "24/7", label: t("Customer Support") },
+              { value: "150+", label: t("Countries Covered") },
             ].map((stat, index) => (
               <div
                 key={index}
@@ -54,18 +56,18 @@ export default function AboutPage() {
 
           {/* Team Section */}
           <div className="mt-12">
-            <h2 className="text-2xl font-bold text-dark mb-6">Our Team</h2>
+            <h2 className="text-2xl font-bold text-dark mb-6">
+              {t("Our Team")}
+            </h2>
             <p className="text-text mb-6">
-              Hotelya is powered by a diverse team of travel enthusiasts, tech
-              innovators, and hospitality experts united by our passion for
-              making travel better.
+              {t("Hotelya is powered by a diverse team of travel enthusiasts")}
             </p>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-6">
               {[
-                { name: "Alex Chen", role: "CEO & Founder" },
-                { name: "Maria Garcia", role: "Head of Operations" },
-                { name: "James Wilson", role: "CTO" },
-                { name: "Sarah Johnson", role: "Customer Experience" },
+                { name: "Alex Chen", role: t("CEO & Founder") },
+                { name: "Maria Garcia", role: t("Head of Operations") },
+                { name: "James Wilson", role: t("CTO") },
+                { name: "Sarah Johnson", role: t("Customer Experience") },
               ].map((member, index) => (
                 <div key={index} className="text-center">
                   <div className="w-24 h-24 mx-auto mb-3 rounded-full bg-light flex items-center justify-center text-xl font-bold text-primary">

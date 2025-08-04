@@ -1,4 +1,8 @@
+// import { useTranslations } from "next-intl";
+
 export default function TermsPage() {
+  // const t = useTranslations("TermsPage");
+
   const termsSections = [
     {
       title: "Account Responsibility",

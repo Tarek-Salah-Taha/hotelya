@@ -1,27 +1,39 @@
+import { useTranslations } from "next-intl";
+
 export default function CareersPage() {
+  const t = useTranslations("CareersPage");
+
   const perks = [
     {
       icon: "🏝️",
-      title: "Flexible PTO",
-      description: "Take time when you need it",
+      title: t("Flexible PTO"),
+      description: t("Take time when you need it"),
     },
-    { icon: "🏠", title: "Remote Options", description: "Work from anywhere" },
+    {
+      icon: "🏠",
+      title: t("Remote Options"),
+      description: t("Work from anywhere"),
+    },
     {
       icon: "💪",
-      title: "Health Benefits",
-      description: "Medical, dental & vision",
+      title: t("Health Benefits"),
+      description: t("Medical, dental & vision"),
     },
     {
       icon: "📈",
-      title: "Career Growth",
-      description: "Learning & development",
+      title: t("Career Growth"),
+      description: t("Learning & development"),
     },
     {
       icon: "🍕",
-      title: "Team Events",
-      description: "Regular company retreats",
+      title: t("Team Events"),
+      description: t("Regular company retreats"),
     },
-    { icon: "💻", title: "Tech Stipend", description: "For your home office" },
+    {
+      icon: "💻",
+      title: t("Tech Stipend"),
+      description: t("For your home office"),
+    },
   ];
 
   return (
@@ -29,42 +41,48 @@ export default function CareersPage() {
       {/* Hero Section */}
       <div className="text-center mb-16">
         <h1 className="text-4xl sm:text-5xl font-bold text-dark mb-4">
-          Join the <span className="text-primary">Hotelya</span> Team
+          {t("Join the")} <span className="text-primary">Hotelya</span>
         </h1>
         <p className="text-xl text-text max-w-3xl mx-auto">
-          We&apos;re building the future of travel. Come help us create
-          exceptional experiences for travelers around the world.
+          {t("We're building the future of travel")}
         </p>
       </div>
 
       {/* Culture Section */}
       <div className="bg-light/10 rounded-xl p-8 mb-16">
         <h2 className="text-3xl font-bold text-dark mb-6 text-center">
-          Our Culture
+          {t("Our Culture")}
         </h2>
         <div className="grid md:grid-cols-3 gap-8">
           <div className="text-center">
             <div className="text-4xl mb-4">🚀</div>
-            <h3 className="text-xl font-semibold mb-2">Mission-Driven</h3>
+            <h3 className="text-xl font-semibold mb-2">
+              {t("Mission-Driven")}
+            </h3>
             <p className="text-text">
-              We&apos;re passionate about making travel accessible and enjoyable
-              for everyone.
+              {t(
+                "We're passionate about making travel accessible and enjoyable for everyone"
+              )}
             </p>
           </div>
           <div className="text-center">
             <div className="text-4xl mb-4">🤝</div>
-            <h3 className="text-xl font-semibold mb-2">Collaborative</h3>
+            <h3 className="text-xl font-semibold mb-2">{t("Collaborative")}</h3>
             <p className="text-text">
-              We believe the best solutions come from diverse perspectives
-              working together.
+              {t(
+                "We believe the best solutions come from diverse perspectives working together"
+              )}
             </p>
           </div>
           <div className="text-center">
             <div className="text-4xl mb-4">🌱</div>
-            <h3 className="text-xl font-semibold mb-2">Growth-Oriented</h3>
+            <h3 className="text-xl font-semibold mb-2">
+              {t("Growth-Oriented")}
+            </h3>
             <p className="text-text">
-              We invest in our team&apos;s development and celebrate continuous
-              learning.
+              {t(
+                "We invest in our team's development and celebrate continuous learning"
+              )}
             </p>
           </div>
         </div>
@@ -73,7 +91,7 @@ export default function CareersPage() {
       {/* Perks Section */}
       <div className="mb-16">
         <h2 className="text-3xl font-bold text-dark mb-8 text-center">
-          Perks & Benefits
+          {t("Perks & Benefits")}
         </h2>
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {perks.map((perk, index) => (
