@@ -1,35 +1,39 @@
+import { useTranslations } from "next-intl";
+
 export default function CookiesPage() {
+  const t = useTranslations("CookiesPage");
+
   const cookieTypes = [
     {
-      name: "Essential Cookies",
-      purpose: "Required for website functionality like login and checkout",
-      examples: "Session cookies, authentication tokens",
-      duration: "Session or up to 24 hours",
-      control: "Cannot be disabled",
+      name: t("Essential Cookies"),
+      purpose: t("Required for website functionality like login and checkout"),
+      examples: t("Session cookies, authentication tokens"),
+      duration: t("Session or up to 24 hours"),
+      control: t("Cannot be disabled"),
       controlType: "required",
     },
     {
-      name: "Performance Cookies",
-      purpose: "Collect anonymous data about website usage",
-      examples: "Google Analytics, Hotjar",
-      duration: "30 days to 2 years",
-      control: "Optional",
+      name: t("Performance Cookies"),
+      purpose: t("Collect anonymous data about website usage"),
+      examples: t("Google Analytics, Hotjar"),
+      duration: t("30 days to 2 years"),
+      control: t("Optional"),
       controlType: "optional",
     },
     {
-      name: "Functional Cookies",
-      purpose: "Remember preferences and settings",
-      examples: "Language selection, currency preference",
-      duration: "30 days to 1 year",
-      control: "Optional",
+      name: t("Functional Cookies"),
+      purpose: t("Remember preferences and settings"),
+      examples: t("Language selection, currency preference"),
+      duration: t("30 days to 1 year"),
+      control: t("Optional"),
       controlType: "optional",
     },
     {
-      name: "Marketing Cookies",
-      purpose: "Track visitors for personalized advertising",
-      examples: "Facebook Pixel, Google Ads",
-      duration: "30 days to 1 year",
-      control: "Optional (disabled by default)",
+      name: t("Marketing Cookies"),
+      purpose: t("Track visitors for personalized advertising"),
+      examples: t("Facebook Pixel, Google Ads"),
+      duration: t("30 days to 1 year"),
+      control: t("Optional (disabled by default)"),
       controlType: "marketing",
     },
   ];
@@ -38,30 +42,26 @@ export default function CookiesPage() {
     <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
       {/* Header remains the same */}
       <div className="text-center mb-12">
-        <h1 className="text-4xl font-bold text-gray-900 mb-4">Cookie Policy</h1>
+        <h1 className="text-4xl font-bold text-gray-900 mb-4">
+          {t("Cookie Policy")}
+        </h1>
         <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-          Last updated:{" "}
-          {new Date().toLocaleDateString("en-US", {
-            year: "numeric",
-            month: "long",
-            day: "numeric",
-          })}
+          {t("Last updated: August 1, 2025")}
         </p>
       </div>
 
       <div className="prose prose-lg max-w-none mb-12">
         <p className="text-lg text-gray-700 mb-8">
-          Our website uses cookies and similar technologies to improve user
-          experience, analyze traffic, and personalize content. By continuing to
-          browse, you consent to our use of essential cookies. You can manage
-          preferences for other cookie types at any time.
+          {t(
+            "Our website uses cookies and similar technologies to improve user experience"
+          )}
         </p>
       </div>
 
       {/* Mobile-friendly cookie cards */}
       <div className="mb-12">
         <h2 className="text-2xl font-bold text-gray-900 mb-6">
-          Types of Cookies We Use
+          {t("Types of Cookies We Use")}
         </h2>
         <div className="space-y-4">
           {cookieTypes.map((cookie, index) => (
@@ -89,7 +89,7 @@ export default function CookiesPage() {
               <div className="mt-3 space-y-2">
                 <div className="flex items-start">
                   <span className="text-sm font-medium text-gray-500 min-w-[80px]">
-                    Purpose:
+                    {t("Purpose:")}
                   </span>
                   <span className="text-sm text-gray-600 ml-2">
                     {cookie.purpose}
@@ -97,7 +97,7 @@ export default function CookiesPage() {
                 </div>
                 <div className="flex items-start">
                   <span className="text-sm font-medium text-gray-500 min-w-[80px]">
-                    Examples:
+                    {t("Examples:")}
                   </span>
                   <span className="text-sm text-gray-600 ml-2">
                     {cookie.examples}
@@ -105,7 +105,7 @@ export default function CookiesPage() {
                 </div>
                 <div className="flex items-start">
                   <span className="text-sm font-medium text-gray-500 min-w-[80px]">
-                    Duration:
+                    {t("Duration:")}
                   </span>
                   <span className="text-sm text-gray-600 ml-2">
                     {cookie.duration}
@@ -121,37 +121,39 @@ export default function CookiesPage() {
       <div className="grid md:grid-cols-2 gap-8 mb-12">
         <div className="bg-blue-50 rounded-xl p-6 border border-blue-100">
           <h2 className="text-xl font-bold text-gray-900 mb-4">
-            Managing Cookies
+            {t("Managing Cookies")}
           </h2>
           <p className="text-gray-700 mb-4">
-            You can control non-essential cookies through our preference center
-            or directly in your browser settings.
+            {t(
+              "You can control non-essential cookies through our preference center or directly in your browser settings"
+            )}
           </p>
         </div>
 
         <div className="bg-gray-50 rounded-xl p-6 border border-gray-200">
           <h2 className="text-xl font-bold text-gray-900 mb-4">
-            Browser Controls
+            {t("Browser Controls")}
           </h2>
-          <p className="text-gray-700 mb-2">Most browsers allow you to:</p>
+          <p className="text-gray-700 mb-2">
+            {t("Most browsers allow you to:")}
+          </p>
           <ul className="list-disc pl-5 text-gray-600 space-y-1">
-            <li>View and delete existing cookies</li>
-            <li>Block cookies from specific sites</li>
-            <li>Set preferences for all websites</li>
+            <li>{t("View and delete existing cookies")}</li>
+            <li>{t("Block cookies from specific sites")}</li>
+            <li>{t("Set preferences for all websites")}</li>
           </ul>
         </div>
       </div>
 
       <div className="prose prose-lg max-w-none text-gray-700">
         <h2 className="text-2xl font-bold text-gray-900 mb-4">
-          Additional Information
+          {t("Additional Information")}
         </h2>
         <p>
-          We may update this policy as technology and regulations evolve.
-          Significant changes will be notified through our website or email.
+          {t("We may update this policy as technology and regulations evolve")}
         </p>
         <p className="mt-4">
-          For questions about our cookie usage, please contact us at{" "}
+          {t("For questions about our cookie usage, please contact us at")}{" "}
           <strong>privacy@hotelya.com</strong>.
         </p>
       </div>

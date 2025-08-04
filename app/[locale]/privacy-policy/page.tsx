@@ -1,68 +1,72 @@
+import { useTranslations } from "next-intl";
+
 export default function PrivacyPolicyPage() {
+  const t = useTranslations("PrivacyPolicyPage");
+
   const policySections = [
     {
-      title: "Data We Collect",
+      title: t("Data We Collect"),
       content: [
-        "Contact information (name, email, phone)",
-        "Payment details (processed securely via PCI-compliant services)",
-        "Booking history and preferences",
-        "Device and browser information",
-        "Location data (with your permission)",
+        t("Contact information (name, email, phone)"),
+        t("Payment details (processed securely via PCI-compliant services)"),
+        t("Booking history and preferences"),
+        t("Device and browser information"),
+        t("Location data (with your permission)"),
       ],
       icon: "📋",
     },
     {
-      title: "How We Use Data",
+      title: t("How We Use Data"),
       content: [
-        "Process reservations and payments",
-        "Personalize your experience",
-        "Improve our services",
-        "Send booking confirmations and updates",
-        "Prevent fraud and ensure security",
+        t("Process reservations and payments"),
+        t("Personalize your experience"),
+        t("Improve our services"),
+        t("Send booking confirmations and updates"),
+        t("Prevent fraud and ensure security"),
       ],
       icon: "🔍",
     },
     {
-      title: "Data Sharing",
+      title: t("Data Sharing"),
       content: [
-        "With hotels and service providers to fulfill bookings",
-        "Payment processors to complete transactions",
-        "Legal authorities when required by law",
-        "Third-party analytics (anonymized where possible)",
-        "Marketing partners (with your consent)",
+        t("With hotels and service providers to fulfill bookings"),
+        t("Payment processors to complete transactions"),
+        t("Legal authorities when required by law"),
+        t("Third-party analytics (anonymized where possible)"),
+        t("Marketing partners (with your consent)"),
       ],
       icon: "🤝",
     },
     {
-      title: "Your Rights",
+      title: t("Your Rights"),
       content: [
-        "Access your personal data",
-        "Request correction of inaccurate data",
-        "Delete your data (subject to legal requirements)",
-        "Object to certain processing",
-        "Withdraw consent for marketing",
+        t("Access your personal data"),
+        t("Request correction of inaccurate data"),
+        t("Delete your data (subject to legal requirements)"),
+        t("Object to certain processing"),
+        t("Withdraw consent for marketing"),
       ],
       icon: "🛡️",
     },
     {
-      title: "Security Measures",
+      title: t("Security Measures"),
       content: [
-        "SSL encryption for all data transfers",
-        "Regular security audits",
-        "Limited employee access to sensitive data",
-        "Secure payment processing",
-        "Data minimization principles",
+        t("SSL encryption for all data transfers"),
+        t("Regular security audits"),
+        t("Limited employee access to sensitive data"),
+        t("Secure payment processing"),
+        t("Data minimization principles"),
       ],
       icon: "🔒",
     },
     {
-      title: "Cookies & Tracking",
+      title: t("Cookies & Tracking"),
       content: [
-        "Essential cookies for website functionality",
-        "Analytics cookies to improve our services",
-        "Marketing cookies (opt-in required)",
-        "Browser controls to manage preferences",
-        "Do Not Track browser setting support",
+        t("Essential cookies for website functionality"),
+        t("Analytics cookies to improve our services"),
+        t("Marketing cookies (opt-in required)"),
+        t("Browser controls to manage preferences"),
+        t("Do Not Track browser setting support"),
       ],
       icon: "🍪",
     },
@@ -72,23 +76,16 @@ export default function PrivacyPolicyPage() {
     <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
       <div className="text-center mb-12">
         <h1 className="text-4xl font-bold text-gray-900 mb-4">
-          Privacy Policy
+          {t("Privacy Policy")}
         </h1>
         <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-          Last updated:{" "}
-          {new Date().toLocaleDateString("en-US", {
-            year: "numeric",
-            month: "long",
-            day: "numeric",
-          })}
+          {t("Last updated: August 1, 2025")}
         </p>
       </div>
 
       <div className="prose prose-lg max-w-none mb-12">
         <p className="text-lg text-gray-700 mb-8">
-          We are committed to protecting your personal data. This policy
-          explains what information we collect, how we use it, and your rights
-          under GDPR, CCPA, and other privacy regulations.
+          {t("We are committed to protecting your personal data")}
         </p>
       </div>
 
@@ -117,26 +114,30 @@ export default function PrivacyPolicyPage() {
 
       <div className="bg-blue-50 rounded-xl p-8 border border-blue-100 mb-12">
         <h2 className="text-2xl font-bold text-gray-900 mb-4">
-          Exercising Your Rights
+          {t("Exercising Your Rights")}
         </h2>
         <div className="grid sm:grid-cols-2 gap-8">
           <div>
-            <h3 className="font-medium text-gray-900 mb-3">Data Requests</h3>
+            <h3 className="font-medium text-gray-900 mb-3">
+              {t("Data Requests")}
+            </h3>
             <p className="text-gray-600 mb-4">
-              Submit requests regarding your personal data through our online
-              portal or by contacting our Data Protection Officer.
+              {t(
+                "Submit requests regarding your personal data through our online portal or by contacting our Data Protection Officer"
+              )}
             </p>
           </div>
           <div>
             <h3 className="font-medium text-gray-900 mb-3">
-              Contact Information
+              {t("Contact Information")}
             </h3>
             <ul className="space-y-2 text-gray-600">
-              <li>Email: privacy@hotelya.com</li>
-              <li>Phone: +1 (800) 555-PRIV</li>
+              <li>{t("Email:")} privacy@hotelya.com</li>
+              <li>{t("Phone:")} +1 (800) 555-PRIV</li>
               <li>
-                Mail: Data Protection Officer, 123 Privacy Lane, San Francisco,
-                CA 94107
+                {t(
+                  "Mail: Data Protection Officer, 123 Privacy Lane, San Francisco, CA 94107"
+                )}
               </li>
             </ul>
           </div>
@@ -145,16 +146,11 @@ export default function PrivacyPolicyPage() {
 
       <div className="prose prose-lg max-w-none text-gray-700">
         <h2 className="text-2xl font-bold text-gray-900 mb-4">
-          Additional Information
+          {t("Additional Information")}
         </h2>
-        <p>
-          We may update this policy periodically. Significant changes will be
-          notified through email or website notices. Continued use of our
-          services constitutes acceptance of the updated policy.
-        </p>
+        <p>{t("We may update this policy periodically")}</p>
         <p className="mt-4">
-          For questions about this policy or our privacy practices, please
-          contact us using the information above.
+          {t("For questions about this policy or our privacy practices")}
         </p>
       </div>
     </main>
