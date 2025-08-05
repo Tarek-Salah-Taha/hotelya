@@ -166,7 +166,11 @@ export default function FilteredHotelList({
             <Spinner />
           </div>
         ) : filteredHotels.length === 0 ? (
-          <NoResults message="Sorry, we couldn't find any hotels matching your filters." />
+          <NoResults
+            message={tFilters(
+              "Sorry, we couldn't find any hotels matching your filters"
+            )}
+          />
         ) : (
           <HotelCard
             hotels={filteredHotels}

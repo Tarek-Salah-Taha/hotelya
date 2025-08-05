@@ -66,14 +66,14 @@ export default function Page() {
   const handleCancelBooking = async function (bookingId: string) {
     try {
       await cancelBooking(bookingId);
-      toast.success("Booking has been cancelled.");
+      toast.success(tBooking("Booking has been cancelled"));
       setBookings((prev) =>
         prev.map((b) =>
           b.id === bookingId ? { ...b, status: "Cancelled" } : b
         )
       );
     } catch {
-      toast.error("Failed to cancel booking.");
+      toast.error(tBooking("Failed to cancel booking"));
     }
   };
 
@@ -91,9 +91,9 @@ export default function Page() {
     setIsLoading(true);
     getBookingsByUser(user.id, locale as SupportedLang)
       .then((data) => setBookings(data))
-      .catch(() => toast.error("Failed to load bookings"))
+      .catch(() => toast.error(tBooking("Failed to load bookings")))
       .finally(() => setIsLoading(false));
-  }, [user, locale]);
+  }, [user, locale, tBooking]);
 
   const today = new Date();
 
@@ -250,12 +250,14 @@ export default function Page() {
       {filteredBookings.length === 0 ? (
         <div className="bg-gray-50 rounded-xl p-12 text-center">
           <h3 className="text-lg font-medium text-gray-900 mb-2">
-            No {activeTab} bookings found
+            {tBooking("No Bookings Found")}
           </h3>
           <p className="text-gray-600 max-w-md mx-auto">
             {activeTab === "upcoming"
-              ? "You don't have any upcoming reservations. Start planning your next trip!"
-              : "Your past bookings will appear here once you've completed a stay."}
+              ? tBooking("You don't have any upcoming reservations")
+              : tBooking(
+                  "Your past bookings will appear here once you've completed a stay"
+                )}
           </p>
         </div>
       ) : (

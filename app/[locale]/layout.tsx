@@ -5,16 +5,12 @@ import { notFound } from "next/navigation";
 import { routing } from "@/i18n/routing";
 import { ToasterProvider } from "../_components/ToasterProvider";
 import Header from "../_components/Header";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Cairo } from "next/font/google";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
+const cairo = Cairo({
+  subsets: ["latin", "arabic"],
+  weight: ["400", "500", "700"],
+  display: "swap",
 });
 
 export const metadata: Metadata = {
@@ -53,9 +49,7 @@ export default async function RootLayout({
 
   return (
     <html lang={locale} dir={locale === "ar" ? "rtl" : "ltr"}>
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-background`}
-      >
+      <body className={`${cairo.className}  antialiased bg-background`}>
         <NextIntlClientProvider>
           <ToasterProvider />
           <Header />

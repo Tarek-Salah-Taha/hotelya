@@ -128,7 +128,13 @@
     "One child": "طفل واحد",
     "children": "أطفال",
     "One adult": "شخص بالغ واحد",
-    "adults": "بالغين"
+    "adults": "بالغين",
+    "Booking has been cancelled": "تم إلغاء الحجز.",
+    "Failed to cancel booking": "فشل في إلغاء الحجز.",
+    "Failed to load bookings": "فشل تحميل الحجوزات.",
+    "No bookings found": "لم يتم العثور على أي حجوزات.",
+    "You don't have any upcoming reservations": "ليس لديك أي حجوزات قادمة. ابدأ بالتخطيط لرحلتك القادمة!",
+    "Your past bookings will appear here once you've completed a stay": "ستظهر حجوزاتك السابقة هنا بمجرد الانتهاء من إقامتك."
   },
 
   "SigninPage": {
@@ -215,7 +221,8 @@
     "Reset": "إعادة ضبط",
     "Hide filters": "إخفاء التصفيات",
     "Show filters": "إظهار التصفيات",
-    "All Countries": "جميع البلدان"
+    "All Countries": "جميع البلدان",
+    "Sorry, we couldn't find any hotels matching your filters": "نأسف، لم نتمكن من العثور على أي فنادق تطابق مرشحاتك."
   },
 
   "HotelsPage": {
@@ -570,7 +577,7 @@
     "Contact Information": "معلومات الاتصال",
     "For questions about these Terms & Conditions, please contact us at:": "للحصول على أسئلة حول هذه الشروط والأحكام ، يرجى الاتصال بنا على:",
     "Email:": "بريد إلكتروني:",
-    "Mail: Hotelya Legal Department, 123 Compliance Way, San Francisco, CA 94107": "البريد: قسم الشؤون القانونية في هوتيليا، 123 طريق الامتثال، سان فرانسيسكو، كاليفورنيا 94107",
+    "Mail: Hotelya Legal Department, 123 Compliance Way, San Francisco, CA 94107": "البريد: قسم الشؤون القانونية في  123 Hotelya طريق الامتثال، سان فرانسيسكو، كاليفورنيا 94107",
     "Phone: +1 (800) 555-LEGAL (Business hours: Mon-Fri 9AM-5PM PST)": "الهاتف: +1 (800) 555-Legal (ساعات العمل: Mon-Fri 9 صباحًا-5 مساءً بتوقيت المحيط الهادئ)",
     "Booking Policies": "سياسات الحجز",
     "Payment Terms": "شروط الدفع",
@@ -668,5 +675,9 @@
     "Text can be zoomed to 200% without loss of functionality": "يمكن تكبير النص إلى 200% دون فقدان الوظائف",
     "Consistent Navigation": "التنقل الثابت",
     "Predictable structure and labeling across all pages": "بنية وتصنيف يمكن التنبؤ بها عبر جميع الصفحات"
+  },
+
+  "NoResultsPage": {
+    "Reset Filters": "إعادة ضبط"
   }
 }

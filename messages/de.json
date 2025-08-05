@@ -127,7 +127,13 @@
     "One child": "Ein Kind",
     "children": "Kinder",
     "One adult": "Ein Erwachsener",
-    "adults": "Erwachsene"
+    "adults": "Erwachsene",
+    "Booking has been cancelled": "Die Buchung wurde storniert.",
+    "Failed to cancel booking": "Stornierung der Buchung fehlgeschlagen.",
+    "Failed to load bookings": "Buchungen konnten nicht geladen werden.",
+    "No bookings found": "Keine Buchungen gefunden.",
+    "You don't have any upcoming reservations": "Sie haben keine bevorstehenden Reservierungen. Beginnen Sie mit der Planung Ihrer nächsten Reise!",
+    "Your past bookings will appear here once you've completed a stay": "Ihre vergangenen Buchungen werden hier angezeigt, sobald Sie einen Aufenthalt abgeschlossen haben."
   },
 
   "SigninPage": {
@@ -214,7 +220,8 @@
     "Reset": "Zurücksetzen",
     "Hide filters": "Filter ausblenden",
     "Show filters": "Filter anzeigen",
-    "All Countries": "Alle Länder"
+    "All Countries": "Alle Länder",
+    "Sorry, we couldn't find any hotels matching your filters": "Leider konnten wir keine Hotels finden, die Ihren Filtern entsprechen."
   },
 
   "HotelsPage": {
@@ -667,5 +674,9 @@
     "Text can be zoomed to 200% without loss of functionality": "Text kann auf 200% vergrößert werden, ohne dass die Funktionalität beeinträchtigt wird",
     "Consistent Navigation": "Konsistente Navigation",
     "Predictable structure and labeling across all pages": "Vorhersehbare Struktur und Beschriftung auf allen Seiten"
+  },
+
+  "NoResultsPage": {
+    "Reset Filters": "Filter zurücksetzen"
   }
 }

@@ -200,7 +200,13 @@
     "One child": "Un enfant",
     "children": "enfants",
     "One adult": "Un adulte",
-    "adults": "adultes"
+    "adults": "adultes",
+    "Booking has been cancelled": "La réservation a été annulée.",
+    "Failed to cancel booking": "Impossible d'annuler la réservation.",
+    "Failed to load bookings": "Échec du chargement des réservations.",
+    "No bookings found": "Aucune réservation trouvée.",
+    "You don't have any upcoming reservations": "Vous n'avez aucune réservation à venir. Commencez à planifier votre prochain voyage !",
+    "Your past bookings will appear here once you've completed a stay": "Vos réservations passées apparaîtront ici une fois que vous aurez terminé un séjour."
   },
 
   "SigninPage": {
@@ -287,7 +293,8 @@
     "Reset": "Réinitialiser",
     "Hide filters": "Masquer les filtres",
     "Show filters": "Afficher les filtres",
-    "All Countries": "Tous les pays"
+    "All Countries": "Tous les pays",
+    "Sorry, we couldn't find any hotels matching your filters": "Désolé, nous n'avons trouvé aucun hôtel correspondant à vos filtres."
   },
 
   "HotelsPage": {
@@ -624,7 +631,7 @@
     "Optional (disabled by default)": "Facultatif (désactivé par défaut)"
   },
 
-    "AccessibilityPage": {
+  "AccessibilityPage": {
     "Accessibility Statement": "Déclaration d'accessibilité",
     "Last updated: August 1, 2025": "Dernière mise à jour : 1 août 2025",
     "At Hotelya, we are committed to ensuring digital accessibility for people with disabilities": "Chez Hotelya, nous nous engageons à garantir l'accessibilité numérique pour les personnes handicapées. Nous améliorons continuellement l'expérience utilisateur pour tous et appliquons les normes d'accessibilité pertinentes.",
@@ -665,6 +672,9 @@
     "Text can be zoomed to 200% without loss of functionality": "Le texte peut être agrandi jusqu'à 200% sans perte de fonctionnalité",
     "Consistent Navigation": "Navigation cohérente",
     "Predictable structure and labeling across all pages": "Structure et étiquetage prévisibles sur toutes les pages"
-}
+  },
 
+  "NoResultsPage": {
+    "Reset Filters": "Réinitialiser les filtres"
+  }
 }
