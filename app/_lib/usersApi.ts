@@ -1,7 +1,8 @@
 import { FormValues, LoginData, RegisterData } from "../_types/types";
 import supabase from "./supabase";
 
-export async function registerUser({
+// Registers a new user and saves their profile info in the database.
+export async function signUpUserWithProfile({
   email,
   password,
   firstName,
@@ -36,7 +37,8 @@ export async function registerUser({
   return { user: authData.user };
 }
 
-export async function loginUser({ email, password }: LoginData) {
+// Logs in a user with email and password, and fetches their first name from the profile.
+export async function loginUserWithProfile({ email, password }: LoginData) {
   const { data, error } = await supabase.auth.signInWithPassword({
     email,
     password,
@@ -59,7 +61,8 @@ export async function loginUser({ email, password }: LoginData) {
   };
 }
 
-export async function logoutUser() {
+// Signs out the currently authenticated user from the session.
+export async function signOutUser() {
   const { error } = await supabase.auth.signOut();
 
   if (error) {
@@ -69,7 +72,8 @@ export async function logoutUser() {
   return { success: true };
 }
 
-export async function getUserProfile(userId: string) {
+// Fetches the full profile data of a user by their ID.
+export async function fetchUserProfile(userId: string) {
   const { data, error } = await supabase
     .from("users")
     .select("*")
@@ -83,7 +87,8 @@ export async function getUserProfile(userId: string) {
   return data;
 }
 
-export async function updateUserProfile(
+// Updates the user's profile in the database using their ID.
+export async function updateUserProfileById(
   userId: string,
   data: Partial<FormValues>
 ) {
@@ -96,7 +101,8 @@ export async function updateUserProfile(
   return { success: true };
 }
 
-export async function uploadAvatar(file: File): Promise<string> {
+// Uploads a user avatar to Supabase storage and returns the public URL.
+export async function uploadUserAvatar(file: File): Promise<string> {
   const fileExt = file.name.split(".").pop();
   const fileName = `${Date.now()}.${fileExt}`;
   const filePath = `avatars/${fileName}`;

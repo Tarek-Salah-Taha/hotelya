@@ -6,9 +6,9 @@ import { useForm } from "react-hook-form";
 import { useUser } from "../_hooks/useUser";
 import toast from "react-hot-toast";
 import {
-  getUserProfile,
-  updateUserProfile,
-  uploadAvatar,
+  fetchUserProfile,
+  updateUserProfileById,
+  uploadUserAvatar,
 } from "../_lib/usersApi";
 import { FormValues } from "../_types/types";
 import { motion } from "framer-motion";
@@ -31,7 +31,7 @@ export default function Profile() {
     if (!user?.id) return;
 
     const loadProfile = async () => {
-      const data = await getUserProfile(user.id);
+      const data = await fetchUserProfile(user.id);
 
       if (data) {
         const fields: (keyof FormValues)[] = [
@@ -70,7 +70,7 @@ export default function Profile() {
     setIsUploading(true);
 
     try {
-      const uploadedUrl = await uploadAvatar(file);
+      const uploadedUrl = await uploadUserAvatar(file);
 
       if (uploadedUrl && typeof uploadedUrl === "string") {
         setAvatarUrl(uploadedUrl);
@@ -98,7 +98,7 @@ export default function Profile() {
     };
 
     try {
-      const { error } = await updateUserProfile(user.id, safeData);
+      const { error } = await updateUserProfileById(user.id, safeData);
 
       if (error) {
         console.error("❌ Update failed:", error);

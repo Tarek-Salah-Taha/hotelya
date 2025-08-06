@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { loginUser } from "../_lib/usersApi";
+import { loginUserWithProfile } from "../_lib/usersApi";
 import toast from "react-hot-toast";
 import { FiEye, FiEyeOff, FiLoader } from "react-icons/fi";
 import { usePathname } from "next/navigation";
@@ -42,7 +42,7 @@ export default function Login() {
     setError("");
 
     try {
-      const { user, error, userName } = await loginUser(form);
+      const { user, error, userName } = await loginUserWithProfile(form);
 
       if (error) {
         setError(error);

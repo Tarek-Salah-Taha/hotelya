@@ -36,6 +36,8 @@ type Props = {
 };
 
 export default function HotelFilters({ filters, onApplyFilters }: Props) {
+  // console.log(filters);
+
   const initialState = useMemo(
     () => ({
       selectedContinents: [] as string[],
@@ -111,6 +113,8 @@ export default function HotelFilters({ filters, onApplyFilters }: Props) {
 
   const continents = getLocalizedValues("continent");
 
+  console.log(continents);
+
   const countries = Array.from(
     new Set(
       filters
@@ -139,6 +143,7 @@ export default function HotelFilters({ filters, onApplyFilters }: Props) {
     const matchContinent =
       filterState.selectedContinents.length === 0 ||
       filterState.selectedContinents.includes(hotel.continent);
+
     const matchCountry =
       !filterState.selectedCountry ||
       hotel.country === filterState.selectedCountry;
@@ -191,7 +196,7 @@ export default function HotelFilters({ filters, onApplyFilters }: Props) {
     if (filterState.selectedCity) params.set("city", filterState.selectedCity);
     if (filterState.minPrice > 0)
       params.set("minPrice", filterState.minPrice.toString());
-    if (filterState.maxPrice < 0)
+    if (filterState.maxPrice > 0)
       params.set("maxPrice", filterState.maxPrice.toString());
     if (filterState.selectedRatings.length)
       params.set("ratingLabels", filterState.selectedRatings.join(","));
@@ -221,8 +226,6 @@ export default function HotelFilters({ filters, onApplyFilters }: Props) {
       paymentOptions: [],
       languagesSpoken: [],
     });
-
-    setTimeout(() => setLoading(false), 500);
   };
 
   const resetFilters = async () => {
@@ -560,7 +563,6 @@ export default function HotelFilters({ filters, onApplyFilters }: Props) {
               <input
                 type="number"
                 placeholder="Max"
-                max={filterState.maxPrice}
                 className="w-1/2 border border-gray-300 p-2 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
                 value={filterState.maxPrice}
                 onChange={(e) =>

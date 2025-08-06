@@ -1,25 +1,20 @@
-import { HotelSuggestion, Suggestion } from "../_types/types";
+import { HotelSuggestion, Suggestion, SupportedLang } from "../_types/types";
 import supabase from "./supabase";
 
-export async function fetchDestinationSuggestions(
-  query: string
+// Fetches unique city and country destination suggestions based on the user's search query and locale.
+export async function fetchLocalizedDestinationSuggestions(
+  query: string,
+  locale: SupportedLang = "en"
 ): Promise<Suggestion[]> {
   if (query.trim().length < 2) return [];
 
-  const languages = ["en"];
-  // const languages = ["en", "ar", "fr", "es", "de", "it"];
-
-  const fields = languages.flatMap((locale) => [
-    `city_${locale}`,
-    `country_${locale}`,
-  ]);
-
-  const orFilter = fields.map((field) => `${field}.ilike.%${query}%`).join(",");
+  const cityField = `city_${locale}`;
+  const countryField = `country_${locale}`;
 
   const { data, error } = await supabase
     .from("hotels")
-    .select(fields.join(","))
-    .or(orFilter)
+    .select(`${cityField}, ${countryField}`)
+    .or(`${cityField}.ilike.%${query}%,${countryField}.ilike.%${query}%`)
     .limit(15);
 
   if (error || !data) {
@@ -30,13 +25,11 @@ export async function fetchDestinationSuggestions(
   const suggestions: Set<string> = new Set();
 
   (data as unknown as HotelSuggestion[]).forEach((hotel) => {
-    languages.forEach((locale) => {
-      const city = hotel[`city_${locale}`];
-      const country = hotel[`country_${locale}`];
-      if (city && country) {
-        suggestions.add(`${city}, ${country}`);
-      }
-    });
+    const city = hotel[cityField];
+    const country = hotel[countryField];
+    if (city && country) {
+      suggestions.add(`${city}, ${country}`);
+    }
   });
 
   return Array.from(suggestions);

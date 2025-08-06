@@ -1,10 +1,9 @@
-// ✅ INTEGRATED & FINALIZED FILTERED HOTEL FETCHING SYSTEM
-
 import supabase from "./supabase";
 import { Hotel, HotelCardData, SupportedLang } from "../_types/types";
 import { normalizeLocalizedFields } from "./normalizeLocalizedFields";
 
-export async function fetchBasicHotelInfo(
+// Fetches a paginated list of hotels with localized fields based on the selected language.
+export async function fetchPaginatedHotelsWithLocalization(
   page: number = 1,
   limit: number = 15,
   locale: SupportedLang = "en"
@@ -48,7 +47,8 @@ export async function fetchBasicHotelInfo(
   );
 }
 
-export async function fetchHotelCount(): Promise<number> {
+// Returns the total number of hotels from the database.
+export async function fetchTotalHotelCount(): Promise<number> {
   const { count, error } = await supabase
     .from("hotel_with_standard_room")
     .select("id", { count: "exact", head: true });
@@ -61,7 +61,8 @@ export async function fetchHotelCount(): Promise<number> {
   return count ?? 0;
 }
 
-export async function fetchHotelInfo(id: string): Promise<Hotel> {
+// Fetches full hotel details by its unique ID.
+export async function fetchHotelById(id: string): Promise<Hotel> {
   const { data, error } = await supabase
     .from("hotel_with_standard_room")
     .select("*")
@@ -75,6 +76,7 @@ export async function fetchHotelInfo(id: string): Promise<Hotel> {
   return data;
 }
 
+// Fetches and returns a filtered, localized, and paginated list of hotels with total count.
 export async function fetchFilteredHotels(filters: {
   continent?: string | string[];
   country?: string;
@@ -88,7 +90,7 @@ export async function fetchFilteredHotels(filters: {
   locale: SupportedLang;
   page?: number;
   limit?: number;
-  sort?: string; // Add this line
+  sort?: string;
 }): Promise<{ data: HotelCardData[]; count: number }> {
   const {
     continent,
@@ -175,7 +177,10 @@ export async function fetchFilteredHotels(filters: {
 
   const { data, error } = await query;
 
-  if (error) throw new Error(error.message);
+  if (error) {
+    console.error("Error fetching filtered hotels", error.details, filters);
+    throw new Error("Unable to load hotels");
+  }
 
   // ✅ Normalize + manual filter
   let filtered = (data as unknown as HotelCardData[]).map((hotel) =>
@@ -231,28 +236,23 @@ export async function fetchFilteredHotels(filters: {
   };
 }
 
-export async function fetchFilteredHotelCount(
+// Returns the number of hotels matching the given city in the selected locale.
+export async function fetchHotelCountByCity(
   city: string,
-  country: string = "",
   locale: SupportedLang = "en"
 ) {
   let query = supabase
     .from("hotel_with_standard_room")
     .select("id", { count: "exact", head: true });
 
-  if (city && country) {
-    query = query
-      .ilike(`city_${locale}`, `%${city}%`)
-      .ilike(`country_${locale}`, `%${country}%`);
-  } else if (city) {
-    query = query.ilike(`city_${locale}`, `%${city}%`);
-  }
+  query = query.ilike(`city_${locale}`, `%${city}%`);
 
   const { count, error } = await query;
   return { count, error };
 }
 
-export async function getHotelsByIds(
+// Fetches multiple hotels by their IDs with localized fields for the given locale.
+export async function fetchHotelsByIds(
   hotelIds: string[],
   locale: SupportedLang = "en"
 ): Promise<HotelCardData[]> {

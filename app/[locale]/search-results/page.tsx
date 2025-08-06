@@ -1,6 +1,6 @@
 import HotelCard from "@/app/_components/HotelCard";
 import {
-  fetchFilteredHotelCount,
+  fetchHotelCountByCity,
   fetchFilteredHotels,
 } from "@/app/_lib/hotelsApi";
 import { normalizeLocalizedFields } from "@/app/_lib/normalizeLocalizedFields";
@@ -8,15 +8,16 @@ import { HotelCardData, SupportedLang } from "@/app/_types/types";
 import { notFound } from "next/navigation";
 
 export default async function SearchResultsPage({
+  params,
   searchParams,
 }: {
-  searchParams: Promise<{
+  params: { locale: SupportedLang };
+  searchParams: {
     destination?: string;
     page?: string;
-    locale: SupportedLang;
-  }>;
+  };
 }) {
-  const resolvedParams = await searchParams;
+  const resolvedParams = searchParams;
 
   const destination = resolvedParams?.destination?.trim() || "";
   if (!destination) notFound();
@@ -24,7 +25,7 @@ export default async function SearchResultsPage({
   const page = parseInt(resolvedParams?.page || "1", 10);
   const limit = 15;
 
-  const locale = resolvedParams?.locale || "en";
+  const locale = params.locale || "en";
 
   const [hotelsResult, countResult] = await Promise.all([
     fetchFilteredHotels({
@@ -33,8 +34,10 @@ export default async function SearchResultsPage({
       page,
       limit,
     }),
-    fetchFilteredHotelCount(destination, "", locale),
+    fetchHotelCountByCity(destination, locale),
   ]);
+
+  console.log(hotelsResult, countResult);
 
   const totalPages = Math.ceil((countResult.count || 0) / limit);
 
@@ -54,7 +57,6 @@ export default async function SearchResultsPage({
         currentPage={page}
         totalPages={totalPages}
         basePath="/search-results"
-        // basePath={`${locale}/search-results`}
         destination={destination}
       />
     </div>

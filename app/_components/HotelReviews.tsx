@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "react-hot-toast";
-import { addHotelReview, getHotelReviews } from "../_lib/reviewsApi";
+import { submitHotelReview, fetchHotelReviews } from "../_lib/reviewsApi";
 import StarRating from "./StarRating";
 import { HotelReviewsProps } from "../_types/types";
 import { useTranslations } from "next-intl";
@@ -58,8 +58,8 @@ export default function HotelReviews({
 
     setLoading(true);
     try {
-      await addHotelReview(hotelId, author, rating, comment);
-      const updated = await getHotelReviews(hotelId);
+      await submitHotelReview(hotelId, author, rating, comment);
+      const updated = await fetchHotelReviews(hotelId);
       setReviews(updated);
       setAuthor("");
       setRating(10);

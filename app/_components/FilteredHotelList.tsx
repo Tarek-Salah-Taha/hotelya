@@ -66,8 +66,6 @@ export default function FilteredHotelList({
   }, [searchParams]);
 
   useEffect(() => {
-    const hasFilters = searchParams.toString() !== "";
-
     const fetchData = async () => {
       try {
         const result = await fetchFilteredHotels({
@@ -87,14 +85,22 @@ export default function FilteredHotelList({
       }
     };
 
-    if (hasFilters) {
+    if ([...searchParams.keys()].length > 0) {
       setIsLoading(true);
       fetchData();
     } else {
       setFilteredHotels(initialHotels);
+      setTotalPages(initialTotalPages);
       setIsLoading(false);
     }
-  }, [filterParams, currentPage, locale, searchParams, initialHotels]);
+  }, [
+    filterParams,
+    currentPage,
+    locale,
+    searchParams,
+    initialHotels,
+    initialTotalPages,
+  ]);
 
   return (
     <>
@@ -177,8 +183,6 @@ export default function FilteredHotelList({
             currentPage={currentPage}
             totalPages={totalPages}
             basePath="/hotels"
-            // Remove this line:
-            // onPageChange={(page) => setCurrentPage(page)}
           />
         )}
       </main>

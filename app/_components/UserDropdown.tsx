@@ -4,7 +4,7 @@ import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useUser } from "../_hooks/useUser";
-import { logoutUser } from "../_lib/usersApi";
+import { signOutUser } from "../_lib/usersApi";
 import { usePathname, useRouter } from "next/navigation";
 import { SupportedLang } from "../_types/types";
 import { useTranslations } from "next-intl";
@@ -48,7 +48,7 @@ export default function UserDropdown() {
   };
 
   const handleLogout = async () => {
-    await logoutUser();
+    await signOutUser();
     router.push(`/${locale}`);
   };
 

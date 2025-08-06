@@ -1,7 +1,8 @@
 import { SupportedLang } from "../_types/types";
 import supabase from "./supabase";
 
-export async function createBooking(booking: {
+// Creates a new hotel booking with the given details and default status if not provided.
+export async function createHotelBooking(booking: {
   userId: string;
   hotelId: number;
   roomId: number;
@@ -27,7 +28,8 @@ export async function createBooking(booking: {
   return data;
 }
 
-export async function getBookingsByUser(
+// Fetches all bookings for a user along with localized hotel details.
+export async function fetchUserBookingsWithHotelInfo(
   userId: string,
   locale: SupportedLang = "en"
 ) {
@@ -42,7 +44,8 @@ export async function getBookingsByUser(
   return data;
 }
 
-export async function getBookedDateRanges(roomId: number) {
+// Retrieves all booked check-in and check-out date ranges for the given room.
+export async function fetchBookedDateRangesByRoom(roomId: number) {
   const { data, error } = await supabase
     .from("bookings")
     .select("checkInDate, checkOutDate")
@@ -52,7 +55,8 @@ export async function getBookedDateRanges(roomId: number) {
   return data;
 }
 
-export async function cancelBooking(bookingId: string) {
+// Updates the status of a booking to "Cancelled" by its ID.
+export async function cancelHotelBooking(bookingId: string) {
   const { data, error } = await supabase
     .from("bookings")
     .update({ status: "Cancelled" })

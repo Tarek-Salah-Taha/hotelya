@@ -5,7 +5,10 @@ import Image from "next/image";
 import { IoLocationSharp } from "react-icons/io5";
 import { FaHeart, FaRegHeart } from "react-icons/fa";
 import { useRouter } from "next/navigation";
-import { addFavorite, removeFavorite } from "../_lib/favoritesApi";
+import {
+  addHotelToFavorites,
+  removeHotelFromFavorites,
+} from "../_lib/favoritesApi";
 import { iconMap, availableTags } from "../_constants/availableTags";
 import getRatingLabel from "../_lib/getRatingLabel";
 import { HotelCardItemProps } from "../_types/types";
@@ -37,10 +40,10 @@ export default function HotelCardItem({ hotel }: HotelCardItemProps) {
 
     try {
       if (!isFavorite) {
-        await addFavorite(user.id, hotel.id);
+        await addHotelToFavorites(user.id, hotel.id);
         toast.success(tFavorites("Added to favorites"));
       } else {
-        await removeFavorite(user.id, hotel.id);
+        await removeHotelFromFavorites(user.id, hotel.id);
         toast.success(tFavorites("Removed from favorites"));
       }
     } catch (err) {

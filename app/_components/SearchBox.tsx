@@ -3,9 +3,10 @@
 import { useEffect, useState } from "react";
 import { FaMapMarkerAlt } from "react-icons/fa";
 import { usePathname, useRouter } from "next/navigation";
-import { fetchDestinationSuggestions } from "../_lib/suggestionsApi";
+import { fetchLocalizedDestinationSuggestions } from "../_lib/suggestionsApi";
 import { motion, AnimatePresence } from "framer-motion";
 import { useTranslations } from "next-intl";
+import { SupportedLang } from "../_types/types";
 
 function SearchBox() {
   const [destination, setDestination] = useState("");
@@ -14,8 +15,19 @@ function SearchBox() {
   const [suggestions, setSuggestions] = useState<string[]>([]);
   const [isFocused, setIsFocused] = useState(false);
 
+  console.log(suggestions);
+
   const pathname = usePathname();
-  const locale = pathname.split("/")[1] || "en";
+
+  const localeFromPath = pathname.split("/")[1] || "en";
+  const supportedLangs: SupportedLang[] = ["en", "ar", "fr", "es", "de", "it"];
+
+  const locale: SupportedLang = supportedLangs.includes(
+    localeFromPath as SupportedLang
+  )
+    ? (localeFromPath as SupportedLang)
+    : "en";
+
   const router = useRouter();
   const t = useTranslations("HomePage");
 
@@ -39,7 +51,10 @@ function SearchBox() {
   useEffect(() => {
     const loadSuggestions = async () => {
       if (destination.length >= 2) {
-        const results = await fetchDestinationSuggestions(destination);
+        const results = await fetchLocalizedDestinationSuggestions(
+          destination,
+          locale
+        );
         setSuggestions(results);
       } else {
         setSuggestions([]);
@@ -51,7 +66,7 @@ function SearchBox() {
     }, 300);
 
     return () => clearTimeout(timer);
-  }, [destination]);
+  }, [destination, locale]);
 
   const handleSelectSuggestion = (suggestion: string) => {
     setDestination(suggestion);

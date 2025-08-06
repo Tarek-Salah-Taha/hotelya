@@ -1,6 +1,9 @@
 // app/(locale)/hotels/page.tsx or similar
-import { fetchBasicHotelInfo, fetchHotelCount } from "@/app/_lib/hotelsApi";
-import { fetchFilters } from "@/app/_lib/filtersApi";
+import {
+  fetchPaginatedHotelsWithLocalization,
+  fetchTotalHotelCount,
+} from "@/app/_lib/hotelsApi";
+import { fetchHotelFiltersData } from "@/app/_lib/filtersApi";
 import FilteredHotelList from "@/app/_components/FilteredHotelList";
 import { SupportedLang } from "@/app/_types/types";
 import { notFound } from "next/navigation";
@@ -19,13 +22,14 @@ export default async function Page({
   const currentPage = parseInt(pageStr, 10) || 1;
   const limit = 15;
 
-  const [hotels, filters] = await Promise.all([
-    fetchBasicHotelInfo(currentPage, limit, locale),
-    fetchFilters({ locale }),
+  const [hotels, filters, totalCount] = await Promise.all([
+    fetchPaginatedHotelsWithLocalization(currentPage, limit, locale),
+    fetchHotelFiltersData({ locale }),
+    fetchTotalHotelCount(),
   ]);
 
-  const totalCount =
-    hotels.length < limit ? hotels.length : await fetchHotelCount();
+  console.log(filters);
+
   const totalPages = Math.ceil(totalCount / limit);
 
   if (!hotels || hotels.length === 0) notFound();

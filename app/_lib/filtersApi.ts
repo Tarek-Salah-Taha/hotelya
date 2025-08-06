@@ -2,7 +2,8 @@ import { SupportedLang, HotelFilterData } from "../_types/types";
 import supabase from "./supabase";
 import { normalizeLocalizedFields } from "./normalizeLocalizedFields";
 
-export async function fetchFilters({
+// Fetches hotel data with localized fields used to generate filter options.
+export async function fetchHotelFiltersData({
   locale,
 }: {
   locale: SupportedLang;
@@ -28,7 +29,8 @@ export async function fetchFilters({
 
   const { data, error } = await supabase
     .from("hotel_with_standard_room")
-    .select(selectFields);
+    .select(selectFields)
+    .range(0, 1200);
 
   if (error) throw new Error(error.message || "Failed to fetch filters");
 

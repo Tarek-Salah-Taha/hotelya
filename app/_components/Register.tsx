@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { registerUser } from "../_lib/usersApi";
+import { signUpUserWithProfile } from "../_lib/usersApi";
 import toast from "react-hot-toast";
 import Link from "next/link";
 import { FiEye, FiEyeOff, FiLoader } from "react-icons/fi";
@@ -43,7 +43,7 @@ export default function Register() {
     setError("");
 
     try {
-      const { user, error } = await registerUser(form);
+      const { user, error } = await signUpUserWithProfile(form);
 
       if (error) {
         setError(error);

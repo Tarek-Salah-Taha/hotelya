@@ -4,7 +4,10 @@ import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import toast from "react-hot-toast";
 import Image from "next/image";
-import { getBookingsByUser, cancelBooking } from "../_lib/bookingsApi";
+import {
+  fetchUserBookingsWithHotelInfo,
+  cancelHotelBooking,
+} from "../_lib/bookingsApi";
 import { usePathname, useRouter } from "next/navigation";
 import { Booking, SupportedLang } from "../_types/types";
 import { useUser } from "../_hooks/useUser";
@@ -65,7 +68,7 @@ export default function Page() {
 
   const handleCancelBooking = async function (bookingId: string) {
     try {
-      await cancelBooking(bookingId);
+      await cancelHotelBooking(bookingId);
       toast.success(tBooking("Booking has been cancelled"));
       setBookings((prev) =>
         prev.map((b) =>
@@ -89,7 +92,7 @@ export default function Page() {
     }
 
     setIsLoading(true);
-    getBookingsByUser(user.id, locale as SupportedLang)
+    fetchUserBookingsWithHotelInfo(user.id, locale as SupportedLang)
       .then((data) => setBookings(data))
       .catch(() => toast.error(tBooking("Failed to load bookings")))
       .finally(() => setIsLoading(false));

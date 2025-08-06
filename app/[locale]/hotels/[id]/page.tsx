@@ -1,8 +1,8 @@
 import HotelPage from "@/app/_components/HotelPage";
 import HotelReviews from "@/app/_components/HotelReviews";
-import { fetchHotelInfo } from "@/app/_lib/hotelsApi";
-import { getHotelReviews } from "@/app/_lib/reviewsApi";
-import { getRooms } from "@/app/_lib/roomsApi";
+import { fetchHotelById } from "@/app/_lib/hotelsApi";
+import { fetchHotelReviews } from "@/app/_lib/reviewsApi";
+import { fetchRoomsByHotelId } from "@/app/_lib/roomsApi";
 import { transformHotelFields } from "@/app/_lib/transformHotel";
 import { SupportedLang } from "@/app/_types/types";
 
@@ -17,9 +17,9 @@ export default async function Page({ params }: PageParams) {
   const { id, locale } = await params;
 
   const [rawHotel, reviews, rooms] = await Promise.all([
-    fetchHotelInfo(id),
-    getHotelReviews(id),
-    getRooms(id),
+    fetchHotelById(id),
+    fetchHotelReviews(id),
+    fetchRoomsByHotelId(id),
   ]);
 
   const hotel = transformHotelFields(rawHotel, locale);
