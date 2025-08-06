@@ -1,7 +1,7 @@
 "use client";
 
 import { useUser } from "@/app/_hooks/useUser";
-import { createBooking } from "@/app/_lib/bookingsApi";
+import { createHotelBooking } from "@/app/_lib/bookingsApi";
 import { useSearchParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import DatePicker from "react-datepicker";
@@ -81,7 +81,7 @@ export default function BookingPage({
     }
 
     try {
-      await createBooking({
+      await createHotelBooking({
         userId: user.id,
         hotelId,
         roomId,

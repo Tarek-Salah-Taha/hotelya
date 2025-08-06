@@ -11,21 +11,22 @@ export default async function SearchResultsPage({
   params,
   searchParams,
 }: {
-  params: { locale: SupportedLang };
-  searchParams: {
+  params: Promise<{ locale: SupportedLang }>;
+  searchParams: Promise<{
     destination?: string;
     page?: string;
-  };
+  }>;
 }) {
-  const resolvedParams = searchParams;
+  const resolvedParams = await params;
+  const resolvedSearchParams = await searchParams;
 
-  const destination = resolvedParams?.destination?.trim() || "";
+  const destination = resolvedSearchParams.destination?.trim() || "";
   if (!destination) notFound();
 
-  const page = parseInt(resolvedParams?.page || "1", 10);
+  const page = parseInt(resolvedSearchParams.page || "1", 10);
   const limit = 15;
 
-  const locale = params.locale || "en";
+  const locale = resolvedParams.locale || "en";
 
   const [hotelsResult, countResult] = await Promise.all([
     fetchFilteredHotels({

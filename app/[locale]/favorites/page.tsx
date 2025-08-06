@@ -7,8 +7,10 @@ import { motion, AnimatePresence } from "framer-motion";
 import toast from "react-hot-toast";
 import { useUser } from "@/app/_hooks/useUser";
 import { HotelCardData, SupportedLang } from "@/app/_types/types";
-import { fetchFavorites, removeFavorite } from "@/app/_lib/favoritesApi";
-import { getHotelsByIds } from "@/app/_lib/hotelsApi";
+import {
+  fetchFavoriteHotelIds,
+  removeHotelFromFavorites,
+} from "@/app/_lib/favoritesApi";
 import { usePathname } from "next/navigation";
 import { IoLocationSharp } from "react-icons/io5";
 import { availableTags, iconMap } from "@/app/_constants/availableTags";
@@ -16,6 +18,7 @@ import getRatingLabel from "@/app/_lib/getRatingLabel";
 import { FiArrowRight, FiArrowLeft } from "react-icons/fi";
 import { FaRegTrashAlt } from "react-icons/fa";
 import { useTranslations } from "next-intl";
+import { fetchHotelsByIds } from "@/app/_lib/hotelsApi";
 
 export default function FavoritesPage() {
   const { user, loading } = useUser();
@@ -32,8 +35,8 @@ export default function FavoritesPage() {
 
     const loadFavorites = async () => {
       try {
-        const favoriteIds = await fetchFavorites(user.id);
-        const hotels = await getHotelsByIds(
+        const favoriteIds = await fetchFavoriteHotelIds(user.id);
+        const hotels = await fetchHotelsByIds(
           favoriteIds,
           locale as SupportedLang
         );
@@ -50,7 +53,7 @@ export default function FavoritesPage() {
   const handleRemove = async (hotelId: number) => {
     if (!user) return;
     try {
-      await removeFavorite(user.id, hotelId);
+      await removeHotelFromFavorites(user.id, hotelId);
       setFavorites((prev) => prev.filter((hotel) => hotel.id !== hotelId));
       toast.success(t("Removed from favorites"));
     } catch {
