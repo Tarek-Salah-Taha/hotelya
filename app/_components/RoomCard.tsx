@@ -16,11 +16,7 @@ import { motion } from "framer-motion";
 import { useTranslations } from "next-intl";
 
 function RoomCard({
-  hotelId,
   roomId,
-  hotelName,
-  city,
-  country,
   roomType,
   image,
   priceNew,
@@ -157,17 +153,7 @@ function RoomCard({
             whileHover={{ scale: 1.03 }}
             whileTap={{ scale: 0.97 }}
             className="bg-primary text-white px-8 py-3 rounded-lg font-medium transition-all duration-300 w-full sm:w-auto text-center shadow-md hover:shadow-lg"
-            onClick={() =>
-              router.push(
-                `/${locale}/rooms/${roomId}?price=${priceNew}&roomType=${encodeURIComponent(
-                  roomType
-                )}&hotelId=${hotelId}&hotelName=${encodeURIComponent(
-                  hotelName
-                )}&city=${encodeURIComponent(
-                  city
-                )}&country=${encodeURIComponent(country)}`
-              )
-            }
+            onClick={() => router.push(`/${locale}/rooms/${roomId}`)}
           >
             {tRoomDescriptions("Check Availability")}
           </motion.button>

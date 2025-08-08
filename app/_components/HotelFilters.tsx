@@ -565,6 +565,7 @@ export default function HotelFilters({ filters, onApplyFilters }: Props) {
                 placeholder="Max"
                 className="w-1/2 border border-gray-300 p-2 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
                 value={filterState.maxPrice}
+                min={0}
                 onChange={(e) =>
                   setFilterState((prev) => ({
                     ...prev,

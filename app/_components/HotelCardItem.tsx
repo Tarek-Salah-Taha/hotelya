@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import { IoLocationSharp } from "react-icons/io5";
 import { FaHeart, FaRegHeart } from "react-icons/fa";
@@ -8,6 +8,7 @@ import { useRouter } from "next/navigation";
 import {
   addHotelToFavorites,
   removeHotelFromFavorites,
+  fetchFavoriteHotelIds,
 } from "../_lib/favoritesApi";
 import { iconMap, availableTags } from "../_constants/availableTags";
 import getRatingLabel from "../_lib/getRatingLabel";
@@ -22,13 +23,52 @@ import { useTranslations } from "next-intl";
 export default function HotelCardItem({ hotel }: HotelCardItemProps) {
   const [isFavorite, setIsFavorite] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
-  const { user, loading } = useUser();
+  const { user } = useUser();
 
   const pathname = usePathname();
   const locale = pathname.split("/")[1] || "en";
 
   const tFavorites = useTranslations("FavoritesPage");
+
+  useEffect(() => {
+    let isMounted = true;
+
+    const checkFavoriteStatus = async () => {
+      if (!user?.id) {
+        if (isMounted) {
+          setIsFavorite(false);
+          setIsLoading(false);
+        }
+        return;
+      }
+
+      try {
+        const favorites = await fetchFavoriteHotelIds(user.id);
+        console.log("Favorites:", favorites, "Hotel ID:", hotel.id);
+
+        // Ensure we compare the same types (convert both to string)
+        const isHotelFavorite = favorites.some(
+          (favId: string | number) => String(favId) === String(hotel.id)
+        );
+
+        if (isMounted) {
+          setIsFavorite(isHotelFavorite);
+          setIsLoading(false);
+        }
+      } catch (error) {
+        console.error("Failed to fetch favorites:", error);
+        if (isMounted) setIsLoading(false);
+      }
+    };
+
+    checkFavoriteStatus();
+
+    return () => {
+      isMounted = false;
+    };
+  }, [user, hotel.id]);
 
   const handleFavoriteToggle = async () => {
     if (!user) {
@@ -36,10 +76,12 @@ export default function HotelCardItem({ hotel }: HotelCardItemProps) {
       return;
     }
 
-    setIsFavorite((prev) => !prev);
+    // Optimistic update
+    const newFavoriteStatus = !isFavorite;
+    setIsFavorite(newFavoriteStatus);
 
     try {
-      if (!isFavorite) {
+      if (newFavoriteStatus) {
         await addHotelToFavorites(user.id, hotel.id);
         toast.success(tFavorites("Added to favorites"));
       } else {
@@ -47,13 +89,15 @@ export default function HotelCardItem({ hotel }: HotelCardItemProps) {
         toast.success(tFavorites("Removed from favorites"));
       }
     } catch (err) {
+      // Revert on error
+      setIsFavorite(!newFavoriteStatus);
       toast.error(tFavorites("Something went wrong"));
       console.error(err);
     }
   };
 
-  if (loading) {
-    return <div className="w-12 h-12 rounded-full bg-gray-200 animate-pulse" />; // Or any loading UI
+  if (isLoading) {
+    return <div className="w-12 h-12 rounded-full bg-gray-200 animate-pulse" />;
   }
 
   return (

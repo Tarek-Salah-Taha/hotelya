@@ -1,5 +1,5 @@
 import supabase from "./supabase";
-import { Room } from "../_types/types";
+import { Room, SupportedLang } from "../_types/types";
 
 // Fetches all rooms available for the specified hotel.
 export async function fetchRoomsByHotelId(hotelId: string): Promise<Room[]> {
@@ -17,10 +17,23 @@ export async function fetchRoomsByHotelId(hotelId: string): Promise<Room[]> {
 }
 
 // Fetches detailed information for a single room by its ID.
-export async function fetchRoomById(roomId: string) {
+export async function fetchRoomById(
+  roomId: string,
+  locale: SupportedLang = "en"
+) {
   const { data, error } = await supabase
     .from("rooms")
-    .select("*")
+    .select(
+      `
+      id,
+      hotelId,
+      roomType,
+      priceNew,
+      hotel:hotelId (
+        hotelName_${locale}, city_${locale}, country_${locale}
+      )
+    `
+    )
     .eq("id", roomId)
     .single();
 

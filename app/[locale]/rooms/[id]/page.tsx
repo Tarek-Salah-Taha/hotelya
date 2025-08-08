@@ -2,13 +2,14 @@
 
 import { useUser } from "@/app/_hooks/useUser";
 import { createHotelBooking } from "@/app/_lib/bookingsApi";
-import { useSearchParams, useRouter } from "next/navigation";
+import { fetchRoomById } from "@/app/_lib/roomsApi";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import toast from "react-hot-toast";
 import { use } from "react";
-import { SupportedLang } from "@/app/_types/types";
+import { RoomData, SupportedLang } from "@/app/_types/types";
 import { motion } from "framer-motion";
 import {
   FaUser,
@@ -26,16 +27,11 @@ export default function BookingPage({
 }: {
   params: Promise<{ id: string; locale: SupportedLang }>;
 }) {
-  const searchParams = useSearchParams();
   const router = useRouter();
   const { id, locale } = use(params);
+  console.log(locale, id);
+
   const roomId = Number(id);
-  const hotelId = Number(searchParams.get("hotelId"));
-  const roomType = searchParams.get("roomType");
-  const price = Number(searchParams.get("price"));
-  const hotelName = searchParams.get("hotelName") || "Unknown Hotel";
-  const city = searchParams.get("city") || "Unknown City";
-  const country = searchParams.get("country") || "Unknown Country";
 
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [endDate, setEndDate] = useState<Date | null>(null);
@@ -43,10 +39,41 @@ export default function BookingPage({
   const [children, setChildren] = useState(0);
   const [monthsToShow, setMonthsToShow] = useState(2);
 
+  const [roomData, setRoomData] = useState<RoomData | null>(null);
+
   const { user, loading } = useUser();
 
   const tRoomDescriptions = useTranslations("RoomDescriptions");
   const tRoomTypes = useTranslations("RoomTypes");
+
+  console.log(roomData);
+
+  // Check if hotel is an array and access the first item if it is
+  const hotelData = Array.isArray(roomData?.hotel)
+    ? roomData?.hotel[0]
+    : roomData?.hotel;
+
+  const hotelName = hotelData?.[`hotelName_${locale}`] || "Unknown";
+  const city = hotelData?.[`city_${locale}`] || "Unknown";
+  const country = hotelData?.[`country_${locale}`] || "Unknown";
+
+  const roomType = roomData?.roomType || "";
+  const price = roomData?.priceNew || 0;
+  const hotelId = roomData?.hotelId || 0;
+
+  useEffect(() => {
+    async function loadRoomData() {
+      try {
+        const data = await fetchRoomById(id, locale); // use actual id from params
+        setRoomData(data);
+      } catch (error) {
+        console.error("Failed to fetch room details:", error);
+        toast.error("Failed to load room details");
+      }
+    }
+
+    loadRoomData();
+  }, [id, locale]);
 
   useEffect(() => {
     const handleResize = () => {
