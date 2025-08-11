@@ -10,6 +10,7 @@ import { usePathname } from "next/navigation";
 import { SupportedLang } from "../_types/types";
 import { motion } from "framer-motion";
 import { useTranslations } from "next-intl";
+import { useUserContext } from "../_context/UserContext";
 
 const supportedLocales: SupportedLang[] = ["en", "ar", "fr", "de", "es", "it"];
 
@@ -22,6 +23,7 @@ export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const { setUser } = useUserContext();
 
   const pathname = usePathname();
 
@@ -51,6 +53,7 @@ export default function Login() {
       }
 
       if (user) {
+        setUser(user);
         toast.success(`${t("Welcome back")} ${userName}!`);
         router.push(`/${locale}`);
       }

@@ -1,4 +1,4 @@
-import { FormValues, LoginData, RegisterData } from "../_types/types";
+import { FormValues, RegisterData } from "../_types/types";
 import supabase from "./supabase";
 
 // Registers a new user and saves their profile info in the database.
@@ -38,7 +38,14 @@ export async function signUpUserWithProfile({
 }
 
 // Logs in a user with email and password, and fetches their first name from the profile.
-export async function loginUserWithProfile({ email, password }: LoginData) {
+// _lib/usersApi.ts
+export async function loginUserWithProfile({
+  email,
+  password,
+}: {
+  email: string;
+  password: string;
+}) {
   const { data, error } = await supabase.auth.signInWithPassword({
     email,
     password,
@@ -48,28 +55,39 @@ export async function loginUserWithProfile({ email, password }: LoginData) {
     return { error: error.message };
   }
 
-  const { data: profileData } = await supabase
-    .from("users")
-    .select("firstName")
-    .eq("id", data.user.id)
-    .single();
+  if (data?.user) {
+    const { data: profile } = await supabase
+      .from("users")
+      .select("id, email, firstName, lastName, avatarUrl")
+      .eq("id", data.user.id)
+      .single();
 
-  return {
-    user: data.user,
-    session: data.session,
-    userName: profileData?.firstName || "",
-  };
+    return {
+      user: profile,
+      userName: profile?.firstName || profile?.email,
+      error: null,
+    };
+  }
+
+  return { error: "Login failed" };
 }
 
 // Signs out the currently authenticated user from the session.
 export async function signOutUser() {
-  const { error } = await supabase.auth.signOut();
+  try {
+    const { error } = await supabase.auth.signOut();
+    if (error) throw error;
 
-  if (error) {
-    return { error: error.message };
+    // Clear any client-side user data
+    if (typeof window !== "undefined") {
+      localStorage.removeItem("supabaseUser");
+    }
+
+    return { success: true };
+  } catch (error) {
+    console.error("Sign out error:", error);
+    return { error: error instanceof Error ? error.message : "Logout failed" };
   }
-
-  return { success: true };
 }
 
 // Fetches the full profile data of a user by their ID.

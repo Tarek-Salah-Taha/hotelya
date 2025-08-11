@@ -12,7 +12,7 @@ import { motion } from "framer-motion";
 import { useTranslations } from "next-intl";
 
 function Navigation() {
-  const { user } = useUser();
+  const { user, loading } = useUser();
   const pathname = usePathname();
   const locale = pathname.split("/")[1] || "en";
   const t = useTranslations("Navigation");
@@ -63,7 +63,10 @@ function Navigation() {
           );
         })}
         <li className="mt-2 lg:mt-0">
-          {user ? (
+          {loading && user ? (
+            // Loading state - skeleton loader
+            <div className="w-10 h-10 rounded-full bg-gray-200 animate-pulse" />
+          ) : user ? (
             <UserDropdown />
           ) : (
             <motion.div

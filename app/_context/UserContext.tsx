@@ -1,11 +1,11 @@
 "use client";
 
 import { createContext, useContext, useState } from "react";
-import type { UserProfile } from "../_types/types";
+import { UserProfile } from "../_types/types";
 
 type UserContextType = {
   user: UserProfile | null;
-  setUser: (user: UserProfile | null) => void;
+  setUser: (u: UserProfile | null) => void;
 };
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
@@ -17,6 +17,7 @@ export function UserProvider({
   children: React.ReactNode;
   initialUser: UserProfile | null;
 }) {
+  // Simple state without localStorage persistence
   const [user, setUser] = useState<UserProfile | null>(initialUser);
 
   return (
@@ -28,8 +29,6 @@ export function UserProvider({
 
 export function useUserContext() {
   const ctx = useContext(UserContext);
-  if (!ctx) {
-    throw new Error("useUserContext must be used inside UserProvider");
-  }
+  if (!ctx) throw new Error("useUserContext must be used inside UserProvider");
   return ctx;
 }
