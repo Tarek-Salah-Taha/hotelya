@@ -64,7 +64,6 @@ export default function Page() {
 
   const tRoom = useTranslations("RoomTypes");
 
-  console.log(bookings);
 
   const handleCancelBooking = async function (bookingId: string) {
     try {

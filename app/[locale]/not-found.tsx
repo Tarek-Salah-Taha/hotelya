@@ -21,7 +21,6 @@ export default function NotFound() {
     ? localeFromPath
     : "en";
 
-  console.log("Current language:", locale);
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-background text-text text-center px-4">

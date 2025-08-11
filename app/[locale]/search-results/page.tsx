@@ -1,11 +1,11 @@
 import HotelCard from "@/app/_components/HotelCard";
+import NoResults from "@/app/_components/NoResults";
 import {
   fetchHotelCountByCity,
   fetchFilteredHotels,
 } from "@/app/_lib/hotelsApi";
 import { normalizeLocalizedFields } from "@/app/_lib/normalizeLocalizedFields";
 import { HotelCardData, SupportedLang } from "@/app/_types/types";
-import { notFound } from "next/navigation";
 
 export default async function SearchResultsPage({
   params,
@@ -21,7 +21,6 @@ export default async function SearchResultsPage({
   const resolvedSearchParams = await searchParams;
 
   const destination = resolvedSearchParams.destination?.trim() || "";
-  if (!destination) notFound();
 
   const page = parseInt(resolvedSearchParams.page || "1", 10);
   const limit = 15;
@@ -38,7 +37,17 @@ export default async function SearchResultsPage({
     fetchHotelCountByCity(destination, locale),
   ]);
 
-  console.log(hotelsResult, countResult);
+  if (hotelsResult.data.length === 0 || countResult.count === 0) {
+    return (
+      <NoResults
+        message="No results found"
+        buttonText="Back to search page"
+        destination="/"
+      />
+    );
+  }
+
+
 
   const totalPages = Math.ceil((countResult.count || 0) / limit);
 

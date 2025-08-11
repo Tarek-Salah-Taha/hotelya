@@ -29,7 +29,7 @@ export default function BookingPage({
 }) {
   const router = useRouter();
   const { id, locale } = use(params);
-  console.log(locale, id);
+
 
   const roomId = Number(id);
 
@@ -46,7 +46,6 @@ export default function BookingPage({
   const tRoomDescriptions = useTranslations("RoomDescriptions");
   const tRoomTypes = useTranslations("RoomTypes");
 
-  console.log(roomData);
 
   // Check if hotel is an array and access the first item if it is
   const hotelData = Array.isArray(roomData?.hotel)

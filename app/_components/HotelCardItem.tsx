@@ -46,7 +46,6 @@ export default function HotelCardItem({ hotel }: HotelCardItemProps) {
 
       try {
         const favorites = await fetchFavoriteHotelIds(user.id);
-        console.log("Favorites:", favorites, "Hotel ID:", hotel.id);
 
         // Ensure we compare the same types (convert both to string)
         const isHotelFavorite = favorites.some(

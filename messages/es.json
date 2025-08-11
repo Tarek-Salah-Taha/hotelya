@@ -675,6 +675,8 @@
   },
 
   "NoResultsPage": {
-    "Reset Filters": "Restablecer filtros"
+    "Reset Filters": "Restablecer filtros",
+    "Back to search page": "Volver a la página de busqueda",
+    "No results found": "No se encontraron resultados"
   }
 }

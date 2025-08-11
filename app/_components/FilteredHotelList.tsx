@@ -173,9 +173,9 @@ export default function FilteredHotelList({
           </div>
         ) : filteredHotels.length === 0 ? (
           <NoResults
-            message={tFilters(
-              "Sorry, we couldn't find any hotels matching your filters"
-            )}
+            message="Sorry, we couldn't find any hotels matching your filters"
+            buttonText="Reset Filters"
+            destination="/hotels"
           />
         ) : (
           <HotelCard

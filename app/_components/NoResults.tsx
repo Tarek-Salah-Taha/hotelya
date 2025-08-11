@@ -1,3 +1,5 @@
+"use client";
+
 import { FaRedo } from "react-icons/fa";
 import { motion } from "framer-motion";
 import { useState } from "react";
@@ -5,14 +7,22 @@ import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 
-export default function NoResults({ message }: { message: string }) {
+export default function NoResults({
+  message,
+  buttonText,
+  destination,
+}: {
+  message: string;
+  buttonText: string;
+  destination: string;
+}) {
   const t = useTranslations("NoResultsPage");
   const router = useRouter();
 
   const [isResetHovered, setIsResetHovered] = useState(false);
 
   const handleResetFilters = () => {
-    router.push("/hotels");
+    router.push(destination);
   };
 
   return (
@@ -40,7 +50,7 @@ export default function NoResults({ message }: { message: string }) {
         animate={{ opacity: 1 }}
         transition={{ delay: 0.2 }}
       >
-        {message}
+        {t(message)}
       </motion.h3>
 
       {/* Buttons */}
@@ -67,7 +77,7 @@ export default function NoResults({ message }: { message: string }) {
           >
             <FaRedo size={16} />
           </motion.div>
-          {t("Reset Filters")}
+          {t(buttonText)}
         </motion.button>
       </motion.div>
     </motion.div>

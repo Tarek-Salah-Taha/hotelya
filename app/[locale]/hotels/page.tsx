@@ -28,7 +28,6 @@ export default async function Page({
     fetchTotalHotelCount(),
   ]);
 
-  console.log(filters);
 
   const totalPages = Math.ceil(totalCount / limit);
 

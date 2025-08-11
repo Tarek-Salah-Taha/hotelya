@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import { useTranslations } from "next-intl";
 
 function Destinations() {
@@ -46,9 +47,12 @@ function Destinations() {
                 </p>
               </div>
               <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-primary/80">
-                <button className="px-6 py-2 bg-white text-text font-medium rounded-full hover:bg-opacity-90 transition">
+                <Link
+                  href={`/hotels?city=${encodeURIComponent(city)}`}
+                  className="px-6 py-2 bg-white text-text font-medium rounded-full hover:bg-opacity-90 transition"
+                >
                   {t("explore hotels")}
-                </button>
+                </Link>
               </div>
             </div>
           ))}

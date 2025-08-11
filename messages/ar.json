@@ -678,6 +678,8 @@
   },
 
   "NoResultsPage": {
-    "Reset Filters": "إعادة ضبط"
+    "Reset Filters": "إعادة ضبط",
+    "Back to search page": "العودة لصفحة البحث",
+    "No results found": "لم يتم العثور على نتائج"
   }
 }

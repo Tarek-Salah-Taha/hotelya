@@ -15,8 +15,6 @@ function SearchBox() {
   const [suggestions, setSuggestions] = useState<string[]>([]);
   const [isFocused, setIsFocused] = useState(false);
 
-  console.log(suggestions);
-
   const pathname = usePathname();
 
   const localeFromPath = pathname.split("/")[1] || "en";

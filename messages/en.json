@@ -675,6 +675,8 @@
   },
 
   "NoResultsPage": {
-    "Reset Filters": "Reset Filters"
+    "Reset Filters": "Reset Filters",
+    "Back to search page": "Back to search page",
+    "No results found": "No results found"
   }
 }

@@ -8,8 +8,20 @@ export async function fetchLocalizedDestinationSuggestions(
 ): Promise<Suggestion[]> {
   if (query.trim().length < 2) return [];
 
-  const cityField = `city_${locale}`;
-  const countryField = `country_${locale}`;
+  let cityField = `city_${locale}`;
+  let countryField = `country_${locale}`;
+
+  // Use normalized columns for Arabic
+  if (locale === "ar") {
+    cityField = "city_ar_normalized";
+    countryField = "country_ar_normalized";
+    query = query
+      .replace(/[إأآ]/g, "ا")
+      .replace(/ى/g, "ي")
+      .replace(/ؤ/g, "و")
+      .replace(/ئ/g, "ي")
+      .replace(/ة/g, "ه");
+  }
 
   const { data, error } = await supabase
     .from("hotels")
@@ -22,11 +34,11 @@ export async function fetchLocalizedDestinationSuggestions(
     return [];
   }
 
-  const suggestions: Set<string> = new Set();
+  const suggestions = new Set<string>();
 
   (data as unknown as HotelSuggestion[]).forEach((hotel) => {
-    const city = hotel[cityField];
-    const country = hotel[countryField];
+    const city = hotel[cityField as keyof HotelSuggestion];
+    const country = hotel[countryField as keyof HotelSuggestion];
     if (city && country) {
       suggestions.add(`${city}, ${country}`);
     }

@@ -36,7 +36,6 @@ type Props = {
 };
 
 export default function HotelFilters({ filters, onApplyFilters }: Props) {
-  // console.log(filters);
 
   const initialState = useMemo(
     () => ({
@@ -112,8 +111,6 @@ export default function HotelFilters({ filters, onApplyFilters }: Props) {
   };
 
   const continents = getLocalizedValues("continent");
-
-  console.log(continents);
 
   const countries = Array.from(
     new Set(

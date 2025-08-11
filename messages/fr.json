@@ -675,6 +675,8 @@
   },
 
   "NoResultsPage": {
-    "Reset Filters": "Réinitialiser les filtres"
+    "Reset Filters": "Réinitialiser les filtres",
+    "Back to search page": "Retour à la page de recherche",
+    "No results found": "Aucun resultat trouvé"
   }
 }
