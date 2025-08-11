@@ -6,16 +6,12 @@ import Image from "next/image";
 import { useUser } from "../_hooks/useUser";
 import { signOutUser } from "../_lib/usersApi";
 import { usePathname, useRouter } from "next/navigation";
-import { SupportedLang, UserProfile } from "../_types/types";
+import { SupportedLang } from "../_types/types";
 import { useTranslations } from "next-intl";
 
-type UserDropdownProps = {
-  initialUser: UserProfile | null;
-};
-
-export default function UserDropdown({ initialUser }: UserDropdownProps) {
+export default function UserDropdown() {
   const router = useRouter();
-  const { user } = useUser(initialUser); // ✅ Pass initialUser directly
+  const { user } = useUser();
   const [open, setOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 

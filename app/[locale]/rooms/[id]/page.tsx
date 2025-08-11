@@ -30,7 +30,6 @@ export default function BookingPage({
   const router = useRouter();
   const { id, locale } = use(params);
 
-
   const roomId = Number(id);
 
   const [startDate, setStartDate] = useState<Date | null>(null);
@@ -41,11 +40,10 @@ export default function BookingPage({
 
   const [roomData, setRoomData] = useState<RoomData | null>(null);
 
-  const { user, loading } = useUser();
+  const { user } = useUser();
 
   const tRoomDescriptions = useTranslations("RoomDescriptions");
   const tRoomTypes = useTranslations("RoomTypes");
-
 
   // Check if hotel is an array and access the first item if it is
   const hotelData = Array.isArray(roomData?.hotel)
@@ -130,14 +128,6 @@ export default function BookingPage({
       toast.error(tRoomDescriptions("Failed to create booking"));
     }
   };
-
-  if (loading) {
-    return (
-      <div className="flex justify-center items-center min-h-screen">
-        <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin" />
-      </div>
-    );
-  }
 
   return (
     <div className="min-h-screen bg-gray-50 py-8 px-4 sm:px-6 lg:px-8">

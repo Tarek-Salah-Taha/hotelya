@@ -9,6 +9,7 @@ import { Cairo } from "next/font/google";
 
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers";
+import { UserProvider } from "../_context/UserContext";
 
 const cairo = Cairo({
   subsets: ["latin", "arabic"],
@@ -72,8 +73,10 @@ export default async function RootLayout({
       <body className={`${cairo.className}  antialiased bg-background`}>
         <NextIntlClientProvider>
           <ToasterProvider />
-          <Header initialUser={userProfile} />
-          {children}
+          <UserProvider initialUser={userProfile}>
+            <Header />
+            {children}
+          </UserProvider>
         </NextIntlClientProvider>
       </body>
     </html>

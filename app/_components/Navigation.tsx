@@ -10,14 +10,9 @@ import { useUser } from "../_hooks/useUser";
 import UserDropdown from "./UserDropdown";
 import { motion } from "framer-motion";
 import { useTranslations } from "next-intl";
-import { UserProfile } from "../_types/types";
 
-type NavigationProps = {
-  initialUser: UserProfile | null;
-};
-
-function Navigation({ initialUser }: NavigationProps) {
-  const { user } = useUser(initialUser);
+function Navigation() {
+  const { user } = useUser();
   const pathname = usePathname();
   const locale = pathname.split("/")[1] || "en";
   const t = useTranslations("Navigation");
@@ -69,7 +64,7 @@ function Navigation({ initialUser }: NavigationProps) {
         })}
         <li className="mt-2 lg:mt-0">
           {user ? (
-            <UserDropdown initialUser={user} />
+            <UserDropdown />
           ) : (
             <motion.div
               whileHover={{ scale: 1.05 }}

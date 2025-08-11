@@ -1,14 +1,15 @@
-// hooks/useUser.ts
 "use client";
 
-import { useEffect, useState } from "react";
+import { useUserContext } from "../_context/UserContext";
+import { useState, useEffect, useCallback } from "react";
 import supabase from "../_lib/supabase";
-import { UserProfile } from "../_types/types";
 
-export function useUser(initialUser: UserProfile | null) {
-  const [user, setUser] = useState<UserProfile | null>(initialUser);
+export function useUser() {
+  const { user, setUser } = useUserContext();
+  const [loading, setLoading] = useState(!user);
 
-  const fetchUser = async () => {
+  const fetchUser = useCallback(async () => {
+    setLoading(true);
     const {
       data: { session },
     } = await supabase.auth.getSession();
@@ -19,21 +20,19 @@ export function useUser(initialUser: UserProfile | null) {
         .select("id, email, firstName, lastName, avatarUrl")
         .eq("id", session.user.id)
         .single();
+
       setUser(profile || null);
     } else {
       setUser(null);
     }
-  };
+    setLoading(false);
+  }, [setUser]);
 
   useEffect(() => {
-    // Only fetch fresh data if initialUser wasn't provided
-    if (!initialUser) fetchUser();
-
-    const { data: listener } = supabase.auth.onAuthStateChange(() => {
+    if (!user) {
       fetchUser();
-    });
-    return () => listener.subscription.unsubscribe();
-  }, [initialUser]);
+    }
+  }, [fetchUser, user]);
 
-  return { user };
+  return { user, loading };
 }
