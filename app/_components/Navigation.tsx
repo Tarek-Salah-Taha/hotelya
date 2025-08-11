@@ -10,12 +10,16 @@ import { useUser } from "../_hooks/useUser";
 import UserDropdown from "./UserDropdown";
 import { motion } from "framer-motion";
 import { useTranslations } from "next-intl";
+import { UserProfile } from "../_types/types";
 
-function Navigation() {
-  const { user, loading } = useUser();
+type NavigationProps = {
+  initialUser: UserProfile | null;
+};
+
+function Navigation({ initialUser }: NavigationProps) {
+  const { user } = useUser(initialUser);
   const pathname = usePathname();
   const locale = pathname.split("/")[1] || "en";
-
   const t = useTranslations("Navigation");
 
   const NAV_ITEMS = [
@@ -36,21 +40,12 @@ function Navigation() {
     },
   ];
 
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center">
-        <div className="w-8 h-8 rounded-full bg-gray-200 animate-pulse" />
-      </div>
-    );
-  }
-
   return (
     <nav className="text-base font-medium">
       <ul className="flex flex-col lg:flex-row gap-2 lg:gap-4 items-start lg:items-center">
         {NAV_ITEMS.map(({ href, label, icon }) => {
           const fullHref = `/${locale}${href}`;
-          const isActive = pathname.startsWith(fullHref); // Changed to startsWith for nested routes
-
+          const isActive = pathname.startsWith(fullHref);
           return (
             <li key={href}>
               <motion.div
@@ -72,10 +67,9 @@ function Navigation() {
             </li>
           );
         })}
-
         <li className="mt-2 lg:mt-0">
           {user ? (
-            <UserDropdown />
+            <UserDropdown initialUser={user} />
           ) : (
             <motion.div
               whileHover={{ scale: 1.05 }}

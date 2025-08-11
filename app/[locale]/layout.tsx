@@ -7,6 +7,9 @@ import { ToasterProvider } from "../_components/ToasterProvider";
 import Header from "../_components/Header";
 import { Cairo } from "next/font/google";
 
+import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
+import { cookies } from "next/headers";
+
 const cairo = Cairo({
   subsets: ["latin", "arabic"],
   weight: ["400", "500", "700"],
@@ -47,12 +50,29 @@ export default async function RootLayout({
     notFound();
   }
 
+  const supabase = createServerComponentClient({ cookies });
+
+  const {
+    data: { session },
+  } = await supabase.auth.getSession();
+
+  let userProfile = null;
+
+  if (session?.user) {
+    const { data } = await supabase
+      .from("users")
+      .select("id, email, firstName, lastName, avatarUrl")
+      .eq("id", session.user.id)
+      .single();
+    userProfile = data;
+  }
+
   return (
     <html lang={locale} dir={locale === "ar" ? "rtl" : "ltr"}>
       <body className={`${cairo.className}  antialiased bg-background`}>
         <NextIntlClientProvider>
           <ToasterProvider />
-          <Header />
+          <Header initialUser={userProfile} />
           {children}
         </NextIntlClientProvider>
       </body>

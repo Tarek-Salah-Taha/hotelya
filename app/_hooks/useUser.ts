@@ -3,17 +3,10 @@
 
 import { useEffect, useState } from "react";
 import supabase from "../_lib/supabase";
+import { UserProfile } from "../_types/types";
 
-export function useUser() {
-  const [user, setUser] = useState<{
-    id: string;
-    email: string;
-    firstName: string;
-    lastName: string;
-    avatarUrl?: string;
-  } | null>(null);
-
-  const [loading, setLoading] = useState(true); // ✅ Add loading
+export function useUser(initialUser: UserProfile | null) {
+  const [user, setUser] = useState<UserProfile | null>(initialUser);
 
   const fetchUser = async () => {
     const {
@@ -26,31 +19,21 @@ export function useUser() {
         .select("id, email, firstName, lastName, avatarUrl")
         .eq("id", session.user.id)
         .single();
-
-      if (profile) {
-        setUser(profile);
-      } else {
-        setUser(null);
-      }
+      setUser(profile || null);
     } else {
       setUser(null);
     }
-
-    setLoading(false);
   };
 
   useEffect(() => {
-    fetchUser();
+    // Only fetch fresh data if initialUser wasn't provided
+    if (!initialUser) fetchUser();
 
-    // ✅ Listen for auth changes (login, logout, token refresh)
     const { data: listener } = supabase.auth.onAuthStateChange(() => {
       fetchUser();
     });
+    return () => listener.subscription.unsubscribe();
+  }, [initialUser]);
 
-    return () => {
-      listener.subscription.unsubscribe();
-    };
-  }, []);
-
-  return { user, loading };
+  return { user };
 }

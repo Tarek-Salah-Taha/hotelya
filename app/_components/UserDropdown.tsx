@@ -1,17 +1,21 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useRef, useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useUser } from "../_hooks/useUser";
 import { signOutUser } from "../_lib/usersApi";
 import { usePathname, useRouter } from "next/navigation";
-import { SupportedLang } from "../_types/types";
+import { SupportedLang, UserProfile } from "../_types/types";
 import { useTranslations } from "next-intl";
 
-export default function UserDropdown() {
+type UserDropdownProps = {
+  initialUser: UserProfile | null;
+};
+
+export default function UserDropdown({ initialUser }: UserDropdownProps) {
   const router = useRouter();
-  const { user, loading } = useUser();
+  const { user } = useUser(initialUser); // ✅ Pass initialUser directly
   const [open, setOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -25,7 +29,6 @@ export default function UserDropdown() {
     "es",
     "it",
   ];
-
   const pathname = usePathname();
   const localeFromPath = pathname.split("/")[1] as SupportedLang;
   const locale: SupportedLang = supportedLocales.includes(localeFromPath)
@@ -56,10 +59,6 @@ export default function UserDropdown() {
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
-
-  if (loading) {
-    return <div className="w-12 h-12 rounded-full bg-gray-200 animate-pulse" />; // Or any loading UI
-  }
 
   if (!user) return null;
 

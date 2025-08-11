@@ -277,6 +277,14 @@ export type RegisterData = {
   password: string;
 };
 
+export type UserProfile = {
+  firstName: string;
+  lastName: string;
+  email: string;
+  id: string;
+  avatarUrl?: string;
+};
+
 export type LoginData = {
   email: string;
   password: string;

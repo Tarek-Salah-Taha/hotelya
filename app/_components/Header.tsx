@@ -6,8 +6,13 @@ import UserPreferences from "./UserPreferences";
 import { useState } from "react";
 import { HiOutlineMenuAlt3, HiOutlineX } from "react-icons/hi";
 import { motion, AnimatePresence } from "framer-motion";
+import { UserProfile } from "../_types/types";
 
-function Header() {
+type HeaderProps = {
+  initialUser: UserProfile | null;
+};
+
+function Header({ initialUser }: HeaderProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
@@ -26,7 +31,7 @@ function Header() {
 
         {/* Desktop Navigation */}
         <div className="hidden lg:flex items-center gap-8">
-          <Navigation />
+          <Navigation initialUser={initialUser} />
           <UserPreferences />
         </div>
       </div>
@@ -41,7 +46,7 @@ function Header() {
             exit={{ opacity: 0, y: -10 }}
             transition={{ duration: 0.2 }}
           >
-            <Navigation />
+            <Navigation initialUser={initialUser} />
             <UserPreferences />
           </motion.div>
         )}
