@@ -24,7 +24,7 @@ export function useUser(initialUser?: UserProfile | null) {
       sessionStorage.removeItem(STORAGE_KEY);
       return null;
     }
-  }, [user]); // Recalculate only when user changes
+  }, []); // Recalculate only when user changes
 
   // Fetch user from DB
   const fetchUser = useCallback(async () => {
