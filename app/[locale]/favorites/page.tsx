@@ -164,11 +164,13 @@ export default function FavoritesPage() {
               >
                 <div className="relative h-56 w-full overflow-hidden">
                   <Image
-                    src={hotel.exteriorImages}
+                    src={hotel.exteriorImages || "/placeholder.jpg"}
                     alt={hotel.hotelName}
                     fill
                     className="object-cover transition-transform duration-500 hover:scale-105"
                     loading="lazy"
+                    placeholder="blur"
+                    blurDataURL="/placeholder.jpg"
                   />
                   <div
                     className={`absolute top-3 ${

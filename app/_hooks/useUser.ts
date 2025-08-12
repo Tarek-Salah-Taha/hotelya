@@ -5,22 +5,19 @@ import { useState, useEffect, useCallback } from "react";
 import supabase from "../_lib/supabase";
 import { UserProfile } from "../_types/types";
 
+const STORAGE_KEY = "app_user"; // 👈 change if you want a different key
+
 export function useUser(initialUser?: UserProfile | null) {
   const { user, setUser } = useUserContext();
   const [loading, setLoading] = useState(
     user === undefined && initialUser === undefined
   );
 
-  useEffect(() => {
-    if (initialUser !== undefined && user === undefined) {
-      setUser(initialUser);
-      setLoading(false);
-    }
-  }, [initialUser, user, setUser]);
-
+  // ✅ Fetch user from DB
   const fetchUser = useCallback(async () => {
-    setLoading(true);
     try {
+      setLoading(true);
+
       const {
         data: { user: authUser },
         error: authError,
@@ -28,6 +25,7 @@ export function useUser(initialUser?: UserProfile | null) {
 
       if (authError || !authUser) {
         setUser(null);
+        sessionStorage.removeItem(STORAGE_KEY);
         return;
       }
 
@@ -40,9 +38,11 @@ export function useUser(initialUser?: UserProfile | null) {
       if (profileError) throw profileError;
 
       setUser(profile);
+      sessionStorage.setItem(STORAGE_KEY, JSON.stringify(profile)); // ✅ cache user
     } catch (error) {
-      console.error(error);
+      console.error("Failed to fetch user:", error);
       setUser(null);
+      sessionStorage.removeItem(STORAGE_KEY);
     } finally {
       setLoading(false);
     }
@@ -51,13 +51,29 @@ export function useUser(initialUser?: UserProfile | null) {
   useEffect(() => {
     let mounted = true;
 
-    if (initialUser !== undefined) {
+    // ✅ 1. Load from initialUser (SSR) if provided
+    if (initialUser !== undefined && user === undefined) {
       setUser(initialUser);
+      sessionStorage.setItem(STORAGE_KEY, JSON.stringify(initialUser));
       setLoading(false);
       return;
     }
 
-    // Check session immediately
+    // ✅ 2. Load from sessionStorage if available
+    if (!user) {
+      const cachedUser = sessionStorage.getItem(STORAGE_KEY);
+      if (cachedUser) {
+        try {
+          const parsed = JSON.parse(cachedUser) as UserProfile;
+          setUser(parsed);
+          setLoading(false);
+        } catch {
+          sessionStorage.removeItem(STORAGE_KEY);
+        }
+      }
+    }
+
+    // ✅ 3. Check Supabase session only if no user in memory
     supabase.auth.getSession().then(({ data: { session } }) => {
       if (!mounted) return;
 
@@ -67,18 +83,24 @@ export function useUser(initialUser?: UserProfile | null) {
         return;
       }
 
-      fetchUser();
+      if (!user) {
+        fetchUser();
+      } else {
+        setLoading(false);
+      }
     });
 
+    // ✅ 4. Auth state changes
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange(async (event) => {
       if (!mounted) return;
 
-      if (event === "SIGNED_IN") {
+      if (event === "SIGNED_IN" && !user) {
         await fetchUser();
       } else if (event === "SIGNED_OUT") {
         setUser(null);
+        sessionStorage.removeItem(STORAGE_KEY);
       }
     });
 
@@ -86,7 +108,7 @@ export function useUser(initialUser?: UserProfile | null) {
       mounted = false;
       subscription?.unsubscribe();
     };
-  }, [fetchUser, initialUser, setUser]);
+  }, [fetchUser, initialUser, user, setUser]);
 
   return { user, loading };
 }

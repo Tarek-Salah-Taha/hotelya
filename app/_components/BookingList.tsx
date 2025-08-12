@@ -64,7 +64,6 @@ export default function Page() {
 
   const tRoom = useTranslations("RoomTypes");
 
-
   const handleCancelBooking = async function (bookingId: string) {
     try {
       await cancelHotelBooking(bookingId);
@@ -300,6 +299,9 @@ export default function Page() {
                       className="object-cover"
                       sizes="(max-width: 768px) 100vw, 300px"
                       priority={false}
+                      loading="lazy"
+                      blurDataURL="/placeholder.jpg"
+                      placeholder="blur"
                     />
                   </div>
 

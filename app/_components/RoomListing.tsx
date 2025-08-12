@@ -34,7 +34,8 @@ function RoomListing({ rooms, hotelName, city, country }: RoomListingProps) {
       <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-2 pt-6">
         {rooms.map((room) => {
           const encodedRoomType = encodeURIComponent(room.roomType);
-          const image = `https://jcnxjvrwruueplpsmdse.supabase.co/storage/v1/object/public/rooms/types/${encodedRoomType}.jpg`;
+
+          const image = `https://jcnxjvrwruueplpsmdse.supabase.co/storage/v1/object/public/rooms/types/${encodedRoomType}.jpg?width=400&height=300&quality=70&format=webp`;
 
           return (
             <RoomCard

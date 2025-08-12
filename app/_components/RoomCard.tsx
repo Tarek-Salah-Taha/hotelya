@@ -50,12 +50,15 @@ function RoomCard({
         className="w-full md:w-2/5 overflow-hidden relative"
       >
         <Image
-          src={image}
+          src={image || "/room-placeholder.jpg"}
           alt={roomType}
           width={400}
           height={300}
           className="w-full h-64 md:h-full object-cover transition-transform duration-500 hover:scale-105"
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 400px"
           loading="lazy"
+          blurDataURL="/room-placeholder.jpg"
+          placeholder="blur"
         />
         {priceOld && (
           <div className="absolute top-4 start-4 bg-red-500 text-white text-sm font-bold px-3 py-1 rounded-full shadow-md">

@@ -38,7 +38,6 @@ export async function signUpUserWithProfile({
 }
 
 // Logs in a user with email and password, and fetches their first name from the profile.
-// _lib/usersApi.ts
 export async function loginUserWithProfile({
   email,
   password,
@@ -51,25 +50,22 @@ export async function loginUserWithProfile({
     password,
   });
 
-  if (error) {
-    return { error: error.message };
-  }
+  if (error) return { error: error.message };
+  if (!data?.user) return { error: "Login failed" };
 
-  if (data?.user) {
-    const { data: profile } = await supabase
-      .from("users")
-      .select("id, email, firstName, lastName, avatarUrl")
-      .eq("id", data.user.id)
-      .single();
+  const { data: profile, error: profileError } = await supabase
+    .from("users")
+    .select("id, email, firstName, lastName, avatarUrl")
+    .eq("id", data.user.id)
+    .single();
 
-    return {
-      user: profile,
-      userName: profile?.firstName || profile?.email,
-      error: null,
-    };
-  }
+  if (profileError) return { error: profileError.message };
 
-  return { error: "Login failed" };
+  return {
+    user: profile,
+    userName: profile.firstName || profile.email,
+    error: null,
+  };
 }
 
 // Signs out the currently authenticated user from the session.
@@ -92,7 +88,7 @@ export async function signOutUser() {
 
 // Fetches the full profile data of a user by their ID.
 export async function fetchUserProfile(userId: string) {
-  const { data, error } = await supabase
+  const { data: profile, error } = await supabase
     .from("users")
     .select("*")
     .eq("id", userId)
@@ -102,7 +98,11 @@ export async function fetchUserProfile(userId: string) {
     throw new Error(error.message);
   }
 
-  return data;
+  if (!error && profile) {
+    sessionStorage.setItem("app_user", JSON.stringify(profile));
+  }
+
+  return profile;
 }
 
 // Updates the user's profile in the database using their ID.

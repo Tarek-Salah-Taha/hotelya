@@ -21,7 +21,7 @@ function ImageGallery({ images }: ImageGalleryProps) {
             "
           >
             <Image
-              src={src}
+              src={src || "/room-placeholder.jpg"}
               alt={`Gallery image ${i + 1}`}
               className="
                 w-full h-64 object-cover
@@ -31,6 +31,8 @@ function ImageGallery({ images }: ImageGalleryProps) {
               width={600}
               height={400}
               loading="lazy"
+              placeholder="blur"
+              blurDataURL="/room-placeholder.jpg"
             />
             <div
               className="

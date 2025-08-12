@@ -139,6 +139,8 @@ export default function HotelCardItem({ hotel }: HotelCardItemProps) {
           alt={hotel.hotelName}
           className="object-cover transition-transform duration-500 hover:scale-105"
           fill
+          placeholder="blur"
+          blurDataURL="/placeholder.jpg"
           loading="lazy"
         />
         <div
