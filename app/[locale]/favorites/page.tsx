@@ -69,9 +69,6 @@ export default function FavoritesPage() {
     toast.custom(
       (toastObj) => (
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -20 }}
           className={`${toastObj.visible ? "animate-enter" : "animate-leave"} 
             max-w-md w-full bg-white shadow-lg rounded-lg pointer-events-auto flex flex-col p-4 border border-red-100`}
         >
@@ -118,32 +115,19 @@ export default function FavoritesPage() {
 
   if (!user)
     return (
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        className="text-center mt-10 text-gray-600"
-      >
+      <motion.div className="text-center mt-10 text-gray-600">
         {t("Please log in to view your favorite hotels")}
       </motion.div>
     );
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      <motion.h1
-        initial={{ y: -20, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.4 }}
-        className="text-3xl font-bold text-center mb-8 text-text"
-      >
+      <motion.h1 className="text-3xl font-bold text-center mb-8 text-text">
         {t("myFavorites")}
       </motion.h1>
 
       {favorites.length === 0 ? (
-        <motion.p
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          className="text-center text-gray-500"
-        >
+        <motion.p className="text-center text-gray-500">
           {t("You have no favorite hotels yet")}
         </motion.p>
       ) : (
@@ -152,10 +136,6 @@ export default function FavoritesPage() {
             {favorites.map((hotel) => (
               <motion.div
                 key={hotel.id}
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.9 }}
-                transition={{ duration: 0.3 }}
                 whileHover={{
                   y: -5,
                   boxShadow: "0 10px 25px -5px rgba(0, 0, 0, 0.1)",
@@ -171,6 +151,7 @@ export default function FavoritesPage() {
                     loading="lazy"
                     placeholder="blur"
                     blurDataURL="/placeholder.jpg"
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                   />
                   <div
                     className={`absolute top-3 ${

@@ -74,12 +74,7 @@ export default function HotelReviews({
   }
 
   return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 0.5 }}
-      className="mt-10 p-6 bg-white rounded-xl shadow-sm border border-gray-100 group"
-    >
+    <motion.div className="mt-10 p-6 bg-white rounded-xl shadow-sm border border-gray-100 group">
       <div className="relative pb-2 mb-6 overflow-hidden">
         <motion.h2
           className="text-2xl font-semibold text-gray-800 inline-block"
@@ -100,11 +95,7 @@ export default function HotelReviews({
       {/* Review List */}
       <div className="space-y-6 mb-10">
         {reviews.length === 0 ? (
-          <motion.p
-            className="text-sm text-gray-500"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-          >
+          <motion.p className="text-sm text-gray-500">
             {t("No reviews yet")}
           </motion.p>
         ) : (
@@ -141,12 +132,7 @@ export default function HotelReviews({
                   >
                     {review.rating} / 10
                   </motion.span>
-                  <motion.p
-                    className="text-sm text-gray-700"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ delay: 0.1 }}
-                  >
+                  <motion.p className="text-sm text-gray-700">
                     {review.comment}
                   </motion.p>
                 </div>

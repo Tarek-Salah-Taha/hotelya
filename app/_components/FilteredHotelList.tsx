@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, useCallback } from "react";
 import { useSearchParams } from "next/navigation";
 import HotelFilters from "./HotelFilters";
 import HotelCard from "./HotelCard";
@@ -30,9 +30,7 @@ export default function FilteredHotelList({
   const searchParams = useSearchParams();
   const [filteredHotels, setFilteredHotels] = useState<HotelCardData[]>([]);
   const [isOpen, setIsOpen] = useState(false);
-
   const [totalPages, setTotalPages] = useState(initialTotalPages);
-  // Update this line to get the initial page from URL
   const [currentPage, setCurrentPage] = useState(
     parseInt(searchParams.get("page") || "1", 10)
   );
@@ -40,13 +38,19 @@ export default function FilteredHotelList({
 
   const tFilters = useTranslations("FiltersPage");
 
-  // Add this effect to update currentPage when URL changes
+  // Memoize the searchParams dependency
+  const searchParamsString = useMemo(
+    () => searchParams.toString(),
+    [searchParams]
+  );
+
+  // Update currentPage when URL changes
   useEffect(() => {
     const page = parseInt(searchParams.get("page") || "1", 10);
     setCurrentPage(page);
-  }, [searchParams]);
+  }, [searchParamsString, searchParams]);
 
-  // Parse filter params from URL
+  // Memoize filter params parsing
   const filterParams = useMemo(() => {
     const getArray = (key: string) =>
       searchParams.get(key)?.split(",").map(decodeURIComponent) ?? [];
@@ -61,46 +65,86 @@ export default function FilteredHotelList({
       stars: getArray("stars").map(Number),
       paymentOptions: getArray("paymentOptions"),
       languagesSpoken: getArray("languagesSpoken"),
-      sort: searchParams.get("sort") || "", // Add this line
+      sort: searchParams.get("sort") || "",
     };
   }, [searchParams]);
 
+  // Memoize the fetch function
+  const fetchHotels = useCallback(async () => {
+    try {
+      const result = await fetchFilteredHotels({
+        ...filterParams,
+        locale,
+        page: currentPage,
+        limit,
+      });
+
+      setFilteredHotels(result.data);
+      setTotalPages(Math.ceil(result.count / limit));
+    } catch (error) {
+      console.error("Error fetching hotels:", error);
+      setFilteredHotels([]);
+    } finally {
+      setIsLoading(false);
+    }
+  }, [filterParams, currentPage, locale]);
+
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const result = await fetchFilteredHotels({
-          ...filterParams,
-          locale,
-          page: currentPage,
-          limit,
-        });
-
-        setFilteredHotels(result.data);
-        setTotalPages(Math.ceil(result.count / limit));
-      } catch (error) {
-        console.error("Error fetching hotels:", error);
-        setFilteredHotels([]);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
     if ([...searchParams.keys()].length > 0) {
       setIsLoading(true);
-      fetchData();
+      fetchHotels();
     } else {
       setFilteredHotels(initialHotels);
       setTotalPages(initialTotalPages);
       setIsLoading(false);
     }
   }, [
-    filterParams,
-    currentPage,
-    locale,
-    searchParams,
+    fetchHotels,
+    searchParamsString,
     initialHotels,
     initialTotalPages,
+    searchParams,
   ]);
+
+  // Memoize the toggle function for the mobile drawer
+  const toggleDrawer = useCallback(() => {
+    setIsOpen((prev) => !prev);
+  }, []);
+
+  // Memoize the reset page function
+  const resetPage = useCallback(() => {
+    setCurrentPage(1);
+  }, []);
+
+  // Memoize the main content to avoid unnecessary re-renders
+  const mainContent = useMemo(() => {
+    if (isLoading) {
+      return (
+        <div className="flex justify-center items-center py-10">
+          <Spinner />
+        </div>
+      );
+    }
+
+    if (filteredHotels.length === 0) {
+      return (
+        <NoResults
+          message="Sorry, we couldn't find any hotels matching your filters"
+          buttonText="Reset Filters"
+          destination="/hotels"
+        />
+      );
+    }
+
+    return (
+      <HotelCard
+        hotels={filteredHotels}
+        currentPage={currentPage}
+        totalPages={totalPages}
+        basePath="/hotels"
+      />
+    );
+  }, [isLoading, filteredHotels, currentPage, totalPages]);
 
   return (
     <>
@@ -109,19 +153,18 @@ export default function FilteredHotelList({
         <HotelFilters
           filters={filters}
           locale={locale}
-          onApplyFilters={() => setCurrentPage(1)}
+          onApplyFilters={resetPage}
         />
       </aside>
 
       {/* Mobile drawer */}
-
       <div className="block lg:hidden mb-6">
         <motion.div
           className="border border-gray-200 rounded-xl shadow-sm overflow-hidden"
           whileHover={{ scale: 1.005 }}
         >
           <motion.button
-            onClick={() => setIsOpen(!isOpen)}
+            onClick={toggleDrawer}
             className="w-full px-5 py-3 bg-gray-50 hover:bg-gray-100 
                 flex items-center justify-between text-gray-700
                 transition-colors focus:outline-none
@@ -133,30 +176,20 @@ export default function FilteredHotelList({
               {isOpen ? tFilters("Hide filters") : tFilters("Show filters")}
             </div>
             {isOpen ? (
-              <>
-                <FaChevronCircleUp className="text-primary" />
-              </>
+              <FaChevronCircleUp className="text-primary" />
             ) : (
-              <>
-                <FaChevronCircleDown className="text-primary" />
-              </>
+              <FaChevronCircleDown className="text-primary" />
             )}
           </motion.button>
 
           <AnimatePresence>
             {isOpen && (
-              <motion.div
-                initial={{ opacity: 0, height: 0 }}
-                animate={{ opacity: 1, height: "auto" }}
-                exit={{ opacity: 0, height: 0 }}
-                transition={{ duration: 0.2 }}
-                className="bg-white border-t border-gray-100"
-              >
+              <motion.div className="bg-white border-t border-gray-100">
                 <div className="p-4 border-t border-gray-100">
                   <HotelFilters
                     filters={filters}
                     locale={locale}
-                    onApplyFilters={() => setCurrentPage(1)}
+                    onApplyFilters={resetPage}
                   />
                 </div>
               </motion.div>
@@ -166,26 +199,7 @@ export default function FilteredHotelList({
       </div>
 
       {/* Hotel Cards */}
-      <main className="w-full">
-        {isLoading ? (
-          <div className="flex justify-center items-center py-10">
-            <Spinner />
-          </div>
-        ) : filteredHotels.length === 0 ? (
-          <NoResults
-            message="Sorry, we couldn't find any hotels matching your filters"
-            buttonText="Reset Filters"
-            destination="/hotels"
-          />
-        ) : (
-          <HotelCard
-            hotels={filteredHotels}
-            currentPage={currentPage}
-            totalPages={totalPages}
-            basePath="/hotels"
-          />
-        )}
-      </main>
+      <main className="w-full">{mainContent}</main>
     </>
   );
 }

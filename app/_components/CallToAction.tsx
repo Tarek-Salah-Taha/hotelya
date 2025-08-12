@@ -59,7 +59,6 @@ function CallToAction() {
               alt="Happy travelers using Hotelya"
               fill
               className="object-contain drop-shadow-2xl"
-              sizes="(max-width: 768px) 100vw, 50vw"
               priority
             />
           </div>

@@ -101,10 +101,6 @@ export default function HotelCardItem({ hotel }: HotelCardItemProps) {
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.3 }}
-      whileHover={{ y: -5 }}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       className="relative bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300 flex flex-col h-full border border-gray-100"
@@ -142,6 +138,7 @@ export default function HotelCardItem({ hotel }: HotelCardItemProps) {
           placeholder="blur"
           blurDataURL="/placeholder.jpg"
           loading="lazy"
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
         />
         <div
           className={`absolute top-3 ${locale === "ar" ? "right-3" : "left-3"}`}
@@ -157,14 +154,7 @@ export default function HotelCardItem({ hotel }: HotelCardItemProps) {
         </div>
 
         <AnimatePresence>
-          {isHovered && (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 0.2 }}
-              exit={{ opacity: 0 }}
-              className="absolute inset-0 bg-black"
-            />
-          )}
+          {isHovered && <motion.div className="absolute inset-0 bg-black" />}
         </AnimatePresence>
       </div>
 

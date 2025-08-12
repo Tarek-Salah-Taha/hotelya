@@ -1,12 +1,13 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo, useCallback } from "react";
 import { FaMapMarkerAlt } from "react-icons/fa";
 import { usePathname, useRouter } from "next/navigation";
 import { fetchLocalizedDestinationSuggestions } from "../_lib/suggestionsApi";
 import { motion, AnimatePresence } from "framer-motion";
 import { useTranslations } from "next-intl";
 import { SupportedLang } from "../_types/types";
+import debounce from "lodash/debounce";
 
 function SearchBox() {
   const [destination, setDestination] = useState("");
@@ -46,25 +47,34 @@ function SearchBox() {
     }
   };
 
-  useEffect(() => {
-    const loadSuggestions = async () => {
-      if (destination.length >= 2) {
+  const loadSuggestions = useCallback(
+    async (value: string) => {
+      if (value.length >= 2) {
         const results = await fetchLocalizedDestinationSuggestions(
-          destination,
+          value,
           locale
         );
         setSuggestions(results);
       } else {
         setSuggestions([]);
       }
+    },
+    [locale]
+  );
+
+  const debouncedLoadSuggestions = useMemo(
+    () => debounce(loadSuggestions, 300),
+    [loadSuggestions]
+  );
+
+  useEffect(() => {
+    debouncedLoadSuggestions(destination);
+
+    // Cleanup function to cancel any pending debounced calls
+    return () => {
+      debouncedLoadSuggestions.cancel();
     };
-
-    const timer = setTimeout(() => {
-      loadSuggestions();
-    }, 300);
-
-    return () => clearTimeout(timer);
-  }, [destination, locale]);
+  }, [destination, debouncedLoadSuggestions]);
 
   const handleSelectSuggestion = (suggestion: string) => {
     setDestination(suggestion);
@@ -76,12 +86,7 @@ function SearchBox() {
 
   return (
     <div className="w-full flex justify-center px-4">
-      <motion.div
-        initial={{ y: 20, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.5 }}
-        className="bg-white shadow-xl rounded-xl p-6 grid grid-cols-1 md:grid-cols-[1fr_auto] gap-4 max-w-3xl w-full relative "
-      >
+      <motion.div className="bg-white shadow-xl rounded-xl p-6 grid grid-cols-1 md:grid-cols-[1fr_auto] gap-4 max-w-3xl w-full relative ">
         {/* Destination Input */}
         <div className="flex flex-col w-full min-w-[240px] relative">
           <label className="text-sm font-medium text-text mb-2">
@@ -105,13 +110,7 @@ function SearchBox() {
             {/* Suggestions Dropdown */}
             <AnimatePresence>
               {suggestions.length > 0 && isFocused && (
-                <motion.ul
-                  initial={{ opacity: 0, y: -10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -10 }}
-                  transition={{ duration: 0.2 }}
-                  className="absolute z-10 mt-1 w-full bg-white border border-border rounded-lg shadow-lg max-h-60 overflow-y-auto"
-                >
+                <motion.ul className="absolute z-10 mt-1 w-full bg-white border border-border rounded-lg shadow-lg max-h-60 overflow-y-auto">
                   {suggestions.map((sug, index) => (
                     <motion.li
                       key={index}
@@ -144,12 +143,7 @@ function SearchBox() {
 
           <AnimatePresence>
             {showTooltip && destination.trim().length < 2 && (
-              <motion.div
-                initial={{ opacity: 0, y: -10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -10 }}
-                className="absolute top-full mt-2 text-sm text-red-600 bg-red-100 border border-red-300 p-2 rounded-lg shadow-md z-10 w-full"
-              >
+              <motion.div className="absolute top-full mt-2 text-sm text-red-600 bg-red-100 border border-red-300 p-2 rounded-lg shadow-md z-10 w-full">
                 {t("Please enter a valid destination (at least 2 letters)")}
               </motion.div>
             )}

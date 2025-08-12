@@ -135,20 +135,10 @@ export default function Profile() {
   }
 
   return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 0.3 }}
-      className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 p-4 md:p-8"
-    >
+    <motion.div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 p-4 md:p-8">
       <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Sidebar */}
-        <motion.div
-          initial={{ y: 20, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ delay: 0.1 }}
-          className="bg-white rounded-2xl p-6 shadow-lg border border-gray-100 text-center"
-        >
+        <motion.div className="bg-white rounded-2xl p-6 shadow-lg border border-gray-100 text-center">
           <motion.div
             whileHover={{ scale: 1.02 }}
             className="relative w-32 h-32 mx-auto rounded-full overflow-hidden border-4 border-white shadow-lg bg-gradient-to-br from-gray-100 to-gray-200 text-4xl flex items-center justify-center"
@@ -202,12 +192,7 @@ export default function Profile() {
               {t("Profile Completion")}
             </p>
             <div className="w-full bg-gray-200 rounded-full h-2.5">
-              <motion.div
-                className="bg-gradient-to-r from-primary to-primary-dark h-2.5 rounded-full"
-                initial={{ width: "0%" }}
-                animate={{ width: `${getProgress()}%` }}
-                transition={{ duration: 0.8, ease: "easeOut" }}
-              />
+              <motion.div className="bg-gradient-to-r from-primary to-primary-dark h-2.5 rounded-full" />
             </div>
             <p className="text-xs text-gray-500 mt-1">
               {getProgress()}% {t("complete")}
@@ -216,12 +201,7 @@ export default function Profile() {
         </motion.div>
 
         {/* Form */}
-        <motion.div
-          initial={{ y: 20, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ delay: 0.2 }}
-          className="lg:col-span-2 bg-white rounded-2xl p-6 shadow-lg border border-gray-100"
-        >
+        <motion.div className="lg:col-span-2 bg-white rounded-2xl p-6 shadow-lg border border-gray-100">
           <h3 className="text-xl font-bold mb-6 pb-2 border-b border-gray-100 text-gray-800">
             {t("Personal Information")}
           </h3>

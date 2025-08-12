@@ -18,22 +18,10 @@ function Footer() {
   const t = useTranslations("HomePage");
   return (
     <footer className="bg-dark text-white pt-16 pb-8 px-4 sm:px-6 lg:px-8">
-      <motion.div
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.8, staggerChildren: 0.2 }}
-        className="max-w-7xl mx-auto"
-      >
+      <motion.div className="max-w-7xl mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-10 lg:gap-16">
           {/* Branding */}
-          <motion.div
-            initial={{ y: 20 }}
-            whileInView={{ y: 0 }}
-            transition={{ duration: 0.6 }}
-            viewport={{ once: true }}
-            className="space-y-6"
-          >
+          <motion.div className="space-y-6">
             <h3 className="text-2xl font-bold">Hotelya</h3>
             <p className="text-background/80">
               {t("Your trusted partner for hotel reservations worldwide")}
@@ -92,12 +80,7 @@ function Footer() {
           </motion.div>
 
           {/* Company */}
-          <motion.div
-            initial={{ y: 20 }}
-            whileInView={{ y: 0 }}
-            transition={{ duration: 0.6, delay: 0.1 }}
-            viewport={{ once: true }}
-          >
+          <motion.div>
             <h4 className="text-lg font-semibold mb-4">{t("Company")}</h4>
             <ul className="space-y-3">
               {[
@@ -123,12 +106,7 @@ function Footer() {
           </motion.div>
 
           {/* Support */}
-          <motion.div
-            initial={{ y: 20 }}
-            whileInView={{ y: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            viewport={{ once: true }}
-          >
+          <motion.div>
             <h4 className="text-lg font-semibold mb-4">{t("Support")}</h4>
             <ul className="space-y-3">
               {[
@@ -154,12 +132,7 @@ function Footer() {
           </motion.div>
 
           {/* Legal */}
-          <motion.div
-            initial={{ y: 20 }}
-            whileInView={{ y: 0 }}
-            transition={{ duration: 0.6, delay: 0.3 }}
-            viewport={{ once: true }}
-          >
+          <motion.div>
             <h4 className="text-lg font-semibold mb-4">{t("Legal")}</h4>
             <ul className="space-y-3">
               {[
@@ -186,13 +159,7 @@ function Footer() {
         </div>
 
         {/* Copyright */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          transition={{ duration: 0.8, delay: 0.4 }}
-          viewport={{ once: true }}
-          className="border-t border-primary/20 mt-12 pt-8 text-center"
-        >
+        <motion.div className="border-t border-primary/20 mt-12 pt-8 text-center">
           <p className="text-sm text-background/70">
             © {new Date().getFullYear()} Hotelya, Inc.{" "}
             {t("All rights reserved")}

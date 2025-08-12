@@ -284,9 +284,6 @@ export default function Page() {
 
             return (
               <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.3 }}
                 key={booking.id}
                 className="bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-300 border border-gray-100"
               >
@@ -297,8 +294,7 @@ export default function Page() {
                       fill
                       alt={hotelName}
                       className="object-cover"
-                      sizes="(max-width: 768px) 100vw, 300px"
-                      priority={false}
+                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                       loading="lazy"
                       blurDataURL="/placeholder.jpg"
                       placeholder="blur"

@@ -132,8 +132,6 @@ export default function BookingPage({
   return (
     <div className="min-h-screen bg-gray-50 py-8 px-4 sm:px-6 lg:px-8">
       <motion.div
-        initial={{ opacity: 0, y: 40 }}
-        animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4, ease: "easeOut" }}
         className="max-w-4xl mx-auto bg-white rounded-2xl shadow-lg overflow-hidden"
       >
@@ -209,12 +207,7 @@ export default function BookingPage({
           </div>
 
           {/* Guest Selection */}
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.3 }}
-            className="grid grid-cols-1 sm:grid-cols-2 gap-4"
-          >
+          <motion.div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {/* Adults Select */}
             <motion.div whileHover={{ scale: 1.01 }} className="space-y-2">
               <label className="block text-sm font-medium text-gray-700">
@@ -273,12 +266,7 @@ export default function BookingPage({
           </motion.div>
 
           {/* Price Summary */}
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
-            className="bg-gray-50 p-6 rounded-lg border border-gray-100"
-          >
+          <motion.div className="bg-gray-50 p-6 rounded-lg border border-gray-100">
             <div className="flex items-center mb-4 space-x-2">
               <FaMoneyBillWave className="text-primary mr-2" />
               <h3 className="font-semibold text-lg text-gray-800">
@@ -330,8 +318,6 @@ export default function BookingPage({
                 </span>
                 <motion.span
                   className="text-xl font-bold text-primary"
-                  initial={{ scale: 0.95 }}
-                  animate={{ scale: 1 }}
                   transition={{ type: "spring", stiffness: 300 }}
                 >
                   {(totalPrice * 1.1).toFixed(2)} {tRoomDescriptions("$")}
@@ -341,12 +327,7 @@ export default function BookingPage({
           </motion.div>
 
           {/* Cancellation Policy */}
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3 }}
-            className="bg-blue-50 p-6 rounded-lg border border-blue-100"
-          >
+          <motion.div className="bg-blue-50 p-6 rounded-lg border border-blue-100">
             <div className="flex items-center mb-3 space-x-2">
               <FaInfoCircle className="text-blue-500 mr-2" />
               <h3 className="font-semibold text-lg text-gray-800">

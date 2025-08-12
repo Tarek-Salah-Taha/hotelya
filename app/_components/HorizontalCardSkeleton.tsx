@@ -6,9 +6,6 @@ const HorizontalCardSkeleton = () => (
       {[1, 2, 3].map((_, i) => (
         <motion.div
           key={i}
-          initial={{ opacity: 0, scale: 0.95 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ delay: i * 0.1, duration: 0.3 }}
           className="p-5 bg-white rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow"
         >
           {/* Image placeholder */}

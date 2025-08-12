@@ -6,9 +6,6 @@ const SkeletonLoader = () => (
       {[1, 2, 3].map((_, i) => (
         <motion.div
           key={i}
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: i * 0.15 }}
           className="p-6 bg-white rounded-2xl shadow-xs border border-gray-100"
         >
           <div className="flex gap-4 mb-4">

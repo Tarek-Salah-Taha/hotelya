@@ -26,12 +26,7 @@ export default function NoResults({
   };
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5 }}
-      className="flex flex-col items-center justify-center min-h-[60vh] px-4 text-center relative overflow-hidden"
-    >
+    <motion.div className="flex flex-col items-center justify-center min-h-[60vh] px-4 text-center relative overflow-hidden">
       {/* Image instead of icon/message */}
       <div className="mb-4">
         <Image
@@ -39,27 +34,18 @@ export default function NoResults({
           alt="No results found"
           width={300}
           height={300}
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
           className="mx-auto"
         />
       </div>
 
       {/* Message */}
-      <motion.h3
-        className="text-3xl md:text-4xl font-bold text-gray-800 mb-4"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.2 }}
-      >
+      <motion.h3 className="text-3xl md:text-4xl font-bold text-gray-800 mb-4">
         {t(message)}
       </motion.h3>
 
       {/* Buttons */}
-      <motion.div
-        className="flex flex-col sm:flex-row gap-4 justify-center mb-12"
-        initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.3 }}
-      >
+      <motion.div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
         <motion.button
           whileHover={{
             scale: 1.05,

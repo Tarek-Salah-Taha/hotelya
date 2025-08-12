@@ -38,12 +38,7 @@ function RoomCard({
   ) as SupportedLang;
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.3 }}
-      className="relative flex flex-col md:flex-row border border-gray-200 rounded-xl overflow-hidden bg-white shadow-lg hover:shadow-xl transition-all duration-300"
-    >
+    <motion.div className="relative flex flex-col md:flex-row border border-gray-200 rounded-xl overflow-hidden bg-white shadow-lg hover:shadow-xl transition-all duration-300">
       {/* Room Image */}
       <motion.div
         whileHover={{ scale: 1.02 }}

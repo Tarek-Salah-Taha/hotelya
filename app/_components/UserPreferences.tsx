@@ -72,13 +72,7 @@ export default function UserPreferences() {
 
       <AnimatePresence>
         {open && (
-          <motion.ul
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            transition={{ duration: 0.2 }}
-            className="absolute z-10 mt-2 w-full bg-white border border-gray-200 rounded-xl shadow-lg overflow-hidden"
-          >
+          <motion.ul className="absolute z-10 mt-2 w-full bg-white border border-gray-200 rounded-xl shadow-lg overflow-hidden">
             {Object.entries(localeLabels).map(([locale, { label, icon }]) => (
               <motion.li
                 key={locale}

@@ -36,7 +36,6 @@ type Props = {
 };
 
 export default function HotelFilters({ filters, onApplyFilters }: Props) {
-
   const initialState = useMemo(
     () => ({
       selectedContinents: [] as string[],
@@ -290,12 +289,7 @@ export default function HotelFilters({ filters, onApplyFilters }: Props) {
   };
 
   return (
-    <motion.section
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.3 }}
-      className="p-4 sm:p-6 border border-gray-200 rounded-2xl bg-white shadow-sm hover:shadow-md transition-shadow duration-300 text-sm space-y-4"
-    >
+    <motion.section className="p-4 sm:p-6 border border-gray-200 rounded-2xl bg-white shadow-sm hover:shadow-md transition-shadow duration-300 text-sm space-y-4">
       <div className="flex justify-between items-center">
         <h2 className="text-xl font-bold flex items-center gap-3 text-gray-800">
           <FaFilter className="text-primary" /> {tFilters("Filters")}
@@ -321,8 +315,6 @@ export default function HotelFilters({ filters, onApplyFilters }: Props) {
             return values.map((v) => (
               <motion.span
                 key={`${key}-${v}`}
-                initial={{ scale: 0.9, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1 }}
                 className="inline-flex items-center bg-blue-100 text-blue-800 text-xs font-medium px-3 py-1 rounded-full shadow-sm"
               >
                 {label}: {v}
@@ -792,12 +784,7 @@ export default function HotelFilters({ filters, onApplyFilters }: Props) {
       </div>
 
       {/* Buttons */}
-      <motion.div
-        className="mt-6 flex flex-col gap-3 sm:flex-row"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.2 }}
-      >
+      <motion.div className="mt-6 flex flex-col gap-3 sm:flex-row">
         <motion.button
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
