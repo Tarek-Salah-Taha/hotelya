@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 import { IoLocationSharp } from "react-icons/io5";
 import { FaHeart, FaRegHeart } from "react-icons/fa";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import {
   addHotelToFavorites,
   removeHotelFromFavorites,
@@ -15,7 +15,6 @@ import getRatingLabel from "../_lib/getRatingLabel";
 import { HotelCardItemProps } from "../_types/types";
 import { useUser } from "../_hooks/useUser";
 import toast from "react-hot-toast";
-import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { FiArrowRight, FiArrowLeft } from "react-icons/fi";
 import { useTranslations } from "next-intl";
@@ -26,10 +25,8 @@ export default function HotelCardItem({ hotel }: HotelCardItemProps) {
   const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
   const { user } = useUser();
-
   const pathname = usePathname();
   const locale = pathname.split("/")[1] || "en";
-
   const tFavorites = useTranslations("FavoritesPage");
 
   useEffect(() => {
@@ -46,8 +43,6 @@ export default function HotelCardItem({ hotel }: HotelCardItemProps) {
 
       try {
         const favorites = await fetchFavoriteHotelIds(user.id);
-
-        // Ensure we compare the same types (convert both to string)
         const isHotelFavorite = favorites.some(
           (favId: string | number) => String(favId) === String(hotel.id)
         );
@@ -75,7 +70,6 @@ export default function HotelCardItem({ hotel }: HotelCardItemProps) {
       return;
     }
 
-    // Optimistic update
     const newFavoriteStatus = !isFavorite;
     setIsFavorite(newFavoriteStatus);
 
@@ -88,7 +82,6 @@ export default function HotelCardItem({ hotel }: HotelCardItemProps) {
         toast.success(tFavorites("Removed from favorites"));
       }
     } catch (err) {
-      // Revert on error
       setIsFavorite(!newFavoriteStatus);
       toast.error(tFavorites("Something went wrong"));
       console.error(err);
@@ -110,25 +103,37 @@ export default function HotelCardItem({ hotel }: HotelCardItemProps) {
         onClick={handleFavoriteToggle}
         className={`absolute top-4 ${
           locale === "ar" ? "left-4" : "right-4"
-        }  z-10`}
+        } z-10`}
         whileTap={{ scale: 0.9 }}
       >
-        <motion.div
-          className="w-10 h-10 rounded-full bg-white shadow-md flex items-center justify-center backdrop-blur-sm bg-opacity-80"
-          animate={{
-            scale: isHovered || isFavorite ? 1.1 : 1,
-          }}
-          transition={{ type: "spring", stiffness: 500, damping: 20 }}
-        >
+        <AnimatePresence mode="wait" initial={false}>
           {isFavorite ? (
-            <FaHeart className="text-red-500 text-lg" />
+            <motion.div
+              key="filled"
+              initial={{ scale: 0, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0, opacity: 0 }}
+              transition={{ duration: 0.2 }}
+              className="w-10 h-10 rounded-full bg-white shadow-md flex items-center justify-center backdrop-blur-sm bg-opacity-80"
+            >
+              <FaHeart className="text-red-500 text-lg" />
+            </motion.div>
           ) : (
-            <FaRegHeart className="text-red-500 text-lg" />
+            <motion.div
+              key="outline"
+              initial={{ scale: 0, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0, opacity: 0 }}
+              transition={{ duration: 0.2 }}
+              className="w-10 h-10 rounded-full bg-white shadow-md flex items-center justify-center backdrop-blur-sm bg-opacity-80"
+            >
+              <FaRegHeart className="text-red-500 text-lg" />
+            </motion.div>
           )}
-        </motion.div>
+        </AnimatePresence>
       </motion.button>
 
-      {/* Hotel image with hover effect */}
+      {/* Hotel image with hover overlay */}
       <div className="relative h-56 w-full overflow-hidden">
         <Image
           src={hotel.exteriorImages || "/placeholder.jpg"}
@@ -140,6 +145,7 @@ export default function HotelCardItem({ hotel }: HotelCardItemProps) {
           loading="lazy"
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
         />
+
         <div
           className={`absolute top-3 ${locale === "ar" ? "right-3" : "left-3"}`}
         >
@@ -153,14 +159,23 @@ export default function HotelCardItem({ hotel }: HotelCardItemProps) {
           </div>
         </div>
 
+        {/* Hover dark overlay */}
         <AnimatePresence>
-          {isHovered && <motion.div className="absolute inset-0 bg-black" />}
+          {isHovered && (
+            <motion.div
+              className="absolute inset-0 bg-gray-900/50"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.25 }}
+            />
+          )}
         </AnimatePresence>
       </div>
 
       {/* Content */}
       <div className="p-5 flex flex-col flex-grow">
-        {/* Hotel name and location */}
+        {/* Hotel name & location */}
         <div className="mb-2">
           <h2 className="text-xl font-bold text-gray-800 line-clamp-1">
             {hotel.hotelName}
@@ -173,15 +188,13 @@ export default function HotelCardItem({ hotel }: HotelCardItemProps) {
           </div>
         </div>
 
-        {/* Stars and rating */}
+        {/* Stars */}
         <div className="flex items-center justify-between mb-3">
           <div className="text-yellow-400 flex items-center gap-1">
             {[...Array(5)].map((_, i) => (
               <motion.span
                 key={i}
-                animate={{
-                  scale: i < hotel.stars ? 1.2 : 1,
-                }}
+                animate={{ scale: i < hotel.stars ? 1.2 : 1 }}
                 transition={{ type: "spring", stiffness: 500 }}
               >
                 {i < hotel.stars ? "★" : "☆"}
@@ -196,7 +209,6 @@ export default function HotelCardItem({ hotel }: HotelCardItemProps) {
             const matchedTag = availableTags.find((tag) =>
               tag.labels.includes(tagLabel)
             );
-
             const Icon = matchedTag ? iconMap[matchedTag.icon] : null;
 
             return (
