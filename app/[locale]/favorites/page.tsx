@@ -8,7 +8,8 @@ import toast from "react-hot-toast";
 import { useUser } from "@/app/_hooks/useUser";
 import { HotelCardData, SupportedLang } from "@/app/_types/types";
 import {
-  fetchFavoriteHotelIds,
+  // fetchFavoriteHotelIds,
+  fetchFavoriteHotels,
   removeHotelFromFavorites,
 } from "@/app/_lib/favoritesApi";
 import { usePathname } from "next/navigation";
@@ -18,46 +19,55 @@ import getRatingLabel from "@/app/_lib/getRatingLabel";
 import { FiArrowRight, FiArrowLeft } from "react-icons/fi";
 import { FaRegTrashAlt } from "react-icons/fa";
 import { useTranslations } from "next-intl";
-import { fetchHotelsByIds } from "@/app/_lib/hotelsApi";
+import SkeletonLoader from "@/app/_components/SkeletonLoader";
+// import { fetchHotelsByIds } from "@/app/_lib/hotelsApi";
 
 export default function FavoritesPage() {
   const { user, loading } = useUser();
   const [favorites, setFavorites] = useState<HotelCardData[]>([]);
   const router = useRouter();
-
   const pathname = usePathname();
   const locale = pathname.split("/")[1] || "en";
 
-  const t = useTranslations("FavoritesPage");
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+
+  const itemsPerPage = 12;
+
+  const tFavorites = useTranslations("FavoritesPage");
+  const tHotels = useTranslations("HotelsPage");
 
   useEffect(() => {
     if (!user) return;
 
     const loadFavorites = async () => {
       try {
-        const favoriteIds = await fetchFavoriteHotelIds(user.id);
-        const hotels = await fetchHotelsByIds(
-          favoriteIds,
-          locale as SupportedLang
+        const { hotels, totalCount } = await fetchFavoriteHotels(
+          user.id,
+          locale as SupportedLang,
+          page,
+          itemsPerPage
         );
+
         setFavorites(hotels);
+        setTotalPages(Math.ceil(totalCount / itemsPerPage));
       } catch (err) {
-        toast.error(t("Failed to load favorites"));
+        toast.error(tFavorites("Failed to load favorites"));
         console.error(err);
       }
     };
 
     loadFavorites();
-  }, [user, locale, t]);
+  }, [user, locale, tFavorites, page]);
 
   const handleRemove = async (hotelId: number) => {
     if (!user) return;
     try {
       await removeHotelFromFavorites(user.id, hotelId);
       setFavorites((prev) => prev.filter((hotel) => hotel.id !== hotelId));
-      toast.success(t("Removed from favorites"));
+      toast.success(tFavorites("Removed from favorites"));
     } catch {
-      toast.error(t("Failed to remove"));
+      toast.error(tFavorites("Failed to remove"));
     }
   };
 
@@ -73,10 +83,10 @@ export default function FavoritesPage() {
             max-w-md w-full bg-white shadow-lg rounded-lg pointer-events-auto flex flex-col p-4 border border-red-100`}
         >
           <div className="text-sm font-medium text-gray-900 mb-2">
-            {t("Confirm Removal")}
+            {tFavorites("Confirm Removal")}
           </div>
           <div className="text-sm text-gray-500 mb-4">
-            {t("Are you sure you want to remove this hotel?")}
+            {tFavorites("Are you sure you want to remove this hotel?")}
           </div>
           <div className="flex gap-2 justify-end">
             <motion.button
@@ -85,7 +95,7 @@ export default function FavoritesPage() {
               onClick={() => toast.dismiss(toastObj.id)}
               className="px-3 py-1.5 text-sm text-gray-600 hover:bg-gray-100 rounded-lg transition"
             >
-              {t("Cancel")}
+              {tFavorites("Cancel")}
             </motion.button>
             <motion.button
               whileHover={{ scale: 1.05 }}
@@ -96,7 +106,7 @@ export default function FavoritesPage() {
               }}
               className="px-3 py-1.5 text-sm bg-red-500 text-white hover:bg-red-600 rounded-lg transition"
             >
-              {t("Remove")}
+              {tFavorites("Remove")}
             </motion.button>
           </div>
         </motion.div>
@@ -105,30 +115,24 @@ export default function FavoritesPage() {
     );
   };
 
-  if (loading) {
-    return (
-      <div className="flex justify-center items-center h-64">
-        <div className="w-12 h-12 rounded-full border-4 border-primary border-t-transparent animate-spin" />
-      </div>
-    );
-  }
+  if (loading) return <SkeletonLoader />;
 
   if (!user)
     return (
       <motion.div className="text-center mt-10 text-gray-600">
-        {t("Please log in to view your favorite hotels")}
+        {tFavorites("Please log in to view your favorite hotels")}
       </motion.div>
     );
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <motion.h1 className="text-3xl font-bold text-center mb-8 text-text">
-        {t("myFavorites")}
+        {tFavorites("myFavorites")}
       </motion.h1>
 
       {favorites.length === 0 ? (
         <motion.p className="text-center text-gray-500">
-          {t("You have no favorite hotels yet")}
+          {tFavorites("You have no favorite hotels yet")}
         </motion.p>
       ) : (
         <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
@@ -152,6 +156,7 @@ export default function FavoritesPage() {
                     placeholder="blur"
                     blurDataURL="/placeholder.jpg"
                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                    quality={85}
                   />
                   <div
                     className={`absolute top-3 ${
@@ -163,7 +168,7 @@ export default function FavoritesPage() {
                         {hotel.rating}
                       </div>
                       <div className="px-3 py-1.5 text-sm font-medium text-gray-700">
-                        {getRatingLabel(hotel.rating, t)}
+                        {getRatingLabel(hotel.rating, tFavorites)}
                       </div>
                     </div>
                   </div>
@@ -188,7 +193,7 @@ export default function FavoritesPage() {
                           animate={{
                             scale: i < hotel.stars ? 1.2 : 1,
                           }}
-                          transition={{ type: "spring", stiffness: 500 }}
+                          transition={{ type: "spring", stiffness: 300 }}
                         >
                           {i < hotel.stars ? "★" : "☆"}
                         </motion.span>
@@ -220,19 +225,19 @@ export default function FavoritesPage() {
                   <div className="flex items-center mb-2 flex-row gap-1">
                     <div className="flex items-end gap-2">
                       <span className="text-xl font-bold text-primary">
-                        {hotel.priceNew} {t("$")}
+                        {hotel.priceNew} {tFavorites("$")}
                       </span>
                       <span className="text-sm text-gray-500 line-through">
-                        {hotel.priceOld} {t("$")}
+                        {hotel.priceOld} {tFavorites("$")}
                       </span>
                       <span className="text-sm text-primary">
-                        {t("per night")}
+                        {tFavorites("per night")}
                       </span>
                     </div>
                   </div>
 
                   <div className="text-xs text-gray-500 mt-1">
-                    {t("Includes taxes and fees")}
+                    {tFavorites("Includes taxes and fees")}
                   </div>
 
                   <div className="flex sm:flex-row gap-5 mt-4">
@@ -242,9 +247,9 @@ export default function FavoritesPage() {
                       onClick={() => handleBookNow(hotel.id)}
                       className="flex-1 bg-primary text-white font-medium p-4 rounded-lg hover:bg-opacity-90 transition shadow-md flex items-center justify-center gap-2 text-sm"
                     >
-                      <span>{t("bookButton")}</span>
+                      <span>{tFavorites("bookButton")}</span>
                       <motion.span
-                        transition={{ type: "spring", stiffness: 500 }}
+                        transition={{ type: "spring", stiffness: 300 }}
                       >
                         {locale === "ar" ? <FiArrowLeft /> : <FiArrowRight />}
                       </motion.span>
@@ -256,9 +261,9 @@ export default function FavoritesPage() {
                       className="flex-1 bg-white border border-red-300 text-red-500 font-medium py-2 px-4 rounded-lg hover:bg-accent transition flex items-center justify-center gap-2 hover:text-white text-sm"
                     >
                       <motion.span
-                        transition={{ type: "spring", stiffness: 500 }}
+                        transition={{ type: "spring", stiffness: 300 }}
                       ></motion.span>
-                      <span>{t("Remove")}</span>
+                      <span>{tFavorites("Remove")}</span>
                       <FaRegTrashAlt />
                     </motion.button>
                   </div>
@@ -268,6 +273,25 @@ export default function FavoritesPage() {
           </AnimatePresence>
         </div>
       )}
+      <div className="flex justify-center gap-4 mt-6">
+        <button
+          onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
+          disabled={page === 1}
+          className="px-4 py-2 bg-gray-200 rounded disabled:opacity-50"
+        >
+          {tHotels("Prev")}
+        </button>
+        <span className="px-4 py-2">
+          {tHotels("Page")} {page} / {totalPages}
+        </span>
+        <button
+          onClick={() => setPage((prev) => prev + 1)}
+          disabled={page === totalPages}
+          className="px-4 py-2 bg-gray-200 rounded disabled:opacity-50"
+        >
+          {tHotels("Next")}
+        </button>
+      </div>
     </div>
   );
 }

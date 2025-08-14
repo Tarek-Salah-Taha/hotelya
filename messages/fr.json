@@ -299,7 +299,8 @@
 
   "HotelsPage": {
     "Next": "Suivant",
-    "Prev": "Précédent"
+    "Prev": "Précédent",
+    "Page": "Page"
   },
 
   "RoomTypes": {

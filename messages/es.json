@@ -224,7 +224,8 @@
 
   "HotelsPage": {
     "Next": "Próximo",
-    "Prev": "Anterior"
+    "Prev": "Anterior",
+    "Page": "Página"
   },
 
   "HotelPage": {

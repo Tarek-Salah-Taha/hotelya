@@ -278,11 +278,11 @@ export type RegisterData = {
 };
 
 export type UserProfile = {
-  firstName: string | null;
-  lastName: string | null;
-  email: string;
   id: string;
-  avatarUrl?: string | null;
+  email?: string;
+  firstName?: string;
+  lastName?: string;
+  avatarUrl?: string;
 };
 
 export type LoginData = {

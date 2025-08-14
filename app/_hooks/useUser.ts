@@ -1,53 +1,30 @@
 "use client";
 
 import { useUserContext } from "../_context/UserContext";
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect } from "react";
 import supabase from "../_lib/supabase";
 import { UserProfile } from "../_types/types";
 
 const STORAGE_KEY = "app_user";
 
-export function useUser(initialUser?: UserProfile | null) {
+export function useUser(initialUser?: UserProfile | null | undefined) {
   const { user, setUser } = useUserContext();
   const [loading, setLoading] = useState(user === undefined);
 
-  const fetchUser = useCallback(async () => {
-    try {
-      setLoading(true);
-      const { data: auth } = await supabase.auth.getUser();
-      if (!auth.user) {
-        setUser(null);
-        sessionStorage.removeItem(STORAGE_KEY);
-        return;
-      }
-
-      const { data } = await supabase
-        .from("users")
-        .select("id, email, firstName, lastName, avatarUrl")
-        .eq("id", auth.user.id)
-        .single();
-
-      setUser(data);
-      sessionStorage.setItem(STORAGE_KEY, JSON.stringify(data));
-    } finally {
-      setLoading(false);
-    }
-  }, [setUser]);
-
   useEffect(() => {
-    // 1️⃣ SSR user from RootLayout
+    // 1️⃣ If SSR provided a user (even null), use it and cache it
     if (initialUser !== undefined && user === undefined) {
       setUser(initialUser);
       if (initialUser) {
-        sessionStorage.setItem(STORAGE_KEY, JSON.stringify(initialUser));
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(initialUser));
       }
       setLoading(false);
       return;
     }
 
-    // 2️⃣ Cached user from sessionStorage
-    if (!user) {
-      const cached = sessionStorage.getItem(STORAGE_KEY);
+    // 2️⃣ If SSR did not provide a user → try cache
+    if (initialUser === undefined && !user) {
+      const cached = localStorage.getItem(STORAGE_KEY);
       if (cached) {
         setUser(JSON.parse(cached));
         setLoading(false);
@@ -55,34 +32,28 @@ export function useUser(initialUser?: UserProfile | null) {
       }
     }
 
-    // 3️⃣ Restore Supabase session
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      if (!session) {
-        setUser(null);
+    // 3️⃣ If no user yet → confirm with Supabase client
+    if (!user) {
+      supabase.auth.getUser().then(async ({ data: auth }) => {
+        if (!auth.user) {
+          setUser(null);
+          localStorage.removeItem(STORAGE_KEY);
+          setLoading(false);
+          return;
+        }
+        const { data } = await supabase
+          .from("users")
+          .select("id, email, firstName, lastName, avatarUrl")
+          .eq("id", auth.user.id)
+          .single();
+        setUser(data);
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
         setLoading(false);
-        return;
-      }
-      if (!user) {
-        fetchUser();
-      } else {
-        setLoading(false);
-      }
-    });
-
-    // 4️⃣ Listen for auth state changes
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange((event) => {
-      if (event === "SIGNED_IN") {
-        fetchUser();
-      } else if (event === "SIGNED_OUT") {
-        setUser(null);
-        sessionStorage.removeItem(STORAGE_KEY);
-      }
-    });
-
-    return () => subscription.unsubscribe();
-  }, [initialUser, user, setUser, fetchUser]);
+      });
+    } else {
+      setLoading(false);
+    }
+  }, [initialUser, user, setUser]);
 
   return { user, loading };
 }

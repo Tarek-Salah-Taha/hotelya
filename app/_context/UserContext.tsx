@@ -4,7 +4,7 @@ import { createContext, useContext, useState } from "react";
 import { UserProfile } from "../_types/types";
 
 type UserContextType = {
-  user: UserProfile | null;
+  user: UserProfile | null | undefined;
   setUser: (u: UserProfile | null) => void;
 };
 
@@ -15,10 +15,10 @@ export function UserProvider({
   initialUser,
 }: {
   children: React.ReactNode;
-  initialUser: UserProfile | null;
+  initialUser?: UserProfile | null;
 }) {
   // Simple state without localStorage persistence
-  const [user, setUser] = useState<UserProfile | null>(initialUser);
+  const [user, setUser] = useState<UserProfile | null | undefined>(initialUser);
 
   return (
     <UserContext.Provider value={{ user, setUser }}>
