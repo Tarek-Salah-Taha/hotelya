@@ -1,3 +1,5 @@
+import { SupportedLang } from "../_types/types";
+
 export const getDateLocale = (locale: SupportedLang) => {
   switch (locale) {
     case "fr":

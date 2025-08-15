@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import HotelCardItem from "./HotelCardItem";
-import { HotelCardProps } from "../_types/types";
+import { HotelCardProps, SupportedLang } from "../_types/types";
 import { useTranslations } from "next-intl";
 import { useLocale } from "next-intl";
 

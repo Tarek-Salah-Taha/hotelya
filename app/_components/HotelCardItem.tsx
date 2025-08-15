@@ -12,7 +12,7 @@ import {
 } from "../_lib/favoritesApi";
 import { iconMap, availableTags } from "../_constants/availableTags";
 import getRatingLabel from "../_lib/getRatingLabel";
-import { HotelCardItemProps } from "../_types/types";
+import { HotelCardItemProps, SupportedLang } from "../_types/types";
 import { useUser } from "../_hooks/useUser";
 import toast from "react-hot-toast";
 import { motion, AnimatePresence } from "framer-motion";
