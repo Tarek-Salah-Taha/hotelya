@@ -5,6 +5,7 @@ import Image from "next/image";
 import { motion } from "framer-motion";
 import { useTranslations } from "next-intl";
 import { useLocale } from "next-intl";
+import { SupportedLang } from "../_types/types";
 
 function CallToAction() {
   const locale = useLocale() as SupportedLang;
