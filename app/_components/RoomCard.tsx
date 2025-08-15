@@ -10,10 +10,10 @@ import {
 } from "react-icons/fa";
 import { LuBaby } from "react-icons/lu";
 import { useRouter } from "next/navigation";
-import { usePathname } from "next/navigation";
 import { RoomCardProps, SupportedLang } from "../_types/types";
 import { motion } from "framer-motion";
 import { useTranslations } from "next-intl";
+import { useLocale } from "next-intl";
 
 function RoomCard({
   roomId,
@@ -30,12 +30,7 @@ function RoomCard({
 
   const tRoomDescriptions = useTranslations("RoomDescriptions");
 
-  const pathname = usePathname();
-  const locale: SupportedLang = (
-    ["en", "fr", "es", "de", "it", "ar"].includes(pathname.split("/")[1])
-      ? pathname.split("/")[1]
-      : "en"
-  ) as SupportedLang;
+  const locale = useLocale() as SupportedLang;
 
   return (
     <motion.div className="relative flex flex-col md:flex-row border border-gray-200 rounded-xl overflow-hidden bg-white shadow-lg hover:shadow-xl transition-all duration-300">

@@ -10,11 +10,12 @@ import { useUser } from "../_hooks/useUser";
 import UserDropdown from "./UserDropdown";
 import { motion } from "framer-motion";
 import { useTranslations } from "next-intl";
+import { useLocale } from "next-intl";
 
 function Navigation() {
   const { user, loading } = useUser();
   const pathname = usePathname();
-  const locale = pathname.split("/")[1] || "en";
+  const locale = useLocale() as SupportedLang;
   const t = useTranslations("Navigation");
 
   const NAV_ITEMS = [

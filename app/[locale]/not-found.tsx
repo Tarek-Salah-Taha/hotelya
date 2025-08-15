@@ -2,8 +2,8 @@
 
 import Link from "next/link";
 import { FaArrowLeft } from "react-icons/fa";
-import { usePathname } from "next/navigation";
 import { SupportedLang } from "../_types/types";
+import { useLocale } from "next-intl";
 
 export default function NotFound() {
   const supportedLocales: SupportedLang[] = [
@@ -15,12 +15,11 @@ export default function NotFound() {
     "it",
   ];
 
-  const pathname = usePathname();
-  const localeFromPath = pathname.split("/")[1] as SupportedLang;
+  const localeFromPath = useLocale() as SupportedLang;
+
   const locale: SupportedLang = supportedLocales.includes(localeFromPath)
     ? localeFromPath
     : "en";
-
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-background text-text text-center px-4">

@@ -2,12 +2,13 @@
 
 import { useEffect, useState, useMemo, useCallback } from "react";
 import { FaMapMarkerAlt } from "react-icons/fa";
-import { usePathname, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { fetchLocalizedDestinationSuggestions } from "../_lib/suggestionsApi";
 import { motion, AnimatePresence } from "framer-motion";
 import { useTranslations } from "next-intl";
 import { SupportedLang } from "../_types/types";
 import debounce from "lodash/debounce";
+import { useLocale } from "next-intl";
 
 function SearchBox() {
   const [destination, setDestination] = useState("");
@@ -16,9 +17,7 @@ function SearchBox() {
   const [suggestions, setSuggestions] = useState<string[]>([]);
   const [isFocused, setIsFocused] = useState(false);
 
-  const pathname = usePathname();
-
-  const localeFromPath = pathname.split("/")[1] || "en";
+  const localeFromPath = useLocale() as SupportedLang;
   const supportedLangs: SupportedLang[] = ["en", "ar", "fr", "es", "de", "it"];
 
   const locale: SupportedLang = supportedLangs.includes(

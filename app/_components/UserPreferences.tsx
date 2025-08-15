@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import { SupportedLang } from "../_types/types";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
+import { useLocale } from "next-intl";
 
 const localeLabels: Record<SupportedLang, { label: string; icon: string }> = {
   en: { label: "English", icon: "https://flagcdn.com/w80/gb.png" },
@@ -18,9 +19,9 @@ const localeLabels: Record<SupportedLang, { label: string; icon: string }> = {
 export default function UserPreferences() {
   const router = useRouter();
   const pathname = usePathname();
-  const currentLocale = (pathname.split("/")[1] as SupportedLang) || "en";
   const [open, setOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
+  const currentLocale = useLocale() as SupportedLang;
 
   const handleLanguageChange = (locale: SupportedLang) => {
     const newPath = pathname.replace(`/${currentLocale}`, `/${locale}`);

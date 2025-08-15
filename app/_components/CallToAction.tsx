@@ -2,13 +2,12 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { usePathname } from "next/navigation";
 import { motion } from "framer-motion";
 import { useTranslations } from "next-intl";
+import { useLocale } from "next-intl";
 
 function CallToAction() {
-  const pathname = usePathname();
-  const locale = pathname.split("/")[1] || "en";
+  const locale = useLocale() as SupportedLang;
 
   const t = useTranslations("HomePage");
 

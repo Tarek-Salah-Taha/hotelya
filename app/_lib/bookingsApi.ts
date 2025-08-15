@@ -31,15 +31,33 @@ export async function createHotelBooking(booking: {
 // Fetches all bookings for a user along with localized hotel details.
 export async function fetchUserBookingsWithHotelInfo(
   userId: string,
-  locale: SupportedLang = "en"
+  locale: SupportedLang = "en",
+  status?: "Confirmed" | "Cancelled",
+  upcoming?: boolean,
+  sortBy: "latest" | "oldest" | "name" = "latest"
 ) {
-  const { data, error } = await supabase
+  let query = supabase
     .from("bookings")
     .select(
       `*, hotel:hotelId(hotelName_${locale}, city_${locale}, country_${locale}, exteriorImages)`
     )
     .eq("userId", userId);
 
+  if (status) query = query.eq("status", status);
+  if (upcoming !== undefined) {
+    query = upcoming
+      ? query.gte("checkOutDate", new Date().toISOString())
+      : query.lt("checkOutDate", new Date().toISOString());
+  }
+
+  if (sortBy === "latest")
+    query = query.order("createdAt", { ascending: false });
+  if (sortBy === "oldest")
+    query = query.order("createdAt", { ascending: true });
+  if (sortBy === "name")
+    query = query.order(`hotel.hotelName_${locale}`, { ascending: true });
+
+  const { data, error } = await query;
   if (error) throw error;
   return data;
 }

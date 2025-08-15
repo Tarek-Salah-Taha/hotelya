@@ -6,11 +6,11 @@ import { useRouter } from "next/navigation";
 import { loginUserWithProfile } from "../_lib/usersApi";
 import toast from "react-hot-toast";
 import { FiEye, FiEyeOff, FiLoader } from "react-icons/fi";
-import { usePathname } from "next/navigation";
 import { SupportedLang } from "../_types/types";
 import { motion } from "framer-motion";
 import { useTranslations } from "next-intl";
 import { useUserContext } from "../_context/UserContext";
+import { useLocale } from "next-intl";
 
 const supportedLocales: SupportedLang[] = ["en", "ar", "fr", "de", "es", "it"];
 
@@ -25,11 +25,9 @@ export default function Login() {
   const [error, setError] = useState("");
   const { setUser } = useUserContext();
 
-  const pathname = usePathname();
-
   const t = useTranslations("SigninPage");
 
-  const localeFromPath = pathname.split("/")[1] as SupportedLang;
+  const localeFromPath = useLocale() as SupportedLang;
   const locale: SupportedLang = supportedLocales.includes(localeFromPath)
     ? localeFromPath
     : "en";

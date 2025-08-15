@@ -5,10 +5,11 @@ import Link from "next/link";
 import Image from "next/image";
 import { useUser } from "../_hooks/useUser";
 import { signOutUser } from "../_lib/usersApi";
-import { usePathname, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { SupportedLang } from "../_types/types";
 import { useTranslations } from "next-intl";
 import { useUserContext } from "../_context/UserContext";
+import { useLocale } from "next-intl";
 
 export default function UserDropdown() {
   const router = useRouter();
@@ -28,8 +29,7 @@ export default function UserDropdown() {
     "es",
     "it",
   ];
-  const pathname = usePathname();
-  const localeFromPath = pathname.split("/")[1] as SupportedLang;
+  const localeFromPath = useLocale() as SupportedLang;
   const locale: SupportedLang = supportedLocales.includes(localeFromPath)
     ? localeFromPath
     : "en";

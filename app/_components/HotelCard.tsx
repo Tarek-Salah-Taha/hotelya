@@ -1,10 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
 import HotelCardItem from "./HotelCardItem";
 import { HotelCardProps } from "../_types/types";
 import { useTranslations } from "next-intl";
+import { useLocale } from "next-intl";
 
 export default function HotelCard({
   hotels,
@@ -14,8 +14,7 @@ export default function HotelCard({
   destination = "",
   onPageChange,
 }: HotelCardProps) {
-  const pathname = usePathname();
-  const locale = pathname.split("/")[1] || "en";
+  const locale = useLocale() as SupportedLang;
 
   const t = useTranslations("HotelsPage");
 

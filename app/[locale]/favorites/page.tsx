@@ -1,75 +1,45 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import Image from "next/image";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import toast from "react-hot-toast";
 import { useUser } from "@/app/_hooks/useUser";
-import { HotelCardData, SupportedLang } from "@/app/_types/types";
-import {
-  // fetchFavoriteHotelIds,
-  fetchFavoriteHotels,
-  removeHotelFromFavorites,
-} from "@/app/_lib/favoritesApi";
-import { usePathname } from "next/navigation";
-import { IoLocationSharp } from "react-icons/io5";
-import { availableTags, iconMap } from "@/app/_constants/availableTags";
-import getRatingLabel from "@/app/_lib/getRatingLabel";
-import { FiArrowRight, FiArrowLeft } from "react-icons/fi";
-import { FaRegTrashAlt } from "react-icons/fa";
+import { SupportedLang } from "@/app/_types/types";
 import { useTranslations } from "next-intl";
-import SkeletonLoader from "@/app/_components/SkeletonLoader";
-// import { fetchHotelsByIds } from "@/app/_lib/hotelsApi";
+import CardSkeletonLoader from "@/app/_components/CardSkeletonLoader";
+import FavoriteHotelCard from "@/app/_components/FavoriteHotelCard";
+import ConfirmActionToast from "@/app/_components/ConfirmActionToast";
+import PaginationControls from "@/app/_components/PaginationControls";
+import useFavorites from "@/app/_hooks/useFavorites";
+import { AiOutlineHeart } from "react-icons/ai";
+import { FaRegUserCircle } from "react-icons/fa";
+import EmptyState from "@/app/_components/EmptyState";
+import { useLocale } from "next-intl";
 
 export default function FavoritesPage() {
-  const { user, loading } = useUser();
-  const [favorites, setFavorites] = useState<HotelCardData[]>([]);
+  const { user, loading: userLoading } = useUser();
   const router = useRouter();
-  const pathname = usePathname();
-  const locale = pathname.split("/")[1] || "en";
+  const locale = useLocale() as SupportedLang;
 
   const [page, setPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
-
   const itemsPerPage = 12;
 
   const tFavorites = useTranslations("FavoritesPage");
   const tHotels = useTranslations("HotelsPage");
 
-  useEffect(() => {
-    if (!user) return;
-
-    const loadFavorites = async () => {
-      try {
-        const { hotels, totalCount } = await fetchFavoriteHotels(
-          user.id,
-          locale as SupportedLang,
-          page,
-          itemsPerPage
-        );
-
-        setFavorites(hotels);
-        setTotalPages(Math.ceil(totalCount / itemsPerPage));
-      } catch (err) {
-        toast.error(tFavorites("Failed to load favorites"));
-        console.error(err);
-      }
-    };
-
-    loadFavorites();
-  }, [user, locale, tFavorites, page]);
-
-  const handleRemove = async (hotelId: number) => {
-    if (!user) return;
-    try {
-      await removeHotelFromFavorites(user.id, hotelId);
-      setFavorites((prev) => prev.filter((hotel) => hotel.id !== hotelId));
-      toast.success(tFavorites("Removed from favorites"));
-    } catch {
-      toast.error(tFavorites("Failed to remove"));
-    }
-  };
+  const {
+    favorites,
+    totalPages,
+    loading: favoritesLoading,
+    removeFavorite,
+  } = useFavorites(
+    user?.id,
+    locale as SupportedLang,
+    page,
+    itemsPerPage,
+    tFavorites
+  );
 
   const handleBookNow = (id: number) => {
     router.push(`/${locale}/hotels/${id}`);
@@ -78,51 +48,33 @@ export default function FavoritesPage() {
   const handleRemoveWithConfirmation = (hotelId: number) => {
     toast.custom(
       (toastObj) => (
-        <motion.div
-          className={`${toastObj.visible ? "animate-enter" : "animate-leave"} 
-            max-w-md w-full bg-white shadow-lg rounded-lg pointer-events-auto flex flex-col p-4 border border-red-100`}
-        >
-          <div className="text-sm font-medium text-gray-900 mb-2">
-            {tFavorites("Confirm Removal")}
-          </div>
-          <div className="text-sm text-gray-500 mb-4">
-            {tFavorites("Are you sure you want to remove this hotel?")}
-          </div>
-          <div className="flex gap-2 justify-end">
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              onClick={() => toast.dismiss(toastObj.id)}
-              className="px-3 py-1.5 text-sm text-gray-600 hover:bg-gray-100 rounded-lg transition"
-            >
-              {tFavorites("Cancel")}
-            </motion.button>
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              onClick={() => {
-                handleRemove(hotelId);
-                toast.dismiss(toastObj.id);
-              }}
-              className="px-3 py-1.5 text-sm bg-red-500 text-white hover:bg-red-600 rounded-lg transition"
-            >
-              {tFavorites("Remove")}
-            </motion.button>
-          </div>
-        </motion.div>
+        <ConfirmActionToast
+          message={tFavorites("Are you sure you want to remove this hotel?")}
+          onCancel={() => toast.dismiss(toastObj.id)}
+          onConfirm={() => {
+            removeFavorite(hotelId);
+            toast.dismiss(toastObj.id);
+          }}
+          confirmLabel={tFavorites("Remove")}
+          cancelLabel={tFavorites("Cancel")}
+        />
       ),
       { duration: Infinity }
     );
   };
 
-  if (loading) return <SkeletonLoader />;
+  if (userLoading || favoritesLoading) {
+    return <CardSkeletonLoader />;
+  }
 
-  if (!user)
+  if (!user) {
     return (
-      <motion.div className="text-center mt-10 text-gray-600">
-        {tFavorites("Please log in to view your favorite hotels")}
-      </motion.div>
+      <EmptyState
+        icon={FaRegUserCircle}
+        text={tFavorites("Please log in to view your favorite hotels")}
+      />
     );
+  }
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -131,167 +83,36 @@ export default function FavoritesPage() {
       </motion.h1>
 
       {favorites.length === 0 ? (
-        <motion.p className="text-center text-gray-500">
-          {tFavorites("You have no favorite hotels yet")}
-        </motion.p>
+        <EmptyState
+          icon={AiOutlineHeart}
+          text={tFavorites("You have no favorite hotels yet")}
+        />
       ) : (
         <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
           <AnimatePresence>
             {favorites.map((hotel) => (
-              <motion.div
+              <FavoriteHotelCard
                 key={hotel.id}
-                whileHover={{
-                  y: -5,
-                  boxShadow: "0 10px 25px -5px rgba(0, 0, 0, 0.1)",
-                }}
-                className="bg-white rounded-xl shadow-lg overflow-hidden flex flex-col border border-gray-100"
-              >
-                <div className="relative h-56 w-full overflow-hidden">
-                  <Image
-                    src={hotel.exteriorImages || "/placeholder.jpg"}
-                    alt={hotel.hotelName}
-                    fill
-                    className="object-cover transition-transform duration-500 hover:scale-105"
-                    loading="lazy"
-                    placeholder="blur"
-                    blurDataURL="/placeholder.jpg"
-                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                    quality={85}
-                  />
-                  <div
-                    className={`absolute top-3 ${
-                      locale === "ar" ? "left-3" : "right-3"
-                    }`}
-                  >
-                    <div className="flex items-center bg-gradient-to-br from-white/90 to-white/70 backdrop-blur-sm rounded-lg shadow-sm border border-white/20 overflow-hidden">
-                      <div className="bg-primary px-3 py-1.5 text-white font-bold">
-                        {hotel.rating}
-                      </div>
-                      <div className="px-3 py-1.5 text-sm font-medium text-gray-700">
-                        {getRatingLabel(hotel.rating, tFavorites)}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="p-5 flex flex-col flex-1 justify-between">
-                  <div>
-                    <h2 className="text-xl font-semibold text-gray-800 mb-1">
-                      {hotel.hotelName}
-                    </h2>
-                    <div className="flex items-center gap-1 text-sm text-gray-600 mt-1">
-                      <IoLocationSharp className="text-lg text-primary" />
-                      <span>
-                        {hotel.city} • {hotel.country}
-                      </span>
-                    </div>
-
-                    <div className="text-yellow-400 flex items-center gap-1 py-1 px-3">
-                      {[...Array(5)].map((_, i) => (
-                        <motion.span
-                          key={i}
-                          animate={{
-                            scale: i < hotel.stars ? 1.2 : 1,
-                          }}
-                          transition={{ type: "spring", stiffness: 300 }}
-                        >
-                          {i < hotel.stars ? "★" : "☆"}
-                        </motion.span>
-                      ))}
-                    </div>
-
-                    <div className="flex flex-wrap gap-2 mb-4">
-                      {hotel.tags?.map((tagLabel) => {
-                        const matchedTag = availableTags.find((tagDef) =>
-                          tagDef.labels.includes(tagLabel)
-                        );
-                        const Icon = matchedTag
-                          ? iconMap[matchedTag.icon]
-                          : null;
-
-                        return (
-                          <div
-                            key={tagLabel}
-                            className="flex items-center gap-1 text-xs text-gray-700 bg-gray-100 px-3 py-1.5 rounded-full"
-                          >
-                            {Icon && <Icon className="w-3 h-3 text-primary" />}
-                            <span>{tagLabel}</span>
-                          </div>
-                        );
-                      })}
-                    </div>
-                  </div>
-
-                  <div className="flex items-center mb-2 flex-row gap-1">
-                    <div className="flex items-end gap-2">
-                      <span className="text-xl font-bold text-primary">
-                        {hotel.priceNew} {tFavorites("$")}
-                      </span>
-                      <span className="text-sm text-gray-500 line-through">
-                        {hotel.priceOld} {tFavorites("$")}
-                      </span>
-                      <span className="text-sm text-primary">
-                        {tFavorites("per night")}
-                      </span>
-                    </div>
-                  </div>
-
-                  <div className="text-xs text-gray-500 mt-1">
-                    {tFavorites("Includes taxes and fees")}
-                  </div>
-
-                  <div className="flex sm:flex-row gap-5 mt-4">
-                    <motion.button
-                      whileHover={{ scale: 1.03 }}
-                      whileTap={{ scale: 0.98 }}
-                      onClick={() => handleBookNow(hotel.id)}
-                      className="flex-1 bg-primary text-white font-medium p-4 rounded-lg hover:bg-opacity-90 transition shadow-md flex items-center justify-center gap-2 text-sm"
-                    >
-                      <span>{tFavorites("bookButton")}</span>
-                      <motion.span
-                        transition={{ type: "spring", stiffness: 300 }}
-                      >
-                        {locale === "ar" ? <FiArrowLeft /> : <FiArrowRight />}
-                      </motion.span>
-                    </motion.button>
-                    <motion.button
-                      whileHover={{ scale: 1.03 }}
-                      whileTap={{ scale: 0.98 }}
-                      onClick={() => handleRemoveWithConfirmation(hotel.id)}
-                      className="flex-1 bg-white border border-red-300 text-red-500 font-medium py-2 px-4 rounded-lg hover:bg-accent transition flex items-center justify-center gap-2 hover:text-white text-sm"
-                    >
-                      <motion.span
-                        transition={{ type: "spring", stiffness: 300 }}
-                      ></motion.span>
-                      <span>{tFavorites("Remove")}</span>
-                      <FaRegTrashAlt />
-                    </motion.button>
-                  </div>
-                </div>
-              </motion.div>
+                hotel={hotel}
+                locale={locale}
+                tFavorites={tFavorites}
+                onBookNow={handleBookNow}
+                onRemove={handleRemoveWithConfirmation}
+              />
             ))}
           </AnimatePresence>
         </div>
       )}
-      <div className="flex justify-center gap-4 mt-6">
-        <button
-          onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
-          disabled={page === 1}
-          className="px-4 py-2 bg-gray-200 rounded disabled:opacity-50"
-        >
-          {tHotels("Prev")}
-        </button>
-        <span className="px-4 py-2">
-          {tHotels("Page")} {page} / {totalPages}
-        </span>
-        <button
-          onClick={() => setPage((prev) => prev + 1)}
-          disabled={page === totalPages}
-          className="px-4 py-2 bg-gray-200 rounded disabled:opacity-50"
-        >
-          {tHotels("Next")}
-        </button>
-      </div>
+
+      {favorites.length > 0 && (
+        <PaginationControls
+          page={page}
+          totalPages={totalPages}
+          onPrev={() => setPage((prev) => Math.max(prev - 1, 1))}
+          onNext={() => setPage((prev) => Math.min(prev + 1, totalPages))}
+          t={tHotels}
+        />
+      )}
     </div>
   );
 }

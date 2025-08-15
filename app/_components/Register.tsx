@@ -7,9 +7,9 @@ import toast from "react-hot-toast";
 import Link from "next/link";
 import { FiEye, FiEyeOff, FiLoader } from "react-icons/fi";
 import { SupportedLang } from "../_types/types";
-import { usePathname } from "next/navigation";
 import { motion } from "framer-motion";
 import { useTranslations } from "next-intl";
+import { useLocale } from "next-intl";
 
 const supportedLocales: SupportedLang[] = ["en", "ar", "fr", "de", "es", "it"];
 
@@ -27,8 +27,7 @@ export default function Register() {
 
   const t = useTranslations("RegisterPage");
 
-  const pathname = usePathname();
-  const localeFromPath = pathname.split("/")[1] as SupportedLang;
+  const localeFromPath = useLocale() as SupportedLang;
   const locale: SupportedLang = supportedLocales.includes(localeFromPath)
     ? localeFromPath
     : "en";

@@ -351,3 +351,7 @@ export type Tag = {
   icon: IconKey;
   labels: string[];
 };
+
+export type BookingTab = "upcoming" | "past";
+export type BookingSort = "latest" | "oldest" | "name";
+export type BookingStatusFilter = "all" | "confirmed" | "cancelled";

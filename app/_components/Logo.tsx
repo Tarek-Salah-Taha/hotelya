@@ -1,7 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
-import { usePathname } from "next/navigation";
 import { SupportedLang } from "../_types/types";
+import { useLocale } from "next-intl";
 
 function Logo() {
   const supportedLocales: SupportedLang[] = [
@@ -13,8 +13,7 @@ function Logo() {
     "it",
   ];
 
-  const pathname = usePathname();
-  const localeFromPath = pathname.split("/")[1] as SupportedLang;
+  const localeFromPath = useLocale() as SupportedLang;
   const locale: SupportedLang = supportedLocales.includes(localeFromPath)
     ? localeFromPath
     : "en";

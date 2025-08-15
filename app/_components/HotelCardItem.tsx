@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 import { IoLocationSharp } from "react-icons/io5";
 import { FaHeart, FaRegHeart } from "react-icons/fa";
-import { useRouter, usePathname } from "next/navigation";
+import { useRouter } from "next/navigation";
 import {
   addHotelToFavorites,
   removeHotelFromFavorites,
@@ -18,6 +18,7 @@ import toast from "react-hot-toast";
 import { motion, AnimatePresence } from "framer-motion";
 import { FiArrowRight, FiArrowLeft } from "react-icons/fi";
 import { useTranslations } from "next-intl";
+import { useLocale } from "next-intl";
 
 export default function HotelCardItem({ hotel }: HotelCardItemProps) {
   const [isFavorite, setIsFavorite] = useState(false);
@@ -25,8 +26,7 @@ export default function HotelCardItem({ hotel }: HotelCardItemProps) {
   const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
   const { user } = useUser();
-  const pathname = usePathname();
-  const locale = pathname.split("/")[1] || "en";
+  const locale = useLocale() as SupportedLang;
   const tFavorites = useTranslations("FavoritesPage");
 
   useEffect(() => {
