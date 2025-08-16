@@ -1,5 +1,6 @@
-import { Hotel, SupportedLang } from "../_types/types";
+import { SupportedLang, Hotel } from "../_types/types";
 
+// ✅ For full hotel pages
 export type LocalizedHotel = Pick<
   Hotel,
   | "id"
@@ -29,6 +30,13 @@ export type LocalizedHotel = Pick<
   languagesSpoken: string[];
 };
 
+export type BookingLocalizedHotel = {
+  hotelName: string;
+  city: string;
+  country: string;
+  exteriorImages: string;
+};
+
 // List of all localized base keys
 type LocalizedFieldMap = {
   hotelName: string;
@@ -44,6 +52,7 @@ type LocalizedFieldMap = {
   languagesSpoken: string[];
 };
 
+// Full transform for hotel pages
 export function transformHotelFields(
   hotel: Hotel,
   lang: SupportedLang
@@ -79,5 +88,25 @@ export function transformHotelFields(
     policies: localize("policies"),
     paymentOptions: localize("paymentOptions"),
     languagesSpoken: localize("languagesSpoken"),
+  };
+}
+
+// Lightweight transform for bookings
+export function transformBookingHotelFields(
+  hotel: {
+    exteriorImages?: string;
+  } & {
+    [K in
+      | `hotelName_${SupportedLang}`
+      | `city_${SupportedLang}`
+      | `country_${SupportedLang}`]?: string;
+  },
+  lang: SupportedLang
+): BookingLocalizedHotel {
+  return {
+    hotelName: hotel[`hotelName_${lang}`] ?? "",
+    city: hotel[`city_${lang}`] ?? "",
+    country: hotel[`country_${lang}`] ?? "",
+    exteriorImages: hotel.exteriorImages ?? "/placeholder.jpg",
   };
 }

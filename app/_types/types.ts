@@ -244,7 +244,7 @@ export type Booking = {
   createdAt: string;
   roomType: string;
   priceNew: number;
-  hotel?: {
+  hotel: {
     exteriorImages: string;
   } & {
     [K in

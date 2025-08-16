@@ -20,6 +20,7 @@ import BookingList from "@/app/_components/BookingList";
 import { filterAndSortBookings } from "@/app/_utils/bookingsUtils";
 import { useLocale } from "next-intl";
 import { useMemo } from "react";
+import BookingsHeader from "@/app/_components/BookingsHeader";
 
 export default function Page() {
   const { user, loading: userLoading } = useUser();
@@ -33,7 +34,11 @@ export default function Page() {
   const tBooking = useTranslations("BookingPage");
   const tRoom = useTranslations("RoomTypes");
 
-  const { bookings, isLoading, cancelBooking } = useBookings(user?.id, locale);
+  const {
+    bookings,
+    isLoading: isLoadingBooking,
+    cancelBooking,
+  } = useBookings(user?.id, locale);
 
   const handleRebook = (hotelId: string) => {
     if (hotelId) router.push(`/${locale}/hotels/${hotelId}`);
@@ -63,8 +68,8 @@ export default function Page() {
     [bookings, activeTab, statusFilter, sortBy, locale]
   );
 
-  if (userLoading)
-    return <div className="w-12 h-12 rounded-full bg-gray-200 animate-pulse" />;
+  if (userLoading || isLoadingBooking) return <SkeletonLoader />;
+
   if (!user)
     return (
       <div className="flex items-center justify-center min-h-[60vh]">
@@ -73,20 +78,10 @@ export default function Page() {
         </p>
       </div>
     );
-  if (isLoading) return <SkeletonLoader />;
 
   return (
     <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8 sm:py-12">
-      <div className="text-center mb-10">
-        <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-2">
-          {tBooking("bookings")}
-        </h1>
-        <p className="text-gray-600">
-          {activeTab === "upcoming"
-            ? tBooking("Upcoming stays")
-            : tBooking("Past reservations")}
-        </p>
-      </div>
+      <BookingsHeader activeTab={activeTab} tBooking={tBooking} />
 
       <BookingsControls
         activeTab={activeTab}
@@ -98,7 +93,7 @@ export default function Page() {
         tBooking={tBooking}
       />
 
-      {!isLoading && filteredBookings.length === 0 ? (
+      {!isLoadingBooking && filteredBookings.length === 0 ? (
         <NoBookingsMessage activeTab={activeTab} tBooking={tBooking} />
       ) : (
         <BookingList

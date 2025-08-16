@@ -30,7 +30,7 @@ export default function BookingsControls({
         {["upcoming", "past"].map((tab) => (
           <button
             key={tab}
-            onClick={() => setActiveTab(tab as "upcoming" | "past")}
+            onClick={() => setActiveTab(tab as BookingTab)}
             className={`px-5 py-2 rounded-md text-sm font-medium transition-all duration-200
               ${
                 activeTab === tab
@@ -48,7 +48,7 @@ export default function BookingsControls({
         <select
           value={statusFilter}
           onChange={(e) =>
-            setStatusFilter(e.target.value as "all" | "confirmed" | "cancelled")
+            setStatusFilter(e.target.value as BookingStatusFilter)
           }
           className="border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
         >
@@ -62,9 +62,7 @@ export default function BookingsControls({
         <span className="text-sm text-gray-600">{tBooking("Sort by")}:</span>
         <select
           value={sortBy}
-          onChange={(e) =>
-            setSortBy(e.target.value as "latest" | "oldest" | "name")
-          }
+          onChange={(e) => setSortBy(e.target.value as BookingSort)}
           className="border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary] focus:border-transparent"
         >
           <option value="latest">{tBooking("Latest")}</option>

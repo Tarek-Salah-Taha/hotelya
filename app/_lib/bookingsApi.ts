@@ -1,4 +1,4 @@
-import { SupportedLang } from "../_types/types";
+import { SupportedLang, BookingSort } from "../_types/types";
 import supabase from "./supabase";
 
 // Creates a new hotel booking with the given details and default status if not provided.
@@ -34,7 +34,7 @@ export async function fetchUserBookingsWithHotelInfo(
   locale: SupportedLang = "en",
   status?: "Confirmed" | "Cancelled",
   upcoming?: boolean,
-  sortBy: "latest" | "oldest" | "name" = "latest"
+  sortBy: BookingSort = "latest"
 ) {
   let query = supabase
     .from("bookings")
