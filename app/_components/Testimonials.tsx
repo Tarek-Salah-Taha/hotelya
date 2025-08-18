@@ -1,4 +1,6 @@
 import { useTranslations } from "next-intl";
+import getInitials from "../_helpers/getInitials";
+import Stars from "./Stars";
 
 function Testimonials() {
   const t = useTranslations("HomePage");
@@ -20,13 +22,6 @@ function Testimonials() {
       rating: 5,
     },
   ];
-
-  const getInitials = (name: string) =>
-    name
-      .split(" ")
-      .map((n) => n[0])
-      .join("")
-      .toUpperCase();
 
   return (
     <section className="bg-background py-16 px-4 sm:px-6 lg:px-8">
@@ -57,16 +52,7 @@ function Testimonials() {
 
                 {/* Star rating */}
                 <div className="flex mb-4 text-xl">
-                  {[...Array(5)].map((_, i) => (
-                    <span
-                      key={i}
-                      className={`${
-                        i < rating ? "text-secondary" : "text-gray-300"
-                      }`}
-                    >
-                      ★
-                    </span>
-                  ))}
+                  <Stars stars={rating} />
                 </div>
 
                 {/* Name */}

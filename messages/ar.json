@@ -262,7 +262,8 @@
     "Please fill in all fields": "يرجى ملء جميع الحقول.",
     "Review posted": "تم نشر المراجعة!",
     "Error posting review": "خطأ في نشر المراجعة",
-    "No reviews yet": "لا توجد مراجعات حتى الآن."
+    "No reviews yet": "لا توجد مراجعات حتى الآن.",
+    "Please log in to post a review": "الرجاء تسجيل الدخول لنشر مراجعة"
   },
 
   "RoomTypes": {

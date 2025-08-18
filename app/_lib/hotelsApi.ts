@@ -1,6 +1,11 @@
 import supabase from "./supabase";
 import { Hotel, HotelCardData, SupportedLang } from "../_types/types";
 import { normalizeLocalizedFields } from "./normalizeLocalizedFields";
+import getLocalizedFields from "../_helpers/getLocalizedFields";
+import { fetchHotelFiltersData } from "./filtersApi";
+import { fetchHotelReviews } from "./reviewsApi";
+import { fetchRoomsByHotelId } from "./roomsApi";
+import { transformHotelFields } from "./transformHotel";
 
 // Fetches a paginated list of hotels with localized fields based on the selected language.
 export async function fetchPaginatedHotelsWithLocalization(
@@ -11,12 +16,12 @@ export async function fetchPaginatedHotelsWithLocalization(
   const from = (page - 1) * limit;
   const to = from + limit - 1;
 
-  const localizedFields = [
-    `hotelName_${locale}`,
-    `city_${locale}`,
-    `country_${locale}`,
-    `tags_${locale}`,
-  ] as const;
+  const localizedFields = getLocalizedFields(locale, [
+    "hotelName",
+    "city",
+    "country",
+    "tags",
+  ]);
 
   const selectFields = [
     "id",
@@ -33,9 +38,7 @@ export async function fetchPaginatedHotelsWithLocalization(
     .select(selectFields)
     .range(from, to);
 
-  if (error) {
-    throw new Error(error.message || "Failed to fetch hotels");
-  }
+  if (error) throw new Error(error.message || "Failed to fetch hotels");
 
   return (data as unknown as Hotel[]).map((hotel) =>
     normalizeLocalizedFields<HotelCardData>(hotel, locale, [
@@ -53,16 +56,34 @@ export async function fetchTotalHotelCount(): Promise<number> {
     .from("hotel_with_standard_room")
     .select("id", { count: "exact", head: true });
 
-  if (error) {
-    console.error("Error counting hotels:", error);
-    throw new Error(error.message || "Failed to count hotels");
-  }
-
+  if (error) throw new Error(error.message || "Failed to count hotels");
   return count ?? 0;
 }
 
+export async function fetchHotelsPageData({
+  page,
+  limit,
+  locale,
+}: {
+  page: number;
+  limit: number;
+  locale: SupportedLang;
+}) {
+  const [hotels, filters, totalCount] = await Promise.all([
+    fetchPaginatedHotelsWithLocalization(page, limit, locale),
+    fetchHotelFiltersData({ locale }),
+    fetchTotalHotelCount(),
+  ]);
+
+  return {
+    hotels,
+    filters,
+    totalPages: Math.ceil(totalCount / limit),
+  };
+}
+
 // Fetches full hotel details by its unique ID.
-export async function fetchHotelById(id: string): Promise<Hotel> {
+export async function fetchHotelById(id: number): Promise<Hotel> {
   const { data, error } = await supabase
     .from("hotel_with_standard_room")
     .select("*")
@@ -74,6 +95,18 @@ export async function fetchHotelById(id: string): Promise<Hotel> {
   }
 
   return data;
+}
+
+export async function fetchHotelPageData(id: number, locale: SupportedLang) {
+  const [rawHotel, reviews, rooms] = await Promise.all([
+    fetchHotelById(id),
+    fetchHotelReviews(id),
+    fetchRoomsByHotelId(id),
+  ]);
+
+  const hotel = transformHotelFields(rawHotel, locale);
+
+  return { hotel, rooms, reviews };
 }
 
 // Fetches and returns a filtered, localized, and paginated list of hotels with total count.
@@ -109,14 +142,14 @@ export async function fetchFilteredHotels(filters: {
 
   const offset = (page - 1) * limit;
 
-  const localizedFields = [
-    `hotelName_${locale}`,
-    `city_${locale}`,
-    `country_${locale}`,
-    `tags_${locale}`,
-    `paymentOptions_${locale}`,
-    `languagesSpoken_${locale}`,
-  ];
+  const localizedFields = getLocalizedFields(locale, [
+    "hotelName",
+    "city",
+    "country",
+    "tags",
+    "paymentOptions",
+    "languagesSpoken",
+  ]);
 
   const selectFields = [
     "id",
@@ -258,12 +291,12 @@ export async function fetchHotelsByIds(
 ): Promise<HotelCardData[]> {
   if (hotelIds.length === 0) return [];
 
-  const localizedFields = [
-    `hotelName_${locale}`,
-    `city_${locale}`,
-    `country_${locale}`,
-    `tags_${locale}`,
-  ] as const;
+  const localizedFields = getLocalizedFields(locale, [
+    "hotelName",
+    "city",
+    "country",
+    "tags",
+  ]);
 
   const selectFields = [
     "id",

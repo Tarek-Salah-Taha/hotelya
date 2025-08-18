@@ -15,7 +15,7 @@ function HotelPage({ hotel, rooms }: HotelPageProps) {
     hotel.exteriorImages,
     hotel.roomsImages,
     hotel.restaurantsImages,
-  ].flat();
+  ].filter(Boolean);
 
   return (
     <div className="space-y-6">
@@ -23,11 +23,7 @@ function HotelPage({ hotel, rooms }: HotelPageProps) {
       <ImageGallery images={allImages} />
       <HotelOverview description={hotel.description} />
       <HotelPopularAmenities tags={hotel.tags} />
-      <HotelAmenities
-        amenities={
-          Array.isArray(hotel.amenities) ? hotel.amenities : [hotel.amenities]
-        }
-      />
+      <HotelAmenities amenities={hotel.amenities} />
       <RoomListing
         rooms={rooms}
         hotelName={hotel.hotelName}
@@ -36,16 +32,14 @@ function HotelPage({ hotel, rooms }: HotelPageProps) {
       />
       <ContactInformation hotel={hotel} />
       <HotelPolicies
-        policies={
-          Array.isArray(hotel.policies) ? hotel.policies : [hotel.policies]
-        }
+        policies={hotel.policies}
         checkIn={hotel.checkIn}
         checkOut={hotel.checkOut}
       />
-
       <PaymentOptions payment={hotel.paymentOptions} />
       <LanguagesSpoken languages={hotel.languagesSpoken} />
     </div>
   );
 }
+
 export default HotelPage;

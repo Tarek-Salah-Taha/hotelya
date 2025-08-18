@@ -43,7 +43,7 @@ export type Hotel = Localized<{
   priceOld: number;
   exteriorImages: string;
   restaurantsImages: string;
-  roomsImages: string[];
+  roomsImages: string;
 
   amenities: Amenities;
   policies: Policy;
@@ -60,7 +60,6 @@ export type Hotel = Localized<{
 export type Room = {
   hotelId: number;
   id: number;
-
   area: number;
   beds: number;
   bathrooms: number;
@@ -148,7 +147,7 @@ export type HotelPageProps = {
 };
 
 export type HotelPoliciesProps = {
-  policies: Policy[];
+  policies: Policy;
   checkIn: string;
   checkOut: string;
 };
@@ -158,7 +157,7 @@ export type HotelAmenitiesProps = {
 };
 
 export type HotelReviewsProps = {
-  hotelId: string;
+  hotelId: number;
   initialReviews: Review[];
 };
 
@@ -219,8 +218,8 @@ export type ImageGalleryProps = {
 // ------------------------
 
 export type Review = {
-  id: string;
-  hotelId: string;
+  id: number;
+  hotelId: number;
   author: string;
   rating: number;
   comment: string;
@@ -355,3 +354,25 @@ export type Tag = {
 export type BookingTab = "upcoming" | "past";
 export type BookingSort = "latest" | "oldest" | "name";
 export type BookingStatusFilter = "all" | "confirmed" | "cancelled";
+
+export type PaymentOptionProps = {
+  payment: string[];
+};
+
+export type AmenityBadgeProps = {
+  label: string;
+  bg: string;
+  text: string;
+  hover: string;
+  key: number;
+};
+
+export type RoomSpecs = {
+  area: number;
+  bed: number;
+  bedType: string;
+  bathrooms: number;
+  adults: number;
+  children: number;
+  extraBed: boolean;
+};

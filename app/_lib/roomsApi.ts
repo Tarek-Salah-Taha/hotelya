@@ -2,7 +2,7 @@ import supabase from "./supabase";
 import { Room, SupportedLang } from "../_types/types";
 
 // Fetches all rooms available for the specified hotel.
-export async function fetchRoomsByHotelId(hotelId: string): Promise<Room[]> {
+export async function fetchRoomsByHotelId(hotelId: number): Promise<Room[]> {
   const { data, error } = await supabase
     .from("rooms")
     .select("*")

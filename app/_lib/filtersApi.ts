@@ -1,23 +1,23 @@
-import { SupportedLang, HotelFilterData } from "../_types/types";
 import supabase from "./supabase";
 import { normalizeLocalizedFields } from "./normalizeLocalizedFields";
+import { SupportedLang, HotelFilterData } from "../_types/types";
+import getLocalizedFields from "../_helpers/getLocalizedFields";
 
-// Fetches hotel data with localized fields used to generate filter options.
 export async function fetchHotelFiltersData({
   locale,
 }: {
   locale: SupportedLang;
 }): Promise<HotelFilterData[]> {
-  const localizedFields = [
-    `continent_${locale}`,
-    `country_${locale}`,
-    `city_${locale}`,
-    `paymentOptions_${locale}`,
-    `languagesSpoken_${locale}`,
-    `amenities_${locale}`,
-    `policies_${locale}`,
-    `tags_${locale}`,
-  ] as const;
+  const localizedFields = getLocalizedFields(locale, [
+    "continent",
+    "country",
+    "city",
+    "paymentOptions",
+    "languagesSpoken",
+    "amenities",
+    "policies",
+    "tags",
+  ]);
 
   const selectFields = [
     "id",

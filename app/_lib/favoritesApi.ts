@@ -1,6 +1,7 @@
 import { SupportedLang, HotelCardData } from "@/app/_types/types";
 import { normalizeLocalizedFields } from "@/app/_lib/normalizeLocalizedFields";
 import supabase from "./supabase";
+import getLocalizedFields from "../_helpers/getLocalizedFields";
 
 type FavoriteWithHotel = {
   hotel: HotelCardData;
@@ -43,69 +44,18 @@ export async function fetchFavoriteHotelIds(userId: string): Promise<string[]> {
   return data.map((item) => item.hotelId);
 }
 
-// export async function fetchFavoriteHotels(
-//   userId: string,
-//   locale: SupportedLang,
-//   page: number,
-//   itemsPerPage: number
-// ): Promise<HotelCardData[]> {
-//   const localizedFields = [
-//     `hotelName_${locale}`,
-//     `city_${locale}`,
-//     `country_${locale}`,
-//     `tags_${locale}`,
-//   ];
-
-//   const selectFields = [
-//     `hotel:hotel_with_standard_room (
-//       id,
-//       ${localizedFields.join(",")},
-//       stars,
-//       rating,
-//       exteriorImages,
-//       priceNew,
-//       priceOld
-//     )`,
-//   ];
-
-//   const from = (page - 1) * itemsPerPage;
-//   const to = from + itemsPerPage - 1;
-
-//   const { data, error } = await supabase
-//     .from("favorites")
-//     .select(selectFields.join(","), { count: "exact" })
-//     .eq("userId", userId)
-//     .range(from, to);
-
-//   if (error || !data) {
-//     console.error("Failed to fetch favorites with hotels:", error?.message);
-//     return { hotels: [], totalCount: 0 };
-//   }
-
-//   return (data as unknown as FavoriteWithHotel[])
-//     .map((item) =>
-//       normalizeLocalizedFields<HotelCardData>(item.hotel, locale, [
-//         "hotelName",
-//         "city",
-//         "country",
-//         "tags",
-//       ])
-//     )
-//     .filter(Boolean);
-// }
-
 export async function fetchFavoriteHotels(
   userId: string,
   locale: SupportedLang,
   page: number,
   itemsPerPage: number
 ): Promise<{ hotels: HotelCardData[]; totalCount: number }> {
-  const localizedFields = [
-    `hotelName_${locale}`,
-    `city_${locale}`,
-    `country_${locale}`,
-    `tags_${locale}`,
-  ];
+  const localizedFields = getLocalizedFields(locale, [
+    "hotelName",
+    "city",
+    "country",
+    "tags",
+  ]);
 
   const selectFields = [
     `hotel:hotel_with_standard_room (

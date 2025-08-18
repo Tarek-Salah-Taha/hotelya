@@ -1,5 +1,10 @@
 import { SupportedLang, Hotel } from "../_types/types";
 
+type Amenities = {
+  type: string;
+  features: string[];
+};
+
 // ✅ For full hotel pages
 export type LocalizedHotel = Pick<
   Hotel,
@@ -24,8 +29,14 @@ export type LocalizedHotel = Pick<
   continent: string;
   address: string;
   description: string;
-  amenities: Hotel["amenities"];
-  policies: Hotel["policies"];
+  amenities: Amenities[];
+  policies: {
+    minAge: number;
+    petsAllowed: boolean;
+    extraBedPolicy: string;
+    smokingAllowed: boolean;
+    cancellationPolicy: string;
+  };
   paymentOptions: string[];
   languagesSpoken: string[];
 };

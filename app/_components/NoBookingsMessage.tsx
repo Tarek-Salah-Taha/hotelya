@@ -20,7 +20,7 @@ export default function NoBookingsMessage({
   return (
     <div className="bg-gray-50 rounded-xl p-12 text-center">
       <h3 className="text-lg font-medium text-gray-900 mb-2">
-        {tBooking("No Bookings Found")}
+        {tBooking("No bookings found")}
       </h3>
       <p className="text-gray-600 max-w-md mx-auto">{message}</p>
     </div>

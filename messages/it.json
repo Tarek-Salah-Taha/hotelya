@@ -121,7 +121,8 @@
     "Please fill in all fields": "Veuillez remplir tous les champs.",
     "Review posted": "Avis publié !",
     "Error posting review": "Erreur lors de la publication de l'avis",
-    "No reviews yet": "Aucun avis pour le moment."
+    "No reviews yet": "Aucun avis pour le moment.",
+    "Please log in to post a review": "Effettua il login per pubblicare una recensione."
   },
 
   "RoomDescriptions": {

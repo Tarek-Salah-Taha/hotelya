@@ -1,19 +1,12 @@
 "use client";
 
 import Image from "next/image";
-import {
-  FaBed,
-  FaRulerCombined,
-  FaBath,
-  FaUser,
-  FaChild,
-} from "react-icons/fa";
-import { LuBaby } from "react-icons/lu";
 import { useRouter } from "next/navigation";
 import { RoomCardProps, SupportedLang } from "../_types/types";
 import { motion } from "framer-motion";
 import { useTranslations } from "next-intl";
 import { useLocale } from "next-intl";
+import { getRoomSpecs } from "../_utils/getRoomSpecs";
 
 function RoomCard({
   roomId,
@@ -25,12 +18,11 @@ function RoomCard({
   roomDescription,
 }: RoomCardProps) {
   const router = useRouter();
-
   const tRoomTypes = useTranslations("RoomTypes");
-
   const tRoomDescriptions = useTranslations("RoomDescriptions");
-
   const locale = useLocale() as SupportedLang;
+
+  const roomSpecs = getRoomSpecs({ specs, tRoomDescriptions });
 
   return (
     <motion.div className="relative flex flex-col md:flex-row border border-gray-200 rounded-xl overflow-hidden bg-white shadow-lg hover:shadow-xl transition-all duration-300">
@@ -52,8 +44,8 @@ function RoomCard({
         />
         {priceOld && (
           <div className="absolute top-4 start-4 bg-red-500 text-white text-sm font-bold px-3 py-1 rounded-full shadow-md">
-            {tRoomDescriptions("Save")} {""}
-            {(priceOld - priceNew).toFixed(2)} {tRoomDescriptions("$")}
+            {tRoomDescriptions("Save")} {(priceOld - priceNew).toFixed(2)}{" "}
+            {tRoomDescriptions("$")}
           </div>
         )}
       </motion.div>
@@ -66,57 +58,19 @@ function RoomCard({
           </h3>
 
           <div className="flex flex-wrap gap-2 mb-4">
-            {[
-              {
-                icon: <FaRulerCombined className="text-primary" size={14} />,
-                text: `${specs.area} ${tRoomDescriptions("m²")}`,
-              },
-              {
-                icon: <FaBed className="text-primary" size={14} />,
-                text: `${specs.bed} × ${tRoomDescriptions(specs.bedType)}`,
-              },
-              {
-                icon: <FaBath className="text-primary" size={14} />,
-                text: `${
-                  specs.bathrooms === 1
-                    ? tRoomDescriptions("Bath")
-                    : tRoomDescriptions("Baths")
-                }`,
-              },
-              {
-                icon: <FaUser className="text-primary" size={14} />,
-                text: `${
-                  specs.adults === 1
-                    ? tRoomDescriptions("Adult")
-                    : `${specs.adults}  ${tRoomDescriptions("Adults")}`
-                }`,
-              },
-              specs.children > 0 && {
-                icon: <FaChild className="text-primary" size={14} />,
-                text: `${
-                  specs.children === 1
-                    ? tRoomDescriptions("Child")
-                    : `${specs.children}  ${tRoomDescriptions("Children")}`
-                }`,
-              },
-              specs.extraBed && {
-                icon: <LuBaby className="text-primary" size={14} />,
-                text: tRoomDescriptions("Free crib"),
-              },
-            ]
-              .filter(Boolean)
-              .map((item, index) => (
+            {roomSpecs.map((spec, index) => {
+              const IconComponent = spec.icon;
+              return (
                 <motion.div
                   key={index}
                   whileHover={{ scale: 1.05 }}
                   className="flex items-center gap-1.5 bg-gray-100 px-3 py-1.5 rounded-full text-sm"
                 >
-                  {item && "icon" in item && item.icon}
-                  <span className="text-gray-700">
-                    {item && "text" in item ? item.text : ""}
-                  </span>
+                  <IconComponent className="text-primary" size={14} />
+                  <span className="text-gray-700">{spec.text}</span>
                 </motion.div>
-              ))}
+              );
+            })}
           </div>
 
           <p className="text-gray-600 mb-6 leading-relaxed">

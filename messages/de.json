@@ -261,7 +261,8 @@
     "Please fill in all fields": "Bitte füllen Sie alle Felder aus.",
     "Review posted": "Bewertung veröffentlicht!",
     "Error posting review": "Fehler beim Posten der Bewertung",
-    "No reviews yet": "Noch keine Bewertungen."
+    "No reviews yet": "Noch keine Bewertungen.",
+    "Please log in to post a review": "Bitte melden Sie sich an, um eine Bewertung abzugeben."
   },
 
   "RoomTypes": {

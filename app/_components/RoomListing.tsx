@@ -1,31 +1,16 @@
 import { RoomListingProps } from "../_types/types";
 import RoomCard from "./RoomCard";
 import { useTranslations } from "next-intl";
+import SectionTitle from "./SectionTitle";
 
 function RoomListing({ rooms, hotelName, city, country }: RoomListingProps) {
   const t = useTranslations("HotelPage");
 
   return (
-    <div
-      className="
-      bg-white p-6 rounded-xl 
-      border border-gray-100
-      shadow-sm hover:shadow-md 
-      transition-all duration-300
-      group
-    "
-    >
+    <div className="bg-white p-6 rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition-all duration-300 group">
       <div className="space-y-8">
-        <div className="relative pb-2 mb-6 overflow-hidden">
-          <h2 className="text-2xl font-semibold text-gray-800 inline-block group-hover:translate-x-1 transition-transform duration-300 rtl:group-hover:-translate-x-1">
-            {t("Room Types")}
-          </h2>
-          <div
-            className="absolute bottom-0 w-12 h-1 bg-primary rounded-full 
-          scale-x-0 group-hover:scale-x-100 origin-left transition-transform duration-500
-          rtl:origin-right"
-          />
-        </div>
+        <SectionTitle title={t("Room Types")} underline />
+
         <p className="text-lg text-gray-600">
           {t("Explore our comfortable accommodations")}
         </p>

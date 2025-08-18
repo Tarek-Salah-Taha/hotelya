@@ -11,7 +11,6 @@ import {
   fetchFavoriteHotelIds,
 } from "../_lib/favoritesApi";
 import { iconMap, availableTags } from "../_constants/availableTags";
-import getRatingLabel from "../_lib/getRatingLabel";
 import { HotelCardItemProps, SupportedLang } from "../_types/types";
 import { useUser } from "../_hooks/useUser";
 import toast from "react-hot-toast";
@@ -19,6 +18,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import { FiArrowRight, FiArrowLeft } from "react-icons/fi";
 import { useTranslations } from "next-intl";
 import { useLocale } from "next-intl";
+import RatingBadge from "./RatingBadge";
+import Stars from "./Stars";
 
 export default function HotelCardItem({ hotel }: HotelCardItemProps) {
   const [isFavorite, setIsFavorite] = useState(false);
@@ -149,14 +150,7 @@ export default function HotelCardItem({ hotel }: HotelCardItemProps) {
         <div
           className={`absolute top-3 ${locale === "ar" ? "right-3" : "left-3"}`}
         >
-          <div className="flex items-center bg-gradient-to-br from-white/90 to-white/70 backdrop-blur-sm rounded-lg shadow-sm border border-white/20 overflow-hidden">
-            <div className="bg-primary px-3 py-1.5 text-white font-bold">
-              {hotel.rating}
-            </div>
-            <div className="px-3 py-1.5 text-sm font-medium text-gray-700">
-              {getRatingLabel(hotel.rating, tFavorites)}
-            </div>
-          </div>
+          <RatingBadge rating={hotel.rating} namespace="FavoritesPage" />
         </div>
 
         {/* Hover dark overlay */}
@@ -190,17 +184,7 @@ export default function HotelCardItem({ hotel }: HotelCardItemProps) {
 
         {/* Stars */}
         <div className="flex items-center justify-between mb-3">
-          <div className="text-yellow-400 flex items-center gap-1">
-            {[...Array(5)].map((_, i) => (
-              <motion.span
-                key={i}
-                animate={{ scale: i < hotel.stars ? 1.2 : 1 }}
-                transition={{ type: "spring", stiffness: 500 }}
-              >
-                {i < hotel.stars ? "★" : "☆"}
-              </motion.span>
-            ))}
-          </div>
+          <Stars stars={hotel.stars} />
         </div>
 
         {/* Tags */}

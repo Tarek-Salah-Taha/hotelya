@@ -3,12 +3,12 @@
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { IoLocationSharp } from "react-icons/io5";
-import getRatingLabel from "@/app/_lib/getRatingLabel";
 import { HotelCardData } from "@/app/_types/types";
 import Stars from "./Stars";
 import Tags from "./Tags";
 import PriceDisplay from "./PriceDisplay";
 import CardActions from "./CardActions";
+import RatingBadge from "./RatingBadge";
 
 type FavoriteHotelCardProps = {
   hotel: HotelCardData;
@@ -49,17 +49,11 @@ export default function FavoriteHotelCard({
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
           quality={IMAGE_QUALITY}
         />
+
         <div
           className={`absolute top-3 ${locale === "ar" ? "left-3" : "right-3"}`}
         >
-          <div className="flex items-center bg-gradient-to-br from-white/90 to-white/70 backdrop-blur-sm rounded-lg shadow-sm border border-white/20 overflow-hidden">
-            <div className="bg-primary px-3 py-1.5 text-white font-bold">
-              {hotel.rating}
-            </div>
-            <div className="px-3 py-1.5 text-sm font-medium text-gray-700">
-              {getRatingLabel(hotel.rating, tFavorites)}
-            </div>
-          </div>
+          <RatingBadge rating={hotel.rating} namespace="FavoritesPage" />
         </div>
       </div>
 
