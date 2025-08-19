@@ -1,4 +1,24 @@
 import { useTranslations } from "next-intl";
+import { FeatureItem } from "../_types/types";
+import FeatureCard from "./FeatureCard";
+
+const features: FeatureItem[] = [
+  {
+    icon: "💰",
+    titleKey: "best price guarantee",
+    descriptionKey: "best price guarantee description",
+  },
+  {
+    icon: "⚡",
+    titleKey: "instant confirmation",
+    descriptionKey: "instant confirmation description",
+  },
+  {
+    icon: "📞",
+    titleKey: "24/7 global support",
+    descriptionKey: "24/7 global support description",
+  },
+];
 
 function Features() {
   const t = useTranslations("HomePage");
@@ -16,38 +36,14 @@ function Features() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {/* Feature 1 */}
-          <div className="bg-white p-8 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 border border-border hover:border-primary/30 group">
-            <div className="text-3xl mb-4 text-primary">💰</div>
-            <h3 className="text-xl font-bold text-text mb-3 group-hover:text-primary transition-colors">
-              {t("best price guarantee")}
-            </h3>
-            <p className="text-text opacity-80">
-              {t("best price guarantee description")}
-            </p>
-          </div>
-
-          {/* Feature 2 */}
-          <div className="bg-white p-8 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 border border-border hover:border-primary/30 group">
-            <div className="text-3xl mb-4 text-primary">⚡</div>
-            <h3 className="text-xl font-bold text-text mb-3 group-hover:text-primary transition-colors">
-              {t("instant confirmation")}
-            </h3>
-            <p className="text-text opacity-80">
-              {t("instant confirmation description")}
-            </p>
-          </div>
-
-          {/* Feature 3 */}
-          <div className="bg-white p-8 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 border border-border hover:border-primary/30 group">
-            <div className="text-3xl mb-4 text-primary">📞</div>
-            <h3 className="text-xl font-bold text-text mb-3 group-hover:text-primary transition-colors">
-              {t("24/7 global support")}
-            </h3>
-            <p className="text-text opacity-80">
-              {t("24/7 global support description")}
-            </p>
-          </div>
+          {features.map((feature, index) => (
+            <FeatureCard
+              key={index}
+              icon={feature.icon}
+              title={t(feature.titleKey)}
+              description={t(feature.descriptionKey)}
+            />
+          ))}
         </div>
       </div>
     </section>

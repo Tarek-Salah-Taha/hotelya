@@ -680,5 +680,11 @@
     "Reset Filters": "Restablecer filtros",
     "Back to search page": "Volver a la página de busqueda",
     "No results found": "No se encontraron resultados"
+  },
+
+  "UserDropdownPage": {
+    "Logout": "Cerrar sesión",
+    "Cancel": "Cancelar",
+    "Are you sure you want to log out?": "¿Estás seguro que deseas cerrar la sesión?"
   }
 }

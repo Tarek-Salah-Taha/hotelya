@@ -20,12 +20,12 @@ function HotelHeader({ hotel }: { hotel: LocalizedHotel }) {
             <Stars stars={stars} />
           </div>
 
-          <address className="flex items-center gap-1 text-lg text-gray-600">
+          <span className="flex items-center gap-1 text-lg text-gray-600">
             <IoLocationSharp className="text-xl text-primary" />
             <span>
               {address} • {city} • {country}
             </span>
-          </address>
+          </span>
         </div>
 
         <RatingBadge rating={rating} namespace="FavoritesPage" />

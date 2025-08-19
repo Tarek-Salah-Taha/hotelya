@@ -13,7 +13,7 @@ import { useTranslations } from "next-intl";
 import { useLocale } from "next-intl";
 import { SupportedLang } from "../_types/types";
 
-function Navigation() {
+function Navigation({ onNavigate }: { onNavigate?: () => void }) {
   const { user, loading } = useUser();
   const pathname = usePathname();
   const locale = useLocale() as SupportedLang;
@@ -52,6 +52,7 @@ function Navigation() {
               >
                 <Link
                   href={fullHref}
+                  onClick={onNavigate}
                   className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-all duration-200 ${
                     isActive
                       ? "text-background font-semibold bg-primary/10"

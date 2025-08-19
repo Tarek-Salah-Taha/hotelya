@@ -1,42 +1,49 @@
 "use client";
 
-import Link from "next/link";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { loginUserWithProfile } from "../_lib/usersApi";
-import toast from "react-hot-toast";
-import { FiEye, FiEyeOff, FiLoader } from "react-icons/fi";
-import { SupportedLang } from "../_types/types";
-import { motion } from "framer-motion";
 import { useTranslations } from "next-intl";
-import { useUserContext } from "../_context/UserContext";
 import { useLocale } from "next-intl";
+import toast from "react-hot-toast";
+import { loginUserWithProfile } from "../_lib/usersApi";
+import { useUserContext } from "../_context/UserContext";
+import { SupportedLang } from "../_types/types";
+import LoginContainer from "./LoginContainer";
+import LoginCard from "./LoginCard";
+import LoginHeader from "./LoginHeader";
+import LoginForm from "./LoginForm";
+import LoginFooter from "./LoginFooter";
 
 const supportedLocales: SupportedLang[] = ["en", "ar", "fr", "de", "es", "it"];
 
+type LoginForm = {
+  email: string;
+  password: string;
+};
+
 export default function Login() {
   const router = useRouter();
-  const [form, setForm] = useState({
+  const t = useTranslations("SigninPage");
+  const { setUser } = useUserContext();
+  const localeFromPath = useLocale() as SupportedLang;
+  const locale: SupportedLang = supportedLocales.includes(localeFromPath)
+    ? localeFromPath
+    : "en";
+
+  const [form, setForm] = useState<LoginForm>({
     email: "",
     password: "",
   });
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const { setUser } = useUserContext();
-
-  const t = useTranslations("SigninPage");
-
-  const localeFromPath = useLocale() as SupportedLang;
-  const locale: SupportedLang = supportedLocales.includes(localeFromPath)
-    ? localeFromPath
-    : "en";
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setForm((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleLogin = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     setError("");
@@ -52,8 +59,8 @@ export default function Login() {
 
       if (user) {
         setUser(user);
-        toast.success(`${t("Welcome back")} ${userName}!`);
         router.push(`/${locale}`);
+        toast.success(`${t("Welcome back")} ${userName}!`);
       }
     } catch (err) {
       console.error(err);
@@ -64,102 +71,27 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center p-4">
-      <motion.div className="w-full max-w-md bg-white p-8 rounded-2xl shadow-xl border border-gray-100">
-        <div className="text-center mb-8">
-          <motion.h1 className="text-3xl font-bold text-gray-800 mb-2">
-            {t("Welcome!")}
-          </motion.h1>
-          <p className="text-gray-500">{t("Sign in to your account")}</p>
-        </div>
+    <LoginContainer>
+      <LoginCard>
+        <LoginHeader
+          title={t("Welcome!")}
+          subtitle={t("Sign in to your account")}
+        />
 
-        <form onSubmit={handleLogin} className="space-y-6">
-          <motion.div>
-            <label
-              htmlFor="email"
-              className="block text-sm font-medium text-gray-700 mb-1"
-            >
-              {t("Email Address")}
-            </label>
-            <input
-              id="email"
-              name="email"
-              type="email"
-              placeholder="your@email.com"
-              value={form.email}
-              onChange={handleChange}
-              className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
-              required
-            />
-          </motion.div>
+        <LoginForm
+          onSubmit={handleSubmit}
+          form={form}
+          onChange={handleChange}
+          showPassword={showPassword}
+          onTogglePassword={() => setShowPassword(!showPassword)}
+          error={error}
+          loading={loading}
+          locale={locale}
+          t={t}
+        />
 
-          <motion.div className="relative">
-            <label
-              htmlFor="password"
-              className="block text-sm font-medium text-gray-700 mb-1"
-            >
-              {t("Password")}
-            </label>
-            <input
-              id="password"
-              name="password"
-              type={showPassword ? "text" : "password"}
-              placeholder="••••••••"
-              value={form.password}
-              onChange={handleChange}
-              className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent pr-10 transition-all"
-              required
-            />
-            <motion.span
-              onClick={() => setShowPassword(!showPassword)}
-              className={`absolute ${
-                locale === "ar" ? "left" : "right"
-              }-3 top-[42px] text-gray-400 hover:text-gray-600 cursor-pointer transition-colors`}
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              {showPassword ? <FiEyeOff size={20} /> : <FiEye size={20} />}
-            </motion.span>
-          </motion.div>
-
-          {error && (
-            <motion.p className="text-red-500 text-sm p-2 bg-red-50 rounded-lg">
-              {error}
-            </motion.p>
-          )}
-
-          <motion.div>
-            <motion.button
-              type="submit"
-              disabled={loading}
-              className="w-full bg-gradient-to-r bg-primary text-white py-3 rounded-lg font-medium shadow-sm hover:shadow-md transition-all flex items-center justify-center gap-2"
-              whileHover={{ scale: 1.01 }}
-              whileTap={{ scale: 0.98 }}
-            >
-              {loading ? (
-                <>
-                  <FiLoader className="animate-spin" />
-                  {t("Signing in")}
-                </>
-              ) : (
-                t("Sign In")
-              )}
-            </motion.button>
-          </motion.div>
-        </form>
-
-        <motion.div className="mt-6 text-center">
-          <p className="text-sm text-gray-600">
-            {t("Don't have an account?")}{" "}
-            <Link
-              href={`/${locale}/auth/register`}
-              className="text-primary hover:underline font-medium transition-colors"
-            >
-              {t("Create one")}
-            </Link>
-          </p>
-        </motion.div>
-      </motion.div>
-    </div>
+        <LoginFooter locale={locale} t={t} />
+      </LoginCard>
+    </LoginContainer>
   );
 }

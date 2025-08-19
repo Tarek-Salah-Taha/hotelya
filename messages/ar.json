@@ -683,5 +683,11 @@
     "Reset Filters": "إعادة ضبط",
     "Back to search page": "العودة لصفحة البحث",
     "No results found": "لم يتم العثور على نتائج"
+  },
+
+  "UserDropdownPage": {
+    "Logout": "تسجيل الخروج",
+    "Cancel": "إلغاء",
+    "Are you sure you want to log out?": "هل أنت متأكد أنك تريد تسجيل الخروج؟"
   }
 }

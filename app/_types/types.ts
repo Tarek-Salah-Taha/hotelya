@@ -376,3 +376,15 @@ export type RoomSpecs = {
   children: number;
   extraBed: boolean;
 };
+
+export type FeatureCardProps = {
+  icon: string;
+  title: string;
+  description: string;
+};
+
+export type FeatureItem = {
+  icon: string;
+  titleKey: string;
+  descriptionKey: string;
+};

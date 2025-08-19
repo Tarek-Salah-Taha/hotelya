@@ -16,7 +16,11 @@ const localeLabels: Record<SupportedLang, { label: string; icon: string }> = {
   it: { label: "Italiano", icon: "https://flagcdn.com/w80/it.png" },
 };
 
-export default function UserPreferences() {
+export default function UserPreferences({
+  onChangePref,
+}: {
+  onChangePref?: () => void;
+}) {
   const router = useRouter();
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
@@ -48,7 +52,10 @@ export default function UserPreferences() {
       <motion.button
         whileHover={{ scale: 1.02 }}
         whileTap={{ scale: 0.98 }}
-        onClick={() => setOpen(!open)}
+        onClick={() => {
+          setOpen(!open);
+          onChangePref?.();
+        }}
         className="w-full bg-white border border-gray-200 text-left px-4 py-3 rounded-xl shadow-sm flex items-center justify-between hover:bg-gray-50 transition-all duration-200"
       >
         <div className="flex items-center gap-3">

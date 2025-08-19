@@ -10,6 +10,8 @@ import { motion, AnimatePresence } from "framer-motion";
 function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
+  const handleCloseMenu = () => setIsMenuOpen(false);
+
   return (
     <header className="border-b border-b-text px-6 sm:px-8 py-4 bg-primary shadow-md sticky top-0 z-50">
       <div className="flex justify-between items-center gap-4">
@@ -26,8 +28,8 @@ function Header() {
 
         {/* Desktop Navigation */}
         <div className="hidden lg:flex items-center gap-8">
-          <Navigation />
-          <UserPreferences />
+          <Navigation onNavigate={handleCloseMenu} />
+          <UserPreferences onChangePref={handleCloseMenu} />
         </div>
       </div>
 
@@ -35,8 +37,8 @@ function Header() {
       <AnimatePresence>
         {isMenuOpen && (
           <motion.div className="lg:hidden mt-4 px-4 space-y-4">
-            <Navigation />
-            <UserPreferences />
+            <Navigation onNavigate={handleCloseMenu} />
+            <UserPreferences onChangePref={handleCloseMenu} />
           </motion.div>
         )}
       </AnimatePresence>

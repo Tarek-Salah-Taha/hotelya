@@ -680,5 +680,11 @@
     "Reset Filters": "Reset Filters",
     "Back to search page": "Back to search page",
     "No results found": "No results found"
+  },
+
+  "UserDropdownPage": {
+    "Logout": "Logout",
+    "Cancel": "Cancel",
+    "Are you sure you want to log out?": "Are you sure you want to log out?"
   }
 }
