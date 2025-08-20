@@ -1,4 +1,3 @@
-// app/_hooks/useFavorites.ts
 import { useEffect, useState, useCallback } from "react";
 import {
   fetchFavoriteHotels,

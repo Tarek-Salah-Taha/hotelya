@@ -1,5 +1,6 @@
 import { Booking, BookingTab } from "../_types/types";
 import { useTranslations } from "next-intl";
+import MotionButton from "./MotionButton";
 
 type BookingCardFooterProps = {
   booking: Booking;
@@ -30,20 +31,18 @@ export default function BookingCardFooter({
 
         <div className="flex gap-3 w-full sm:w-auto">
           {activeTab === "upcoming" && booking.status === "Confirmed" && (
-            <button
+            <MotionButton
+              label={tBooking("Cancel Booking")}
               onClick={() => onCancel(booking.id)}
-              className="flex-1 bg-white border border-red-300 text-red-500 font-medium px-4 py-3 rounded-lg hover:bg-accent transition flex items-center justify-center gap-1 hover:text-white"
-            >
-              {tBooking("Cancel Booking")}
-            </button>
+              variant="danger"
+            />
           )}
           {activeTab === "past" && (
-            <button
+            <MotionButton
+              label={tBooking("Rebook")}
               onClick={() => onRebook(booking.hotelId)}
-              className="flex flex-1 items-center justify-center gap-2 px-4 py-3 bg-primary text-white border border-transparent rounded-xl text-base font-semibold transition-all duration-200 hover:bg-white hover:text-primary hover:border-primary active:bg-white active:text-primary active:border-primary hover:shadow-lg"
-            >
-              {tBooking("Rebook")}
-            </button>
+              variant="primary"
+            />
           )}
         </div>
       </div>

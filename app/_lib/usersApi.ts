@@ -141,3 +141,17 @@ export async function uploadUserAvatar(file: File): Promise<string> {
 
   return data.publicUrl;
 }
+
+export async function updateUserAvatar(userId: string, avatarUrl: string) {
+  const { error } = await supabase
+    .from("users")
+    .update({ avatarUrl })
+    .eq("id", userId);
+
+  if (error) {
+    console.error("Update avatar error:", error);
+    throw new Error("Failed to update avatar");
+  }
+
+  return avatarUrl;
+}
