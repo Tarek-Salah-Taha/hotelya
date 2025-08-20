@@ -4,9 +4,13 @@ import { FiLoader } from "react-icons/fi";
 export default function SubmitButton({
   loading,
   t,
+  loadingLabel,
+  defaultLabel,
 }: {
   loading: boolean;
   t: (key: string) => string;
+  loadingLabel: string;
+  defaultLabel: string;
 }) {
   return (
     <motion.div>
@@ -20,10 +24,10 @@ export default function SubmitButton({
         {loading ? (
           <>
             <FiLoader className="animate-spin" />
-            {t("Signing in")}
+            {t(loadingLabel)}
           </>
         ) : (
-          t("Sign In")
+          t(defaultLabel)
         )}
       </motion.button>
     </motion.div>

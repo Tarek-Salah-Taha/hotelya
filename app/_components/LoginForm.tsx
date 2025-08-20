@@ -6,7 +6,7 @@ import PasswordField from "./PasswordField";
 import FormError from "./FormError";
 import SubmitButton from "./SubmitButton";
 
-interface LoginFormProps {
+type LoginFormProps = {
   onSubmit: (e: React.FormEvent) => void;
   form: {
     email: string;
@@ -19,7 +19,7 @@ interface LoginFormProps {
   loading: boolean;
   locale: SupportedLang;
   t: (key: string) => string;
-}
+};
 
 export default function LoginForm({
   onSubmit,
@@ -60,7 +60,12 @@ export default function LoginForm({
 
       {error && <FormError message={error} />}
 
-      <SubmitButton loading={loading} t={t} />
+      <SubmitButton
+        loading={loading}
+        t={t}
+        loadingLabel="Signing in"
+        defaultLabel="Sign In"
+      />
     </form>
   );
 }

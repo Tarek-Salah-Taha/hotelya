@@ -5,11 +5,12 @@ import { useRouter } from "next/navigation";
 import { signUpUserWithProfile } from "../_lib/usersApi";
 import toast from "react-hot-toast";
 import Link from "next/link";
-import { FiEye, FiEyeOff, FiLoader } from "react-icons/fi";
 import { SupportedLang } from "../_types/types";
-import { motion } from "framer-motion";
-import { useTranslations } from "next-intl";
-import { useLocale } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
+import FormField from "./FormField";
+import PasswordField from "./PasswordField";
+import SubmitButton from "./SubmitButton";
+import FormError from "./FormError";
 
 const supportedLocales: SupportedLang[] = ["en", "ar", "fr", "de", "es", "it"];
 
@@ -26,14 +27,13 @@ export default function Register() {
   const [showPassword, setShowPassword] = useState(false);
 
   const t = useTranslations("RegisterPage");
-
   const localeFromPath = useLocale() as SupportedLang;
   const locale: SupportedLang = supportedLocales.includes(localeFromPath)
     ? localeFromPath
     : "en";
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+    setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
   const handleRegister = async (e: React.FormEvent) => {
@@ -64,129 +64,85 @@ export default function Register() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center p-4">
-      <motion.div className="w-full max-w-md bg-white p-8 rounded-2xl shadow-xl border border-gray-100">
+      <div className="w-full max-w-md bg-white p-8 rounded-2xl shadow-xl border border-gray-100">
         <div className="text-center mb-8">
-          <motion.h1 className="text-3xl font-bold text-gray-800 mb-2">
+          <h1 className="text-3xl font-bold text-gray-800 mb-2">
             {t("Join Us")}
-          </motion.h1>
+          </h1>
           <p className="text-gray-500">
             {t("Create your account to get started")}
           </p>
         </div>
 
         <form onSubmit={handleRegister} className="space-y-5">
-          <motion.div className="flex gap-4">
+          {/* Name fields */}
+          <div className="flex gap-4">
             <div className="w-1/2">
-              <label
-                htmlFor="firstName"
-                className="block text-sm font-medium text-gray-700 mb-1"
-              >
-                {t("First Name")}
-              </label>
-              <input
+              <FormField
                 id="firstName"
                 name="firstName"
+                type="text"
+                label={t("First Name")}
                 placeholder="John"
-                className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
                 value={form.firstName}
                 onChange={handleChange}
                 required
               />
             </div>
             <div className="w-1/2">
-              <label
-                htmlFor="lastName"
-                className="block text-sm font-medium text-gray-700 mb-1"
-              >
-                {t("Last Name")}
-              </label>
-              <input
+              <FormField
                 id="lastName"
                 name="lastName"
+                type="text"
+                label={t("Last Name")}
                 placeholder="Doe"
-                className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
                 value={form.lastName}
                 onChange={handleChange}
                 required
               />
             </div>
-          </motion.div>
+          </div>
 
-          <motion.div>
-            <label
-              htmlFor="email"
-              className="block text-sm font-medium text-gray-700 mb-1"
-            >
-              {t("Email Address")}
-            </label>
-            <input
-              id="email"
-              name="email"
-              type="email"
-              placeholder="your@email.com"
-              className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
-              value={form.email}
-              onChange={handleChange}
-              required
-            />
-          </motion.div>
+          {/* Email */}
+          <FormField
+            id="email"
+            name="email"
+            type="email"
+            label={t("Email Address")}
+            placeholder="your@email.com"
+            value={form.email}
+            onChange={handleChange}
+            required
+          />
 
-          <motion.div className="relative">
-            <label
-              htmlFor="password"
-              className="block text-sm font-medium text-gray-700 mb-1"
-            >
-              {t("Password")}
-            </label>
-            <input
-              id="password"
-              name="password"
-              type={showPassword ? "text" : "password"}
-              placeholder="••••••••"
-              className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent pr-10 transition-all"
-              value={form.password}
-              onChange={handleChange}
-              required
-            />
-            <motion.span
-              onClick={() => setShowPassword(!showPassword)}
-              className={`absolute ${
-                locale === "ar" ? "left" : "right"
-              }-3 top-[42px] text-gray-400 hover:text-gray-600 cursor-pointer transition-colors`}
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              {showPassword ? <FiEyeOff size={20} /> : <FiEye size={20} />}
-            </motion.span>
-          </motion.div>
+          {/* Password */}
+          <PasswordField
+            id="password"
+            name="password"
+            label={t("Password")}
+            placeholder="••••••••"
+            value={form.password}
+            onChange={handleChange}
+            showPassword={showPassword}
+            onTogglePassword={() => setShowPassword((prev) => !prev)}
+            locale={locale}
+            required
+          />
 
-          {error && (
-            <motion.p className="text-red-500 text-sm p-2 bg-red-50 rounded-lg">
-              {error}
-            </motion.p>
-          )}
+          {/* Error */}
+          {error && <FormError message={error} />}
 
-          <motion.div>
-            <motion.button
-              type="submit"
-              disabled={loading}
-              className="w-full bg-gradient-to-r bg-primary  text-white py-3 rounded-lg font-medium shadow-sm hover:shadow-md transition-all flex items-center justify-center gap-2"
-              whileHover={{ scale: 1.01 }}
-              whileTap={{ scale: 0.98 }}
-            >
-              {loading ? (
-                <>
-                  <FiLoader className="animate-spin" />
-                  {t("Creating account")}
-                </>
-              ) : (
-                t("Register")
-              )}
-            </motion.button>
-          </motion.div>
+          {/* Submit */}
+          <SubmitButton
+            loading={loading}
+            t={t}
+            loadingLabel="Creating account"
+            defaultLabel="Register"
+          />
         </form>
 
-        <motion.div className="mt-6 text-center">
+        {/* Footer */}
+        <div className="mt-6 text-center">
           <p className="text-sm text-gray-600">
             {t("Already have an account?")}{" "}
             <Link
@@ -196,8 +152,8 @@ export default function Register() {
               {t("Sign In")}
             </Link>
           </p>
-        </motion.div>
-      </motion.div>
+        </div>
+      </div>
     </div>
   );
 }
