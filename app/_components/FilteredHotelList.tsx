@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState, useCallback } from "react";
 import { useSearchParams } from "next/navigation";
 import HotelFilters from "./HotelFilters";
-import HotelCard from "./HotelCard";
+import HotelCardList from "./HotelCardList";
 import Spinner from "./Spinner";
 import NoResults from "./NoResults";
 import { fetchFilteredHotels } from "../_lib/hotelsApi";
@@ -137,7 +137,7 @@ export default function FilteredHotelList({
     }
 
     return (
-      <HotelCard
+      <HotelCardList
         hotels={filteredHotels}
         currentPage={currentPage}
         totalPages={totalPages}

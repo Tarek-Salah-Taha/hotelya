@@ -6,6 +6,7 @@ import { SupportedLang } from "../_types/types";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { useLocale } from "next-intl";
+import { HiChevronDown } from "react-icons/hi";
 
 const localeLabels: Record<SupportedLang, { label: string; icon: string }> = {
   en: { label: "English", icon: "https://flagcdn.com/w80/gb.png" },
@@ -16,11 +17,7 @@ const localeLabels: Record<SupportedLang, { label: string; icon: string }> = {
   it: { label: "Italiano", icon: "https://flagcdn.com/w80/it.png" },
 };
 
-export default function UserPreferences({
-  onChangePref,
-}: {
-  onChangePref?: () => void;
-}) {
+export default function LocaleSwitcher() {
   const router = useRouter();
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
@@ -52,10 +49,7 @@ export default function UserPreferences({
       <motion.button
         whileHover={{ scale: 1.02 }}
         whileTap={{ scale: 0.98 }}
-        onClick={() => {
-          setOpen(!open);
-          onChangePref?.();
-        }}
+        onClick={() => setOpen((prev) => !prev)}
         className="w-full bg-white border border-gray-200 text-left px-4 py-3 rounded-xl shadow-sm flex items-center justify-between hover:bg-gray-50 transition-all duration-200"
       >
         <div className="flex items-center gap-3">
@@ -72,9 +66,10 @@ export default function UserPreferences({
         </div>
         <motion.span
           animate={{ rotate: open ? 180 : 0 }}
+          transition={{ duration: 0.2 }}
           className="text-primary text-sm"
         >
-          ▼
+          <HiChevronDown size={16} />
         </motion.span>
       </motion.button>
 
@@ -84,6 +79,7 @@ export default function UserPreferences({
             {Object.entries(localeLabels).map(([locale, { label, icon }]) => (
               <motion.li
                 key={locale}
+                role="option"
                 whileHover={{ scale: 1.02, backgroundColor: "#f8fafc" }}
                 whileTap={{ scale: 0.98 }}
                 onClick={() => handleLanguageChange(locale as SupportedLang)}

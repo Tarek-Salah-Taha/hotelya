@@ -71,6 +71,7 @@ export default function FavoriteHotelCard({
           </div>
 
           <Stars stars={hotel.stars} />
+
           <Tags tags={hotel.tags} />
         </div>
 

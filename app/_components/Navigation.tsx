@@ -79,6 +79,7 @@ function Navigation({ onNavigate }: { onNavigate?: () => void }) {
             >
               <Link
                 href={`/${locale}/auth/login`}
+                onClick={onNavigate}
                 className="flex items-center gap-2 px-3 py-1.5 rounded text-black hover:text-border hover:bg-primary/10 transition-colors duration-200"
               >
                 <CgProfile className="text-lg" />

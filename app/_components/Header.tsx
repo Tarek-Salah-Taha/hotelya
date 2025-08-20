@@ -2,7 +2,7 @@
 
 import Logo from "./Logo";
 import Navigation from "./Navigation";
-import UserPreferences from "./UserPreferences";
+import LocaleSwitcher from "./LocaleSwitcher";
 import { useState } from "react";
 import { HiOutlineMenuAlt3, HiOutlineX } from "react-icons/hi";
 import { motion, AnimatePresence } from "framer-motion";
@@ -29,7 +29,7 @@ function Header() {
         {/* Desktop Navigation */}
         <div className="hidden lg:flex items-center gap-8">
           <Navigation onNavigate={handleCloseMenu} />
-          <UserPreferences onChangePref={handleCloseMenu} />
+          <LocaleSwitcher />
         </div>
       </div>
 
@@ -38,7 +38,7 @@ function Header() {
         {isMenuOpen && (
           <motion.div className="lg:hidden mt-4 px-4 space-y-4">
             <Navigation onNavigate={handleCloseMenu} />
-            <UserPreferences onChangePref={handleCloseMenu} />
+            <LocaleSwitcher />
           </motion.div>
         )}
       </AnimatePresence>
