@@ -1,4 +1,4 @@
-import HotelCard from "@/app/_components/HotelCard";
+import HotelCardList from "@/app/_components/HotelCardList";
 import NoResults from "@/app/_components/NoResults";
 import {
   fetchHotelCountByCity,
@@ -62,7 +62,7 @@ export default async function SearchResultsPage({
 
   return (
     <div className="px-4 md:px-6 lg:px-8 py-6">
-      <HotelCard
+      <HotelCardList
         hotels={normalizedHotels}
         currentPage={page}
         totalPages={totalPages}
