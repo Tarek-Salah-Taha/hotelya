@@ -21,6 +21,21 @@ import {
 } from "react-icons/fa";
 
 import { useTranslations } from "next-intl";
+import { registerLocale } from "react-datepicker";
+
+import { enUS as en } from "date-fns/locale/en-US";
+import { fr } from "date-fns/locale/fr";
+import { de } from "date-fns/locale/de";
+import { es } from "date-fns/locale/es";
+import { it } from "date-fns/locale/it";
+import { arSA as ar } from "date-fns/locale/ar-SA";
+
+registerLocale("en", en);
+registerLocale("es", es);
+registerLocale("fr", fr);
+registerLocale("de", de);
+registerLocale("it", it);
+registerLocale("ar", ar);
 
 export default function BookingPage({
   params,
@@ -50,9 +65,9 @@ export default function BookingPage({
     ? roomData?.hotel[0]
     : roomData?.hotel;
 
-  const hotelName = hotelData?.[`hotelName_${locale}`] || "Unknown";
-  const city = hotelData?.[`city_${locale}`] || "Unknown";
-  const country = hotelData?.[`country_${locale}`] || "Unknown";
+  const hotelName = hotelData?.[`hotelName_${locale}`] || "";
+  const city = hotelData?.[`city_${locale}`] || "";
+  const country = hotelData?.[`country_${locale}`] || "";
 
   const roomType = roomData?.roomType || "";
   const price = roomData?.priceNew || 0;
@@ -202,6 +217,7 @@ export default function BookingPage({
                 dayClassName={() => "!rounded-md hover:!bg-primary/10"}
                 weekDayClassName={() => "!text-gray-500 !font-normal"}
                 monthClassName={() => "!text-gray-800"}
+                locale={locale}
               />
             </div>
           </div>

@@ -111,7 +111,7 @@ export async function fetchHotelPageData(id: number, locale: SupportedLang) {
 
 // Fetches and returns a filtered, localized, and paginated list of hotels with total count.
 export async function fetchFilteredHotels(filters: {
-  continent?: string | string[];
+  continent?: string;
   country?: string;
   city?: string;
   minPrice?: number;

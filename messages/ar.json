@@ -222,7 +222,9 @@
     "Hide filters": "إخفاء التصفيات",
     "Show filters": "إظهار التصفيات",
     "All Countries": "جميع البلدان",
-    "Sorry, we couldn't find any hotels matching your filters": "نأسف، لم نتمكن من العثور على أي فنادق تطابق مرشحاتك."
+    "Sorry, we couldn't find any hotels matching your filters": "نأسف، لم نتمكن من العثور على أي فنادق تطابق مرشحاتك.",
+    "Minimum Price": "الحد الأدنى للسعر",
+    "Maximum Price": "الحد الأقصى للسعر"
   },
 
   "HotelsPage": {
@@ -682,12 +684,18 @@
   "NoResultsPage": {
     "Reset Filters": "إعادة ضبط",
     "Back to search page": "العودة لصفحة البحث",
-    "No results found": "لم يتم العثور على نتائج"
+    "No results found": "لم يتم العثور على نتائج",
+    "Sorry, we couldn't find any hotels matching your filters": "نأسف، لم نتمكن من العثور على أي فنادق تطابق مرشحاتك."
   },
 
   "UserDropdownPage": {
     "Logout": "تسجيل الخروج",
     "Cancel": "إلغاء",
     "Are you sure you want to log out?": "هل أنت متأكد أنك تريد تسجيل الخروج؟"
+  },
+
+  "404Page": {
+    "Go Back Home": "العودة إلى الصفحة الرئيسية",
+    "Sorry, the page you’re looking for doesn’t exist": "عذرا، الصفحة التي تبحث عنها غير موجودة."
   }
 }

@@ -7,7 +7,6 @@ import {
   HotelFilterParams,
 } from "@/app/_types/types";
 import getRatingLabel from "../_lib/getRatingLabel";
-import { IoChevronDown, IoChevronUp } from "react-icons/io5";
 import {
   FaGlobe,
   FaFlag,
@@ -15,19 +14,22 @@ import {
   FaMoneyBill,
   FaLanguage,
   FaThumbsUp,
-  FaSort,
   FaFilter,
   FaSpinner,
   FaStar,
 } from "react-icons/fa";
 import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "react-hot-toast";
-import { motion, AnimatePresence } from "framer-motion";
-import { IoMdSearch } from "react-icons/io";
-import { VscDebugRestart } from "react-icons/vsc";
+import { motion } from "framer-motion";
 import { useTranslations } from "next-intl";
-
-const starRatings = [5, 4, 3, 2, 1];
+import FilterButtons from "./FilterButtons";
+import FilterSelect from "./FilterSelect";
+import FilterCheckboxList from "./FilterCheckboxList";
+import FilterSection from "./FilterSection";
+import FilterTagList from "./FilterTagList";
+import SortSelect from "./SortSelect";
+import PriceRangeInputs from "./PriceRangeInputs";
+import StarCheckboxList from "./StarCheckboxList";
 
 type Props = {
   filters: HotelFilterData[];
@@ -56,6 +58,26 @@ export default function HotelFilters({ filters, onApplyFilters }: Props) {
 
   const tFavorites = useTranslations("FavoritesPage");
   const tFilters = useTranslations("FiltersPage");
+
+  const sortOptions = [
+    { value: "", label: tFilters("Default") },
+    { value: "price-asc", label: `▲ ${tFilters("Price: Low to High")}` },
+    { value: "price-desc", label: `▼ ${tFilters("Price: High to Low")}` },
+    { value: "rating-asc", label: `▲ ${tFilters("Rating: Low to High")}` },
+    { value: "rating-desc", label: `▼ ${tFilters("Rating: High to Low")}` },
+    { value: "stars-asc", label: `▲ ${tFilters("Stars: Low to High")}` },
+    { value: "stars-desc", label: `▼ ${tFilters("Stars: High to Low")}` },
+  ];
+
+  const setSort = (newSort: string) => {
+    const params = new URLSearchParams(searchParams.toString());
+    if (newSort) {
+      params.set("sort", newSort);
+    } else {
+      params.delete("sort");
+    }
+    router.replace(`?${params.toString()}`);
+  };
 
   function getUniqueRatingLabelsFromData(filters: HotelFilterData[]) {
     const ratings = new Set<string>();
@@ -259,15 +281,15 @@ export default function HotelFilters({ filters, onApplyFilters }: Props) {
   if (filters.length <= 1) return null;
 
   const filterLabels: Record<keyof typeof filterState, string> = {
-    selectedContinents: "Continent",
-    selectedCountry: "Country",
-    selectedCity: "City",
-    minPrice: "Min Price",
-    maxPrice: "Max Price",
-    selectedRatings: "Rating",
-    selectedStars: "Stars",
-    selectedPayments: "Payment Method",
-    selectedLanguages: "Language",
+    selectedContinents: tFilters("Continent"),
+    selectedCountry: tFilters("Country"),
+    selectedCity: tFilters("City"),
+    minPrice: tFilters("Minimum Price"),
+    maxPrice: tFilters("Maximum Price"),
+    selectedRatings: tFilters("User Rating"),
+    selectedStars: tFilters("Star Rating"),
+    selectedPayments: tFilters("Payment Methods"),
+    selectedLanguages: tFilters("Languages Spoken"),
   };
 
   const removeFilter = (
@@ -305,503 +327,213 @@ export default function HotelFilters({ filters, onApplyFilters }: Props) {
       </div>
 
       {/* Filter Summary */}
-      <div className="flex flex-wrap gap-2">
-        {Object.entries(filterState)
-          .filter(([, val]) => (Array.isArray(val) ? val.length > 0 : val))
-          .map(([key, val]) => {
-            const label = filterLabels[key as keyof typeof filterState] || key;
-            const values = Array.isArray(val) ? val : [val];
 
-            return values.map((v) => (
-              <motion.span
-                key={`${key}-${v}`}
-                className="inline-flex items-center bg-blue-100 text-blue-800 text-xs font-medium px-3 py-1 rounded-full shadow-sm"
-              >
-                {label}: {v}
-                <button
-                  onClick={() =>
-                    removeFilter(key as keyof typeof filterState, v)
-                  }
-                  className="ml-1.5 text-blue-600 hover:text-red-500 transition-colors"
-                  aria-label="Remove filter"
-                >
-                  ×
-                </button>
-              </motion.span>
-            ));
-          })}
-      </div>
+      <FilterTagList
+        filters={filterState}
+        labels={filterLabels}
+        onRemove={(key, value) =>
+          removeFilter(key as keyof typeof filterState, value)
+        }
+      />
 
       {/* Sort By */}
-      <div className="mb-4">
-        <label
-          htmlFor="sortBy"
-          className="flex items-center gap-2 font-semibold mb-2 text-base p-2 rounded-lg hover:bg-gray-50 transition-colors cursor-pointer"
-        >
-          <FaSort className="text-primary" /> {tFilters("Sort by")}:
-        </label>
-        <select
-          id="sortBy"
-          className="w-full border border-gray-300 p-2 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
-          value={searchParams.get("sort") || ""}
-          onChange={(e) => {
-            const newSort = e.target.value;
-            const params = new URLSearchParams(searchParams.toString());
-            if (newSort) {
-              params.set("sort", newSort);
-            } else {
-              params.delete("sort");
-            }
-            router.replace(`?${params.toString()}`);
-          }}
-        >
-          <option value="">{tFilters("Default")}</option>
-          <option value="price-asc">▲ {tFilters("Price: Low to High")}</option>
-          <option value="price-desc">▼ {tFilters("Price: High to Low")}</option>
-          <option value="rating-asc">
-            ▲ {tFilters("Rating: Low to High")}
-          </option>
-          <option value="rating-desc">
-            ▼ {tFilters("Rating: High to Low")}
-          </option>
-          <option value="stars-asc">▲ {tFilters("Stars: Low to High")}</option>
-          <option value="stars-desc">▼ {tFilters("Stars: High to Low")}</option>
-        </select>
-      </div>
+
+      <SortSelect
+        value={searchParams.get("sort") || ""}
+        onChange={setSort}
+        options={sortOptions}
+        label={tFilters("Sort by")}
+      />
 
       {/* Continent */}
-      <div className="border-b border-gray-100 pb-2">
-        <motion.button
-          whileTap={{ scale: 0.98 }}
-          className="flex justify-between items-center w-full font-semibold mb-2 text-base p-2 rounded-lg hover:bg-gray-50 transition-colors"
-          onClick={() => toggleSection("continent")}
-        >
-          <span className="flex items-center gap-2 text-gray-700">
-            <FaGlobe className="text-primary" /> {tFilters("Continent")}
-          </span>
-          {openSection === "continent" ? (
-            <IoChevronUp className="text-gray-500" />
-          ) : (
-            <IoChevronDown className="text-gray-500" />
-          )}
-        </motion.button>
 
-        <AnimatePresence>
-          {openSection === "continent" && (
-            <motion.div
-              initial="closed"
-              animate="open"
-              exit="closed"
-              className="space-y-2 pl-8"
+      <FilterSection
+        title={tFilters("Continent")}
+        icon={<FaGlobe className="text-primary" />}
+        isOpen={openSection === "continent"}
+        onToggle={() => toggleSection("continent")}
+      >
+        {continents.map((item) => {
+          const count = filters.filter((f) => f.continent === item).length;
+          return (
+            <motion.label
+              key={item}
+              whileHover={{ scale: 1.02 }}
+              className="flex items-center gap-3 cursor-pointer text-gray-700"
             >
-              {continents.map((item) => {
-                const count = filters.filter(
-                  (f) => f.continent === item
-                ).length;
-                return (
-                  <motion.label
-                    key={item}
-                    whileHover={{ scale: 1.02 }}
-                    className="flex items-center gap-3 cursor-pointer text-gray-700"
-                  >
-                    <input
-                      type="checkbox"
-                      className="w-4 h-4 text-blue-600 rounded focus:ring-blue-500"
-                      checked={filterState.selectedContinents.includes(item)}
-                      onChange={(e) =>
-                        setFilterState((prev) => ({
-                          ...prev,
-                          selectedContinents: e.target.checked
-                            ? [...prev.selectedContinents, item]
-                            : prev.selectedContinents.filter((c) => c !== item),
-                          selectedCountry: "",
-                          selectedCity: "",
-                        }))
-                      }
-                    />
-                    <span>
-                      {item} <span className="text-gray-500">({count})</span>
-                    </span>
-                  </motion.label>
-                );
-              })}
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </div>
-
-      {/* Country */}
-      <div className="border-b border-gray-100 pb-2">
-        <motion.button
-          whileTap={{ scale: 0.98 }}
-          className="flex justify-between items-center w-full font-semibold mb-2 text-base p-2 rounded-lg hover:bg-gray-50 transition-colors"
-          onClick={() => toggleSection("country")}
-        >
-          <span className="flex items-center gap-2 text-gray-700">
-            <FaFlag className="text-primary" /> {tFilters("Country")}
-          </span>
-          {openSection === "country" ? (
-            <IoChevronUp className="text-gray-500" />
-          ) : (
-            <IoChevronDown className="text-gray-500" />
-          )}
-        </motion.button>
-
-        <AnimatePresence>
-          {openSection === "country" && (
-            <motion.div initial="closed" animate="open" exit="closed">
-              <select
-                className="w-full border border-gray-300 p-2 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
-                value={filterState.selectedCountry}
+              <input
+                type="checkbox"
+                className="w-4 h-4 text-blue-600 rounded focus:ring-blue-500"
+                checked={filterState.selectedContinents.includes(item)}
                 onChange={(e) =>
                   setFilterState((prev) => ({
                     ...prev,
-                    selectedCountry: e.target.value,
+                    selectedContinents: e.target.checked
+                      ? [...prev.selectedContinents, item]
+                      : prev.selectedContinents.filter((c) => c !== item),
+                    selectedCountry: "",
                     selectedCity: "",
                   }))
                 }
-              >
-                <option value="">{tFilters("All Countries")}</option>
-                {countries.map((item) => (
-                  <option key={item}>{item}</option>
-                ))}
-              </select>
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </div>
+              />
+              <span>
+                {item} <span className="text-gray-500">({count})</span>
+              </span>
+            </motion.label>
+          );
+        })}
+      </FilterSection>
+
+      {/* Country */}
+      <FilterSection
+        title={tFilters("Country")}
+        icon={<FaFlag className="text-primary" />}
+        isOpen={openSection === "country"}
+        onToggle={() => toggleSection("country")}
+      >
+        <FilterSelect
+          value={filterState.selectedCountry}
+          items={countries}
+          placeholder={tFilters("All Countries")}
+          onChange={(value) =>
+            setFilterState((prev) => ({
+              ...prev,
+              selectedCountry: value,
+              selectedCity: "",
+            }))
+          }
+        />
+      </FilterSection>
 
       {/* City */}
-      <div className="border-b border-gray-100 pb-2">
-        <motion.button
-          whileTap={{ scale: 0.98 }}
-          className="flex justify-between items-center w-full font-semibold mb-2 text-base p-2 rounded-lg hover:bg-gray-50 transition-colors"
-          onClick={() => toggleSection("city")}
-        >
-          <span className="flex items-center gap-2 text-gray-700">
-            <FaCity className="text-primary" /> {tFilters("City")}
-          </span>
-          {openSection === "city" ? (
-            <IoChevronUp className="text-gray-500" />
-          ) : (
-            <IoChevronDown className="text-gray-500" />
-          )}
-        </motion.button>
-
-        <AnimatePresence>
-          {openSection === "city" && (
-            <motion.div initial="closed" animate="open" exit="closed">
-              <select
-                className="w-full border border-gray-300 p-2 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
-                value={filterState.selectedCity}
-                onChange={(e) =>
-                  setFilterState((prev) => ({
-                    ...prev,
-                    selectedCity: e.target.value,
-                  }))
-                }
-              >
-                <option value="">{tFilters("All Cities")}</option>
-                {cities.map((item) => (
-                  <option key={item}>{item}</option>
-                ))}
-              </select>
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </div>
+      <FilterSection
+        title={tFilters("City")}
+        icon={<FaCity className="text-primary" />}
+        isOpen={openSection === "city"}
+        onToggle={() => toggleSection("city")}
+      >
+        <FilterSelect
+          value={filterState.selectedCity}
+          items={cities}
+          placeholder={tFilters("All Cities")}
+          onChange={(value) =>
+            setFilterState((prev) => ({
+              ...prev,
+              selectedCity: value,
+            }))
+          }
+        />
+      </FilterSection>
 
       {/* Price */}
-      <div className="border-b border-gray-100 pb-2">
-        <motion.button
-          whileTap={{ scale: 0.98 }}
-          className="flex justify-between items-center w-full font-semibold mb-2 text-base p-2 rounded-lg hover:bg-gray-50 transition-colors"
-          onClick={() => toggleSection("price")}
-        >
-          <span className="flex items-center gap-2 text-gray-700">
-            <FaMoneyBill className="text-primary" /> {tFilters("Price Range")}
-          </span>
-          {openSection === "price" ? (
-            <IoChevronUp className="text-gray-500" />
-          ) : (
-            <IoChevronDown className="text-gray-500" />
-          )}
-        </motion.button>
-
-        <AnimatePresence>
-          {openSection === "price" && (
-            <motion.div
-              initial="closed"
-              animate="open"
-              exit="closed"
-              className="flex gap-3"
-            >
-              <input
-                type="number"
-                placeholder="Min"
-                className="w-1/2 border border-gray-300 p-2 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
-                value={filterState.minPrice}
-                min={0}
-                onChange={(e) =>
-                  setFilterState((prev) => ({
-                    ...prev,
-                    minPrice: +e.target.value,
-                  }))
-                }
-              />
-              <input
-                type="number"
-                placeholder="Max"
-                className="w-1/2 border border-gray-300 p-2 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
-                value={filterState.maxPrice}
-                min={0}
-                onChange={(e) =>
-                  setFilterState((prev) => ({
-                    ...prev,
-                    maxPrice: +e.target.value,
-                  }))
-                }
-              />
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </div>
+      <FilterSection
+        title={tFilters("Price Range")}
+        icon={<FaMoneyBill className="text-primary" />}
+        isOpen={openSection === "price"}
+        onToggle={() => toggleSection("price")}
+      >
+        <PriceRangeInputs
+          min={filterState.minPrice}
+          max={filterState.maxPrice}
+          onChangeMin={(val) =>
+            setFilterState((p) => ({ ...p, minPrice: val }))
+          }
+          onChangeMax={(val) =>
+            setFilterState((p) => ({ ...p, maxPrice: val }))
+          }
+        />
+      </FilterSection>
 
       {/* Rating */}
-      <div className="border-b border-gray-100 pb-2">
-        <motion.button
-          whileTap={{ scale: 0.98 }}
-          className="flex justify-between items-center w-full font-semibold mb-2 text-base p-2 rounded-lg hover:bg-gray-50 transition-colors"
-          onClick={() => toggleSection("rating")}
-        >
-          <span className="flex items-center gap-2 text-gray-700">
-            <FaThumbsUp className="text-primary" /> {tFilters("User Rating")}
-          </span>
-          {openSection === "rating" ? (
-            <IoChevronUp className="text-gray-500" />
-          ) : (
-            <IoChevronDown className="text-gray-500" />
-          )}
-        </motion.button>
-
-        <AnimatePresence>
-          {openSection === "rating" && (
-            <motion.div
-              initial="closed"
-              animate="open"
-              exit="closed"
-              className="space-y-2 pl-8"
-            >
-              {ratingLabels.map((label) => (
-                <motion.label
-                  key={label}
-                  whileHover={{ scale: 1.02 }}
-                  className="flex items-center gap-3 cursor-pointer text-gray-700"
-                >
-                  <input
-                    type="checkbox"
-                    className="w-4 h-4 text-blue-600 rounded focus:ring-blue-500"
-                    checked={filterState.selectedRatings.includes(label)}
-                    onChange={(e) =>
-                      setFilterState((prev) => ({
-                        ...prev,
-                        selectedRatings: e.target.checked
-                          ? [...prev.selectedRatings, label]
-                          : prev.selectedRatings.filter((r) => r !== label),
-                      }))
-                    }
-                  />
-                  {label}
-                </motion.label>
-              ))}
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </div>
+      <FilterSection
+        title={tFilters("User Rating")}
+        icon={<FaThumbsUp className="text-primary" />}
+        isOpen={openSection === "rating"}
+        onToggle={() => toggleSection("rating")}
+      >
+        <FilterCheckboxList
+          items={ratingLabels}
+          selected={filterState.selectedRatings}
+          onChange={(value, checked) =>
+            setFilterState((prev) => ({
+              ...prev,
+              selectedRatings: checked
+                ? [...prev.selectedRatings, value]
+                : prev.selectedRatings.filter((r) => r !== value),
+            }))
+          }
+        />
+      </FilterSection>
 
       {/* Stars */}
-      <div className="border-b border-gray-100 pb-2">
-        <motion.button
-          whileTap={{ scale: 0.98 }}
-          className="flex justify-between items-center w-full font-semibold mb-2 text-base p-2 rounded-lg hover:bg-gray-50 transition-colors"
-          onClick={() => toggleSection("stars")}
-        >
-          <span className="flex items-center gap-2 text-gray-700">
-            <FaStar className="text-primary" /> {tFilters("Star Rating")}
-          </span>
-          {openSection === "stars" ? (
-            <IoChevronUp className="text-gray-500" />
-          ) : (
-            <IoChevronDown className="text-gray-500" />
-          )}
-        </motion.button>
-
-        <AnimatePresence>
-          {openSection === "stars" && (
-            <motion.div
-              initial="closed"
-              animate="open"
-              exit="closed"
-              className="space-y-2 pl-8"
-            >
-              {starRatings.map((stars) => (
-                <motion.label
-                  key={stars}
-                  whileHover={{ scale: 1.02 }}
-                  className="flex items-center gap-3 cursor-pointer text-gray-700"
-                >
-                  <input
-                    type="checkbox"
-                    className="w-4 h-4 text-blue-600 rounded focus:ring-blue-500"
-                    checked={filterState.selectedStars.includes(stars)}
-                    onChange={(e) =>
-                      setFilterState((prev) => ({
-                        ...prev,
-                        selectedStars: e.target.checked
-                          ? [...prev.selectedStars, stars]
-                          : prev.selectedStars.filter((s) => s !== stars),
-                      }))
-                    }
-                  />
-
-                  <span className="flex items-center gap-1">
-                    {/* Render star icons */}
-                    {Array.from({ length: stars }, (_, i) => (
-                      <FaStar key={i} className="text-yellow-400 text-sm" />
-                    ))}
-                  </span>
-                </motion.label>
-              ))}
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </div>
+      <FilterSection
+        title={tFilters("Star Rating")}
+        icon={<FaStar className="text-primary" />}
+        isOpen={openSection === "stars"}
+        onToggle={() => toggleSection("stars")}
+      >
+        <StarCheckboxList
+          selected={filterState.selectedStars}
+          onChange={(stars, checked) =>
+            setFilterState((prev) => ({
+              ...prev,
+              selectedStars: checked
+                ? [...prev.selectedStars, stars]
+                : prev.selectedStars.filter((s) => s !== stars),
+            }))
+          }
+        />
+      </FilterSection>
 
       {/* Payment */}
-      <div className="border-b border-gray-100 pb-2">
-        <motion.button
-          whileTap={{ scale: 0.98 }}
-          className="flex justify-between items-center w-full font-semibold mb-2 text-base p-2 rounded-lg hover:bg-gray-50 transition-colors"
-          onClick={() => toggleSection("payment")}
-        >
-          <span className="flex items-center gap-2 text-gray-700">
-            <FaMoneyBill className="text-primary" />{" "}
-            {tFilters("Payment Methods")}
-          </span>
-          {openSection === "payment" ? (
-            <IoChevronUp className="text-gray-500" />
-          ) : (
-            <IoChevronDown className="text-gray-500" />
-          )}
-        </motion.button>
-
-        <AnimatePresence>
-          {openSection === "payment" && (
-            <motion.div
-              initial="closed"
-              animate="open"
-              exit="closed"
-              className="space-y-2 pl-8"
-            >
-              {paymentMethods.map((method) => (
-                <motion.label
-                  key={method}
-                  whileHover={{ scale: 1.02 }}
-                  className="flex items-center gap-3 cursor-pointer text-gray-700"
-                >
-                  <input
-                    type="checkbox"
-                    className="w-4 h-4 text-blue-600 rounded focus:ring-blue-500"
-                    checked={filterState.selectedPayments.includes(method)}
-                    onChange={(e) =>
-                      setFilterState((prev) => ({
-                        ...prev,
-                        selectedPayments: e.target.checked
-                          ? [...prev.selectedPayments, method]
-                          : prev.selectedPayments.filter((m) => m !== method),
-                      }))
-                    }
-                  />
-                  {method}
-                </motion.label>
-              ))}
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </div>
+      <FilterSection
+        title={tFilters("Payment Methods")}
+        icon={<FaMoneyBill className="text-primary" />}
+        isOpen={openSection === "payment"}
+        onToggle={() => toggleSection("payment")}
+      >
+        <FilterCheckboxList
+          items={paymentMethods}
+          selected={filterState.selectedPayments}
+          onChange={(value, checked) =>
+            setFilterState((prev) => ({
+              ...prev,
+              selectedPayments: checked
+                ? [...prev.selectedPayments, value]
+                : prev.selectedPayments.filter((m) => m !== value),
+            }))
+          }
+        />
+      </FilterSection>
 
       {/* Languages */}
-      <div className="border-b border-gray-100 pb-2">
-        <motion.button
-          whileTap={{ scale: 0.98 }}
-          className="flex justify-between items-center w-full font-semibold mb-2 text-base p-2 rounded-lg hover:bg-gray-50 transition-colors"
-          onClick={() => toggleSection("languages")}
-        >
-          <span className="flex items-center gap-2 text-gray-700">
-            <FaLanguage className="text-primary" />{" "}
-            {tFilters("Languages Spoken")}
-          </span>
-          {openSection === "languages" ? (
-            <IoChevronUp className="text-gray-500" />
-          ) : (
-            <IoChevronDown className="text-gray-500" />
-          )}
-        </motion.button>
-
-        <AnimatePresence>
-          {openSection === "languages" && (
-            <motion.div
-              initial="closed"
-              animate="open"
-              exit="closed"
-              className="space-y-2 pl-8"
-            >
-              {languages.map((lang) => (
-                <motion.label
-                  key={lang}
-                  whileHover={{ scale: 1.02 }}
-                  className="flex items-center gap-3 cursor-pointer text-gray-700"
-                >
-                  <input
-                    type="checkbox"
-                    className="w-4 h-4 text-blue-600 rounded focus:ring-blue-500"
-                    checked={filterState.selectedLanguages.includes(lang)}
-                    onChange={(e) =>
-                      setFilterState((prev) => ({
-                        ...prev,
-                        selectedLanguages: e.target.checked
-                          ? [...prev.selectedLanguages, lang]
-                          : prev.selectedLanguages.filter((l) => l !== lang),
-                      }))
-                    }
-                  />
-                  {lang}
-                </motion.label>
-              ))}
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </div>
+      <FilterSection
+        title={tFilters("Languages Spoken")}
+        icon={<FaLanguage className="text-primary" />}
+        isOpen={openSection === "languages"}
+        onToggle={() => toggleSection("languages")}
+      >
+        <FilterCheckboxList
+          items={languages}
+          selected={filterState.selectedLanguages}
+          onChange={(value, checked) =>
+            setFilterState((prev) => ({
+              ...prev,
+              selectedLanguages: checked
+                ? [...prev.selectedLanguages, value]
+                : prev.selectedLanguages.filter((l) => l !== value),
+            }))
+          }
+        />
+      </FilterSection>
 
       {/* Buttons */}
-      <motion.div className="mt-6 flex flex-col gap-3 sm:flex-row">
-        <motion.button
-          whileHover={{ scale: 1.02 }}
-          whileTap={{ scale: 0.98 }}
-          onClick={handleApplyFilters}
-          className="w-full bg-primary text-white px-2 py-3 rounded-lg font-semibold hover:bg-success transition-all shadow-md hover:shadow-lg flex items-center justify-center gap-1"
-        >
-          <IoMdSearch className="text-base" /> {tFilters("Apply Filters")}
-        </motion.button>
-        <motion.button
-          whileHover={{ scale: 1.02 }}
-          whileTap={{ scale: 0.98 }}
-          onClick={resetFilters}
-          className="w-full border gap-1 border-gray-300 text-gray-700 px-2 py-3 rounded-lg font-semibold hover:bg-gray-50 transition-all shadow-sm hover:shadow-md flex items-center justify-center"
-        >
-          <VscDebugRestart className="text-base" /> {tFilters("Reset")}
-        </motion.button>
-      </motion.div>
+      <FilterButtons
+        onApply={handleApplyFilters}
+        onReset={resetFilters}
+        applyLabel={tFilters("Apply Filters")}
+        resetLabel={tFilters("Reset")}
+      />
     </motion.section>
   );
 }

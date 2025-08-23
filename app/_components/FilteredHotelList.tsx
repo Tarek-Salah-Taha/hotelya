@@ -11,6 +11,7 @@ import { HotelFilterData, HotelCardData, SupportedLang } from "../_types/types";
 import { motion, AnimatePresence } from "framer-motion";
 import { FaChevronCircleDown, FaChevronCircleUp } from "react-icons/fa";
 import { useTranslations } from "next-intl";
+import { useHotelFilters } from "../_hooks/useHotelFilters";
 
 type Props = {
   filters: HotelFilterData[];
@@ -19,7 +20,7 @@ type Props = {
   initialTotalPages: number;
 };
 
-const limit = 15;
+const LIMIT = 15;
 
 export default function FilteredHotelList({
   filters,
@@ -28,13 +29,14 @@ export default function FilteredHotelList({
   initialTotalPages,
 }: Props) {
   const searchParams = useSearchParams();
-  const [filteredHotels, setFilteredHotels] = useState<HotelCardData[]>([]);
+  const [filteredHotels, setFilteredHotels] =
+    useState<HotelCardData[]>(initialHotels);
   const [isOpen, setIsOpen] = useState(false);
   const [totalPages, setTotalPages] = useState(initialTotalPages);
   const [currentPage, setCurrentPage] = useState(
     parseInt(searchParams.get("page") || "1", 10)
   );
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
 
   const tFilters = useTranslations("FiltersPage");
 
@@ -46,28 +48,12 @@ export default function FilteredHotelList({
 
   // Update currentPage when URL changes
   useEffect(() => {
-    const page = parseInt(searchParams.get("page") || "1", 10);
+    const params = new URLSearchParams(searchParamsString);
+    const page = parseInt(params.get("page") || "1", 10);
     setCurrentPage(page);
-  }, [searchParamsString, searchParams]);
+  }, [searchParamsString]);
 
-  // Memoize filter params parsing
-  const filterParams = useMemo(() => {
-    const getArray = (key: string) =>
-      searchParams.get(key)?.split(",").map(decodeURIComponent) ?? [];
-
-    return {
-      continent: getArray("continent"),
-      country: searchParams.get("country") || "",
-      city: searchParams.get("city") || "",
-      minPrice: Number(searchParams.get("minPrice")) || 0,
-      maxPrice: Number(searchParams.get("maxPrice")) || 1000,
-      ratingLabels: getArray("ratingLabels"),
-      stars: getArray("stars").map(Number),
-      paymentOptions: getArray("paymentOptions"),
-      languagesSpoken: getArray("languagesSpoken"),
-      sort: searchParams.get("sort") || "",
-    };
-  }, [searchParams]);
+  const filterParams = useHotelFilters(searchParamsString);
 
   // Memoize the fetch function
   const fetchHotels = useCallback(async () => {
@@ -76,11 +62,11 @@ export default function FilteredHotelList({
         ...filterParams,
         locale,
         page: currentPage,
-        limit,
+        limit: LIMIT,
       });
 
       setFilteredHotels(result.data);
-      setTotalPages(Math.ceil(result.count / limit));
+      setTotalPages(Math.ceil(result.count / LIMIT));
     } catch (error) {
       console.error("Error fetching hotels:", error);
       setFilteredHotels([]);
@@ -90,33 +76,24 @@ export default function FilteredHotelList({
   }, [filterParams, currentPage, locale]);
 
   useEffect(() => {
-    if ([...searchParams.keys()].length > 0) {
-      setIsLoading(true);
+    const hasSearchParams = searchParamsString.length > 0;
+
+    if (hasSearchParams) {
       fetchHotels();
     } else {
       setFilteredHotels(initialHotels);
       setTotalPages(initialTotalPages);
       setIsLoading(false);
     }
-  }, [
-    fetchHotels,
-    searchParamsString,
-    initialHotels,
-    initialTotalPages,
-    searchParams,
-  ]);
+  }, [fetchHotels, searchParamsString, initialHotels, initialTotalPages]);
 
   // Memoize the toggle function for the mobile drawer
   const toggleDrawer = useCallback(() => {
     setIsOpen((prev) => !prev);
   }, []);
 
-  // Memoize the reset page function
-  const resetPage = useCallback(() => {
-    setCurrentPage(1);
-  }, []);
+  const resetPage = () => setCurrentPage(1);
 
-  // Memoize the main content to avoid unnecessary re-renders
   const mainContent = useMemo(() => {
     if (isLoading) {
       return (
@@ -170,7 +147,6 @@ export default function FilteredHotelList({
                 transition-colors focus:outline-none
                 focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
             whileTap={{ scale: 0.98 }}
-            aria-expanded={isOpen}
           >
             <div className="font-semibold text-gray-800 flex items-center gap-3">
               {isOpen ? tFilters("Hide filters") : tFilters("Show filters")}

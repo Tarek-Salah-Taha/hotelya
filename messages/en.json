@@ -219,7 +219,9 @@
     "Hide filters": "Hide filters",
     "Show filters": "Show filters",
     "All Countries": "All Countries",
-    "Sorry, we couldn't find any hotels matching your filters": "Sorry, we couldn't find any hotels matching your filters."
+    "Sorry, we couldn't find any hotels matching your filters": "Sorry, we couldn't find any hotels matching your filters.",
+    "Minimum Price": "Minimum Price",
+    "Maximum Price": "Maximum Price"
   },
 
   "HotelsPage": {
@@ -679,12 +681,18 @@
   "NoResultsPage": {
     "Reset Filters": "Reset Filters",
     "Back to search page": "Back to search page",
-    "No results found": "No results found"
+    "No results found": "No results found",
+    "Sorry, we couldn't find any hotels matching your filters": "Sorry, we couldn't find any hotels matching your filters."
   },
 
   "UserDropdownPage": {
     "Logout": "Logout",
     "Cancel": "Cancel",
     "Are you sure you want to log out?": "Are you sure you want to log out?"
+  },
+
+  "404Page": {
+    "Go Back Home": "Go Back Home",
+    "Sorry, the page you’re looking for doesn’t exist": "Sorry, the page you’re looking for doesn’t exist."
   }
 }

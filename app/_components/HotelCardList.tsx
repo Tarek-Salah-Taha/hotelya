@@ -4,6 +4,7 @@ import HotelCardItem from "./HotelCardItem";
 import { HotelCardProps, SupportedLang } from "../_types/types";
 import { useTranslations, useLocale } from "next-intl";
 import HotelsPagination from "./HotelsPagination";
+import { useSearchParams } from "next/navigation";
 
 export default function HotelCardList({
   hotels,
@@ -15,12 +16,22 @@ export default function HotelCardList({
 }: HotelCardProps) {
   const locale = useLocale() as SupportedLang;
   const t = useTranslations("HotelsPage");
+  const searchParams = useSearchParams();
 
   const createQuery = (page: number) => {
-    const query: Record<string, string | number> = { page };
+    const params = new URLSearchParams(searchParams.toString());
+
+    params.set("page", page.toString());
+
     if (destination.trim() && basePath === "/search-results") {
-      query.destination = destination;
+      params.set("destination", destination);
     }
+
+    const query: Record<string, string> = {};
+    params.forEach((value, key) => {
+      query[key] = value;
+    });
+
     return query;
   };
 
