@@ -163,7 +163,9 @@
     "Total": "Total :",
     "General Cancellation Policy": "Politique générale d'annulation",
     "Free cancellation": "Annulation gratuite jusqu'à 48 heures avant l'arrivée. Passé ce délai, des frais équivalents à une nuit seront facturés. En cas de non-présentation, le montant total sera facturé.",
-    "Confirm Booking": "Confirmer la réservation"
+    "Confirm Booking": "Confirmer la réservation",
+    "Selected range includes some booked dates, please choose another range": "La plage sélectionnée comprend certaines dates réservées, veuillez choisir une autre plage.",
+    "This date is already booked": "Cette date est déjà réservée."
   },
 
   "BookingPage": {

@@ -66,8 +66,9 @@ export async function fetchUserBookingsWithHotelInfo(
 export async function fetchBookedDateRangesByRoom(roomId: number) {
   const { data, error } = await supabase
     .from("bookings")
-    .select("checkInDate, checkOutDate")
-    .eq("roomId", roomId);
+    .select("checkInDate, checkOutDate, status")
+    .eq("roomId", roomId)
+    .eq("status", "Confirmed"); // only confirmed bookings
 
   if (error) throw error;
   return data;

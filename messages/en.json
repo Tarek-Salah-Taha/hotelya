@@ -312,7 +312,9 @@
     "Total": "Total:",
     "General Cancellation Policy": "General Cancellation Policy",
     "Free cancellation": "Free cancellation up to 48 hours before check-in. After that, a 1-night fee will be charged. No-shows will be charged the full price.",
-    "Confirm Booking": "Confirm Booking"
+    "Confirm Booking": "Confirm Booking",
+    "Selected range includes some booked dates, please choose another range": "Selected range includes some booked dates, please choose another range.",
+    "This date is already booked": "This date is already booked."
   },
 
   "AboutPage": {

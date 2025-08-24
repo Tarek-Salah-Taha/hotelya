@@ -15,7 +15,7 @@ function HeroSection() {
           <p className="text-lg text-text opacity-90">{t("description")}</p>
           <Link
             href="/hotels"
-            className="inline-block bg-primary hover:bg-dark text-white px-8 py-3 rounded-lg font-medium transition duration-300"
+            className="inline-block bg-primary hover:bg-dark text-white px-8 py-3 rounded-lg font-bold transition duration-300"
           >
             {t("bookButton")}
           </Link>

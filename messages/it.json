@@ -163,7 +163,9 @@
     "Total": "Totale:",
     "General Cancellation Policy": "Politica di cancellazione generale",
     "Free cancellation": "Cancellazione gratuita fino a 48 ore prima del check-in. Dopo tale termine, verrà addebitato il costo di una notte. In caso di mancata presentazione verrà addebitato l'intero importo.",
-    "Confirm Booking": "Conferma prenotazione"
+    "Confirm Booking": "Conferma prenotazione",
+    "Selected range includes some booked dates, please choose another range": "L'intervallo selezionato include alcune date prenotate, seleziona un altro intervallo.",
+    "This date is already booked": "Questa data è già prenotata."
   },
 
   "BookingPage": {

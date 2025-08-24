@@ -314,7 +314,9 @@
     "Total": "Gesamt:",
     "General Cancellation Policy": "Allgemeine Stornierungsbedingungen",
     "Free cancellation": "Kostenlose Stornierung bis 48 Stunden vor Check-in. Danach wird eine Gebühr für eine Nacht berechnet. Bei Nichterscheinen wird der volle Preis berechnet.",
-    "Confirm Booking": "Buchung bestätigen"
+    "Confirm Booking": "Buchung bestätigen",
+    "Selected range includes some booked dates, please choose another range": "Der ausgewählte Bereich umfasst einige gebuchte Daten. Bitte wählen Sie einen anderen Bereich.",
+    "This date is already booked": "Dieser Termin ist bereits gebucht."
   },
 
   "AboutPage": {

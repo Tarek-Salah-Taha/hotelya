@@ -7,6 +7,7 @@ import { motion } from "framer-motion";
 import { useTranslations } from "next-intl";
 import { useLocale } from "next-intl";
 import { getRoomSpecs } from "../_utils/getRoomSpecs";
+import MotionButton from "./MotionButton";
 
 function RoomCard({
   roomId,
@@ -79,7 +80,7 @@ function RoomCard({
         </div>
 
         {/* Price & Button */}
-        <div className="mt-auto flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4">
+        <div className="mt-auto flex flex-col justify-between items-start gap-4">
           <div className="flex flex-col">
             <div className="flex items-end gap-2">
               <p className="text-2xl font-bold text-primary">
@@ -96,14 +97,12 @@ function RoomCard({
             </p>
           </div>
 
-          <motion.button
-            whileHover={{ scale: 1.03 }}
-            whileTap={{ scale: 0.97 }}
-            className="bg-primary text-white px-8 py-3 rounded-lg font-medium transition-all duration-300 w-full sm:w-auto text-center shadow-md hover:shadow-lg"
+          <MotionButton
+            label={tRoomDescriptions("Check Availability")}
             onClick={() => router.push(`/${locale}/rooms/${roomId}`)}
-          >
-            {tRoomDescriptions("Check Availability")}
-          </motion.button>
+            variant="primary"
+            className="w-full"
+          />
         </div>
       </div>
     </motion.div>

@@ -17,7 +17,7 @@ function RoomInfo({
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div>
           <p className="text-gray-600">{t("Room Type")}</p>
-          <p className="font-medium">{tRoomTypes(roomType || "Unknown")}</p>
+          <p className="font-medium">{tRoomTypes(roomType || "")}</p>
         </div>
         <div>
           <p className="text-gray-600">{t("Price Per Night")}</p>

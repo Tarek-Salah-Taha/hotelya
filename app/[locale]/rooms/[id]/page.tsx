@@ -1,7 +1,10 @@
 "use client";
 
 import { useUser } from "@/app/_hooks/useUser";
-import { createHotelBooking } from "@/app/_lib/bookingsApi";
+import {
+  createHotelBooking,
+  fetchBookedDateRangesByRoom,
+} from "@/app/_lib/bookingsApi";
 import { fetchRoomById } from "@/app/_lib/roomsApi";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -48,6 +51,9 @@ export default function BookingPage({
   const [adults, setAdults] = useState(2);
   const [children, setChildren] = useState(0);
   const [monthsToShow, setMonthsToShow] = useState(2);
+  const [bookedRanges, setBookedRanges] = useState<
+    { start: Date; end: Date }[]
+  >([]);
 
   const [roomData, setRoomData] = useState<RoomData | null>(null);
 
@@ -82,6 +88,23 @@ export default function BookingPage({
 
     loadRoomData();
   }, [id, locale]);
+
+  useEffect(() => {
+    async function loadBookedRanges() {
+      try {
+        const data = await fetchBookedDateRangesByRoom(roomId);
+        const ranges = data.map((b) => ({
+          start: new Date(b.checkInDate),
+          end: new Date(b.checkOutDate),
+        }));
+        setBookedRanges(ranges);
+      } catch (error) {
+        console.error("Failed to fetch booked ranges:", error);
+      }
+    }
+
+    if (roomId) loadBookedRanges();
+  }, [roomId]);
 
   useEffect(() => {
     const handleResize = () => {
@@ -177,6 +200,7 @@ export default function BookingPage({
             monthsToShow={monthsToShow}
             locale={locale}
             t={tRoomDescriptions}
+            bookedRanges={bookedRanges}
           />
 
           {/* Guest Selection */}

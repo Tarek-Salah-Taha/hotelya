@@ -315,7 +315,9 @@
     "Total": "المجموع:",
     "General Cancellation Policy": "سياسة الإلغاء العامة",
     "Free cancellation": "إلغاء مجاني حتى 48 ساعة قبل تسجيل الوصول. بعد ذلك، تُفرض رسوم ليلة واحدة. في حال عدم الحضور، يُفرض السعر الكامل.",
-    "Confirm Booking": "تأكيد الحجز"
+    "Confirm Booking": "تأكيد الحجز",
+    "Selected range includes some booked dates, please choose another range": "يتضمن النطاق المحدد بعض التواريخ المحجوزة، يرجى اختيار نطاق آخر.",
+    "This date is already booked": "تم حجز هذا التاريخ بالفعل."
   },
 
   "AboutPage": {
