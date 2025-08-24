@@ -3,7 +3,7 @@ import { FaPerson } from "react-icons/fa6";
 import { FaSignInAlt, FaSignOutAlt, FaSmoking } from "react-icons/fa";
 import { TbCalendarCancel } from "react-icons/tb";
 import { MdOutlinePets } from "react-icons/md";
-import { convertTo12Hour } from "../_lib/convertTo12Hour";
+import { convertTo12Hour } from "../_helpers/convertTo12Hour";
 import { useTranslations } from "next-intl";
 import SectionTitle from "./SectionTitle";
 import InfoRow from "./InfoRow";

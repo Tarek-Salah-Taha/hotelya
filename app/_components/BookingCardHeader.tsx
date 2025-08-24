@@ -1,4 +1,4 @@
-import { BookingLocalizedHotel } from "../_lib/transformHotel";
+import { BookingLocalizedHotel } from "../_utils/transformHotel";
 import { statusColors } from "../_helpers/statusColors";
 import { useTranslations } from "next-intl";
 

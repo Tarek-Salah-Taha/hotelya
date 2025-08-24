@@ -9,6 +9,7 @@ type MotionButtonProps = {
   onClick: () => void;
   variant?: "primary" | "danger";
   disabled?: boolean;
+  className?: string;
 };
 
 export default function MotionButton({
@@ -16,23 +17,26 @@ export default function MotionButton({
   icon,
   onClick,
   variant = "primary",
+  disabled = false,
+  className = "",
 }: MotionButtonProps) {
   const baseStyles =
-    "flex-1 font-medium rounded-lg transition flex items-center justify-center gap-2 text-sm shadow-md";
+    "flex-1 font-bold rounded-lg transition flex items-center justify-center gap-2 text-sm shadow-md focus:outline-none";
 
   const variants = {
-    primary: "bg-primary text-white p-4 hover:bg-opacity-90",
+    primary:
+      "bg-primary text-white px-6 py-4 hover:bg-opacity-90 disabled:bg-gray-300 disabled:cursor-not-allowed",
     danger:
-      "bg-white border border-red-300 text-red-500 p-4 hover:bg-accent hover:text-white",
+      "bg-white border border-red-300 text-red-500 px-6 py-4 hover:bg-red-500 hover:text-white disabled:bg-gray-100 disabled:text-gray-400 disabled:cursor-not-allowed",
   };
 
   return (
     <motion.button
-      whileHover={{ scale: 1.03 }}
-      whileTap={{ scale: 0.98 }}
-      onClick={onClick}
-      className={`${baseStyles} ${variants[variant]}`}
-      disabled={false}
+      whileHover={!disabled ? { scale: 1.03 } : {}}
+      whileTap={!disabled ? { scale: 0.98 } : {}}
+      onClick={!disabled ? onClick : undefined}
+      className={`${baseStyles} ${variants[variant]} ${className}`}
+      disabled={disabled}
     >
       <span>{label}</span>
       {icon}

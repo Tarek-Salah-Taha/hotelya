@@ -5,23 +5,13 @@ import { createHotelBooking } from "@/app/_lib/bookingsApi";
 import { fetchRoomById } from "@/app/_lib/roomsApi";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
 import toast from "react-hot-toast";
 import { use } from "react";
 import { RoomData, SupportedLang } from "@/app/_types/types";
 import { motion } from "framer-motion";
-import {
-  FaUser,
-  FaChild,
-  FaHotel,
-  FaCalendarAlt,
-  FaMoneyBillWave,
-  FaInfoCircle,
-} from "react-icons/fa";
-
 import { useTranslations } from "next-intl";
 import { registerLocale } from "react-datepicker";
+import RoomHeader from "@/app/_components/RoomHeader";
 
 import { enUS as en } from "date-fns/locale/en-US";
 import { fr } from "date-fns/locale/fr";
@@ -29,6 +19,12 @@ import { de } from "date-fns/locale/de";
 import { es } from "date-fns/locale/es";
 import { it } from "date-fns/locale/it";
 import { arSA as ar } from "date-fns/locale/ar-SA";
+import RoomInfo from "@/app/_components/RoomInfo";
+import DateRangePicker from "@/app/_components/DateRangePicker";
+import GuestSelectors from "@/app/_components/GuestSelectors";
+import RoomPriceSummary from "@/app/_components/RoomPriceSummary";
+import MotionButton from "@/app/_components/MotionButton";
+import RoomCancellationPolicy from "@/app/_components/RoomCancellationPolicy";
 
 registerLocale("en", en);
 registerLocale("es", es);
@@ -106,6 +102,8 @@ export default function BookingPage({
 
   const totalNights = getNights();
   const totalPrice = totalNights * price;
+  const taxes = totalPrice * 0.1;
+  const grandTotal = totalPrice + taxes;
 
   const handleConfirmBooking = async () => {
     if (!user) {
@@ -128,8 +126,8 @@ export default function BookingPage({
         checkOutDate: endDate.toISOString(),
         numAdults: adults,
         numChildren: children,
-        totalPrice,
-        createdAt: new Date().toLocaleDateString(),
+        totalPrice: grandTotal,
+        createdAt: new Date().toISOString(),
         roomType: roomType || "",
         status: "Confirmed",
         priceNew: price,
@@ -151,225 +149,67 @@ export default function BookingPage({
         className="max-w-4xl mx-auto bg-white rounded-2xl shadow-lg overflow-hidden"
       >
         {/* Header Section */}
-        <div className="bg-gradient-to-r from-primary to-secondary p-6 sm:p-8 text-white">
-          <h1 className="text-2xl sm:text-3xl font-bold">
-            {tRoomDescriptions("Complete Your Booking")}
-          </h1>
-          <div className="flex items-center mt-2 space-x-2 text-sm sm:text-base">
-            <FaHotel className="text-white/80" />
-            <span className="text-white/90">{hotelName}</span>
-            <span className="text-white/70">•</span>
-            <span className="text-white/80">
-              {city} • {country}
-            </span>
-          </div>
-        </div>
+
+        <RoomHeader
+          title={tRoomDescriptions("Complete Your Booking")}
+          hotelName={hotelName}
+          city={city}
+          country={country}
+        />
 
         <div className="p-6 sm:p-8 space-y-8">
           {/* Room Info */}
-          <div className="bg-gray-50 p-4 rounded-lg border border-gray-100">
-            <h3 className="font-semibold text-lg text-gray-800 mb-2">
-              {tRoomDescriptions("Room Details")}
-            </h3>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div>
-                <p className="text-gray-600">
-                  {tRoomDescriptions("Room Type")}
-                </p>
-                <p className="font-medium">
-                  {tRoomTypes(roomType || "Unknown")}
-                </p>
-              </div>
-              <div>
-                <p className="text-gray-600">
-                  {tRoomDescriptions("Price Per Night")}
-                </p>
-                <p className="font-medium">
-                  {price} {tRoomDescriptions("$")}
-                </p>
-              </div>
-            </div>
-          </div>
+          <RoomInfo
+            t={tRoomDescriptions}
+            tRoomTypes={tRoomTypes}
+            roomType={roomType}
+            price={price}
+          />
 
           {/* Date Picker */}
-          <div>
-            <div className="flex items-center mb-4 space-x-2">
-              <FaCalendarAlt className="text-primary mr-2" />
-              <h3 className="font-semibold text-lg text-gray-800">
-                {tRoomDescriptions("Select Dates")}
-              </h3>
-            </div>
-            <div className="border border-gray-200 rounded-lg overflow-hidden">
-              <DatePicker
-                selected={startDate}
-                onChange={(dates) => {
-                  const [start, end] = dates as [Date, Date];
-                  setStartDate(start);
-                  setEndDate(end);
-                }}
-                startDate={startDate}
-                endDate={endDate}
-                selectsRange
-                inline
-                monthsShown={monthsToShow}
-                minDate={new Date()}
-                calendarClassName="!border-0 !p-4 !bg-white"
-                dayClassName={() => "!rounded-md hover:!bg-primary/10"}
-                weekDayClassName={() => "!text-gray-500 !font-normal"}
-                monthClassName={() => "!text-gray-800"}
-                locale={locale}
-              />
-            </div>
-          </div>
+          <DateRangePicker
+            startDate={startDate}
+            endDate={endDate}
+            setDates={(s, e) => {
+              setStartDate(s);
+              setEndDate(e);
+            }}
+            monthsToShow={monthsToShow}
+            locale={locale}
+            t={tRoomDescriptions}
+          />
 
           {/* Guest Selection */}
-          <motion.div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            {/* Adults Select */}
-            <motion.div whileHover={{ scale: 1.01 }} className="space-y-2">
-              <label className="block text-sm font-medium text-gray-700">
-                <span className="flex items-center gap-2">
-                  <FaUser className="text-primary" />
-                  {tRoomDescriptions("Adults")}
-                </span>
-              </label>
-              <div className="relative">
-                <select
-                  value={adults}
-                  onChange={(e) => setAdults(Number(e.target.value))}
-                  className="block w-full pl-10 pr-3 py-3 text-base border border-gray-200 focus:border-primary focus:ring-2 focus:ring-primary/30 rounded-lg shadow-sm transition-all bg-white appearance-none"
-                >
-                  {[1, 2, 3, 4].map((num) => (
-                    <option key={num} value={num}>
-                      {num === 1
-                        ? tRoomDescriptions("Adult")
-                        : `${num} ${tRoomDescriptions("Adults")}`}
-                    </option>
-                  ))}
-                </select>
-                <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                  <FaUser className="text-gray-400" />
-                </div>
-              </div>
-            </motion.div>
-
-            {/* Children Select */}
-            <motion.div whileHover={{ scale: 1.01 }} className="space-y-2">
-              <label className="block text-sm font-medium text-gray-700">
-                <span className="flex items-center gap-2">
-                  <FaChild className="text-primary" />
-                  {tRoomDescriptions("Children")}
-                </span>
-              </label>
-              <div className="relative">
-                <select
-                  value={children}
-                  onChange={(e) => setChildren(Number(e.target.value))}
-                  className="block w-full pl-10 pr-3 py-3 text-base border border-gray-200 focus:border-primary focus:ring-2 focus:ring-primary/30 rounded-lg shadow-sm transition-all bg-white appearance-none"
-                >
-                  {[0, 1, 2, 3].map((num) => (
-                    <option key={num} value={num}>
-                      {num === 1
-                        ? tRoomDescriptions("Child")
-                        : `${num} ${tRoomDescriptions("Children")}`}
-                    </option>
-                  ))}
-                </select>
-                <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                  <FaChild className="text-gray-400" />
-                </div>
-              </div>
-            </motion.div>
-          </motion.div>
+          <GuestSelectors
+            adults={adults}
+            setAdults={setAdults}
+            childrenCount={children}
+            setChildren={setChildren}
+            t={tRoomDescriptions}
+          />
 
           {/* Price Summary */}
-          <motion.div className="bg-gray-50 p-6 rounded-lg border border-gray-100">
-            <div className="flex items-center mb-4 space-x-2">
-              <FaMoneyBillWave className="text-primary mr-2" />
-              <h3 className="font-semibold text-lg text-gray-800">
-                {tRoomDescriptions("Booking Summary")}
-              </h3>
-            </div>
-
-            <div className="space-y-4">
-              <div className="flex justify-between items-center">
-                <span className="text-gray-600">
-                  {tRoomDescriptions("Price Per Night")}
-                </span>
-                <span className="font-medium">
-                  {price} {tRoomDescriptions("$")}
-                </span>
-              </div>
-              <div className="flex justify-between items-center">
-                <span className="text-gray-600">
-                  {tRoomDescriptions("Nights")}
-                </span>
-                <span className="font-medium">{totalNights}</span>
-              </div>
-
-              <div className="border-t border-gray-200 my-2"></div>
-
-              <div className="flex justify-between items-center">
-                <span className="text-gray-800 font-semibold">
-                  {tRoomDescriptions("Subtotal")}
-                </span>
-                <span className="font-medium">
-                  {totalPrice.toFixed(2)} {tRoomDescriptions("$")}
-                </span>
-              </div>
-
-              <div className="flex justify-between items-center">
-                <span className="text-gray-600">
-                  {tRoomDescriptions("Taxes & Fees")}
-                </span>
-                <span className="font-medium">
-                  {(totalPrice * 0.1).toFixed(2)} {tRoomDescriptions("$")}
-                </span>
-              </div>
-
-              <div className="border-t border-gray-200 my-2"></div>
-
-              <div className="flex justify-between items-center">
-                <span className="text-gray-800 font-bold text-lg">
-                  {tRoomDescriptions("Total")}
-                </span>
-                <motion.span
-                  className="text-xl font-bold text-primary"
-                  transition={{ type: "spring", stiffness: 300 }}
-                >
-                  {(totalPrice * 1.1).toFixed(2)} {tRoomDescriptions("$")}
-                </motion.span>
-              </div>
-            </div>
-          </motion.div>
+          <RoomPriceSummary
+            price={price}
+            totalNights={totalNights}
+            totalPrice={totalPrice}
+            taxes={taxes}
+            grandTotal={grandTotal}
+            t={tRoomDescriptions}
+          />
 
           {/* Cancellation Policy */}
-          <motion.div className="bg-blue-50 p-6 rounded-lg border border-blue-100">
-            <div className="flex items-center mb-3 space-x-2">
-              <FaInfoCircle className="text-blue-500 mr-2" />
-              <h3 className="font-semibold text-lg text-gray-800">
-                {tRoomDescriptions("General Cancellation Policy")}
-              </h3>
-            </div>
-            <p className="text-sm text-gray-700 leading-relaxed">
-              {tRoomDescriptions("Free cancellation")}
-            </p>
-          </motion.div>
+          <RoomCancellationPolicy t={tRoomDescriptions} />
 
           {/* Button */}
           <div className="pt-4">
-            <motion.button
-              whileHover={{ scale: 1.01 }}
-              whileTap={{ scale: 0.98 }}
+            <MotionButton
+              label={tRoomDescriptions("Confirm Booking")}
               onClick={handleConfirmBooking}
               disabled={!startDate || !endDate}
-              className={`w-full py-4 px-6 rounded-xl shadow-md font-bold text-white transition ${
-                !startDate || !endDate
-                  ? "bg-gray-400 cursor-not-allowed"
-                  : " bg-primary  hover:opacity-90"
-              }`}
-            >
-              {tRoomDescriptions("Confirm Booking")}
-            </motion.button>
+              variant="primary"
+              className="w-full"
+            />
           </div>
         </div>
       </motion.div>

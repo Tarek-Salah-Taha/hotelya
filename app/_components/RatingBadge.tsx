@@ -1,5 +1,5 @@
 import { useTranslations } from "next-intl";
-import getRatingLabel from "../_lib/getRatingLabel";
+import getRatingLabel from "../_helpers/getRatingLabel";
 
 type RatingBadgeProps = {
   rating: number;

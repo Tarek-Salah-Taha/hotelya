@@ -5,7 +5,7 @@ import { useTranslations } from "next-intl";
 import {
   BookingLocalizedHotel,
   transformBookingHotelFields,
-} from "../_lib/transformHotel";
+} from "../_utils/transformHotel";
 import BookingCardHeader from "./BookingCardHeader";
 import BookingCardDetails from "./BookingCardDetails";
 import BookingCardFooter from "./BookingCardFooter";

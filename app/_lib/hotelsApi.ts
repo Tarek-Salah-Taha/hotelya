@@ -1,11 +1,11 @@
 import supabase from "./supabase";
 import { Hotel, HotelCardData, SupportedLang } from "../_types/types";
-import { normalizeLocalizedFields } from "./normalizeLocalizedFields";
+import { normalizeLocalizedFields } from "../_utils/normalizeLocalizedFields";
 import getLocalizedFields from "../_helpers/getLocalizedFields";
 import { fetchHotelFiltersData } from "./filtersApi";
 import { fetchHotelReviews } from "./reviewsApi";
 import { fetchRoomsByHotelId } from "./roomsApi";
-import { transformHotelFields } from "./transformHotel";
+import { transformHotelFields } from "../_utils/transformHotel";
 
 // Fetches a paginated list of hotels with localized fields based on the selected language.
 export async function fetchPaginatedHotelsWithLocalization(

@@ -1,7 +1,7 @@
 // ------------------------
 // 🌍 Localized Utility
 
-import { LocalizedHotel } from "../_lib/transformHotel";
+import { LocalizedHotel } from "../_utils/transformHotel";
 
 // ------------------------
 export type SupportedLang = "en" | "ar" | "fr" | "de" | "es" | "it";

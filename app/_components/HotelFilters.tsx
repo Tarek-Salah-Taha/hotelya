@@ -6,7 +6,7 @@ import {
   SupportedLang,
   HotelFilterParams,
 } from "@/app/_types/types";
-import getRatingLabel from "../_lib/getRatingLabel";
+import getRatingLabel from "../_helpers/getRatingLabel";
 import {
   FaGlobe,
   FaFlag,

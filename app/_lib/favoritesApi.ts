@@ -1,5 +1,5 @@
 import { SupportedLang, HotelCardData } from "@/app/_types/types";
-import { normalizeLocalizedFields } from "@/app/_lib/normalizeLocalizedFields";
+import { normalizeLocalizedFields } from "@/app/_utils/normalizeLocalizedFields";
 import supabase from "./supabase";
 import getLocalizedFields from "../_helpers/getLocalizedFields";
 

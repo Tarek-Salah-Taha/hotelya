@@ -1,5 +1,5 @@
 import { IoLocationSharp } from "react-icons/io5";
-import { LocalizedHotel } from "../_lib/transformHotel";
+import { LocalizedHotel } from "../_utils/transformHotel";
 import Stars from "./Stars";
 import RatingBadge from "./RatingBadge";
 

@@ -4,7 +4,7 @@ import {
   fetchHotelCountByCity,
   fetchFilteredHotels,
 } from "@/app/_lib/hotelsApi";
-import { normalizeLocalizedFields } from "@/app/_lib/normalizeLocalizedFields";
+import { normalizeLocalizedFields } from "@/app/_utils/normalizeLocalizedFields";
 import { HotelCardData, SupportedLang } from "@/app/_types/types";
 
 export default async function SearchResultsPage({
@@ -46,8 +46,6 @@ export default async function SearchResultsPage({
       />
     );
   }
-
-
 
   const totalPages = Math.ceil((countResult.count || 0) / limit);
 

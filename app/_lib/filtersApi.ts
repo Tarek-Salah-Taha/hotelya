@@ -1,5 +1,5 @@
 import supabase from "./supabase";
-import { normalizeLocalizedFields } from "./normalizeLocalizedFields";
+import { normalizeLocalizedFields } from "../_utils/normalizeLocalizedFields";
 import { SupportedLang, HotelFilterData } from "../_types/types";
 import getLocalizedFields from "../_helpers/getLocalizedFields";
 

@@ -1,7 +1,7 @@
 import { IoLocationSharp } from "react-icons/io5";
 import { FaPhone, FaGlobe } from "react-icons/fa";
 import { MdEmail } from "react-icons/md";
-import { LocalizedHotel } from "../_lib/transformHotel";
+import { LocalizedHotel } from "../_utils/transformHotel";
 import { useTranslations } from "next-intl";
 import SectionTitle from "./SectionTitle";
 import InfoRow from "./InfoRow";
