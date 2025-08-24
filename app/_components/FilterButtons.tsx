@@ -1,6 +1,6 @@
-import { motion } from "framer-motion";
 import { IoMdSearch } from "react-icons/io";
 import { VscDebugRestart } from "react-icons/vsc";
+import MotionButton from "./MotionButton";
 
 type FilterButtonsProps = {
   onApply: () => void;
@@ -16,23 +16,22 @@ export default function FilterButtons({
   resetLabel,
 }: FilterButtonsProps) {
   return (
-    <div className="mt-6 flex flex-col gap-3 sm:flex-row">
-      <motion.button
-        whileHover={{ scale: 1.02 }}
-        whileTap={{ scale: 0.98 }}
+    <div className="mt-6 flex flex-col gap-3">
+      <MotionButton
+        label={applyLabel}
         onClick={onApply}
-        className="w-full bg-primary text-white px-2 py-3 rounded-lg font-semibold hover:bg-success transition-all shadow-md hover:shadow-lg flex items-center justify-center gap-1"
-      >
-        <IoMdSearch className="text-base" /> {applyLabel}
-      </motion.button>
-      <motion.button
-        whileHover={{ scale: 1.02 }}
-        whileTap={{ scale: 0.98 }}
+        variant="primary"
+        icon={<IoMdSearch />}
+        className="w-full"
+      />
+
+      <MotionButton
+        label={resetLabel}
         onClick={onReset}
-        className="w-full border gap-1 border-gray-300 text-gray-700 px-2 py-3 rounded-lg font-semibold hover:bg-gray-50 transition-all shadow-sm hover:shadow-md flex items-center justify-center"
-      >
-        <VscDebugRestart className="text-base" /> {resetLabel}
-      </motion.button>
+        variant="danger"
+        icon={<VscDebugRestart />}
+        className="w-full"
+      />
     </div>
   );
 }

@@ -16,7 +16,7 @@ export default function CardActions({
   onRemove: (id: number) => void;
 }) {
   return (
-    <div className="flex sm:flex-row gap-5 mt-4">
+    <div className="flex flex-col sm:flex-row gap-5 mt-4">
       <MotionButton
         label={tFavorites("bookButton")}
         icon={locale === "ar" ? <FiArrowLeft /> : <FiArrowRight />}

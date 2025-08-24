@@ -77,6 +77,8 @@ export async function signOutUser() {
     // Clear any client-side user data
     if (typeof window !== "undefined") {
       localStorage.removeItem("supabaseUser");
+      localStorage.removeItem("app_user");
+      sessionStorage.removeItem("app_user");
     }
 
     return { success: true };

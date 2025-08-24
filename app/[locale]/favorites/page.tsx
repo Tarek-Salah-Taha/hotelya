@@ -104,7 +104,7 @@ export default function FavoritesPage() {
         </div>
       )}
 
-      {favorites.length > 0 && (
+      {totalPages > 1 && (
         <PaginationControls
           page={page}
           totalPages={totalPages}

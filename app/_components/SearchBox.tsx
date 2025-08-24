@@ -92,13 +92,19 @@ function SearchBox() {
             {t("destination")}
           </label>
           <div className="relative w-full">
-            <FaMapMarkerAlt className="absolute left-3 top-1/2 transform -translate-y-1/2 text-light" />
+            <FaMapMarkerAlt
+              className={`absolute ${
+                locale === "ar" ? "right-3" : "left-3"
+              }  top-1/2 transform -translate-y-1/2 text-light`}
+            />
             <input
               value={destination}
               onChange={(e) => setDestination(e.target.value)}
               onFocus={() => setIsFocused(true)}
               onBlur={() => setTimeout(() => setIsFocused(false), 200)}
-              className={`border-2 p-3 pl-10 rounded-lg w-full text-base h-[52px] focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all ${
+              className={`border-2 p-3 ${
+                locale === "ar" ? "pr-10" : "pl-10"
+              } rounded-lg w-full text-base h-[52px] focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all ${
                 touched && destination.trim().length < 2
                   ? "border-red-500"
                   : "border-border"

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo, useEffect } from "react";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
@@ -19,20 +19,24 @@ import ConfirmActionToast from "@/app/_components/ConfirmActionToast";
 import BookingList from "@/app/_components/BookingList";
 import { filterAndSortBookings } from "@/app/_utils/bookingsUtils";
 import { useLocale } from "next-intl";
-import { useMemo } from "react";
 import BookingsHeader from "@/app/_components/BookingsHeader";
+import PaginationControls from "@/app/_components/PaginationControls";
 
 export default function Page() {
   const { user, loading: userLoading } = useUser();
   const [activeTab, setActiveTab] = useState<BookingTab>("upcoming");
   const [sortBy, setSortBy] = useState<BookingSort>("latest");
   const [statusFilter, setStatusFilter] = useState<BookingStatusFilter>("all");
+  const [page, setPage] = useState(1);
 
   const locale = useLocale() as SupportedLang;
   const router = useRouter();
 
   const tBooking = useTranslations("BookingPage");
   const tRoom = useTranslations("RoomTypes");
+  const tHotels = useTranslations("HotelsPage");
+
+  const ITEMS_PER_PAGE = 5;
 
   const {
     bookings,
@@ -68,6 +72,18 @@ export default function Page() {
     [bookings, activeTab, statusFilter, sortBy, locale]
   );
 
+  const totalPages = Math.ceil(filteredBookings.length / ITEMS_PER_PAGE);
+
+  useEffect(() => {
+    setPage(1);
+  }, [activeTab, statusFilter, sortBy]);
+
+  const paginatedBookings = useMemo(() => {
+    const start = (page - 1) * ITEMS_PER_PAGE;
+    const end = start + ITEMS_PER_PAGE;
+    return filteredBookings.slice(start, end);
+  }, [filteredBookings, page]);
+
   if (userLoading || isLoadingBooking) return <SkeletonLoader />;
 
   if (!user)
@@ -97,13 +113,23 @@ export default function Page() {
         <NoBookingsMessage activeTab={activeTab} tBooking={tBooking} />
       ) : (
         <BookingList
-          bookings={filteredBookings}
+          bookings={paginatedBookings}
           locale={locale}
           activeTab={activeTab}
           onCancel={handleCancelClick}
           onRebook={handleRebook}
           tBooking={tBooking}
           tRoom={tRoom}
+        />
+      )}
+
+      {totalPages > 1 && (
+        <PaginationControls
+          page={page}
+          totalPages={totalPages}
+          onPrev={() => setPage((prev) => Math.max(prev - 1, 1))}
+          onNext={() => setPage((prev) => Math.min(prev + 1, totalPages))}
+          t={tHotels}
         />
       )}
     </div>

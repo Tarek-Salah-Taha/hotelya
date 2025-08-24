@@ -82,8 +82,8 @@ export default function HotelCardItem({ hotel }: HotelCardItemProps) {
         </div>
 
         <div className="mt-auto pt-5 border-t border-gray-100">
-          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-            <div className="flex-1">
+          <div className="flex flex-col gap-4">
+            <div className="w-full">
               <PriceDisplay
                 priceNew={hotel.priceNew}
                 priceOld={hotel.priceOld}
@@ -91,12 +91,15 @@ export default function HotelCardItem({ hotel }: HotelCardItemProps) {
               />
             </div>
 
-            <MotionButton
-              label={tFavorites("bookButton")}
-              icon={locale === "ar" ? <FiArrowLeft /> : <FiArrowRight />}
-              onClick={() => router.push(`/${locale}/hotels/${hotel.id}`)}
-              variant="primary"
-            />
+            <div className="w-full">
+              <MotionButton
+                label={tFavorites("bookButton")}
+                icon={locale === "ar" ? <FiArrowLeft /> : <FiArrowRight />}
+                onClick={() => router.push(`/${locale}/hotels/${hotel.id}`)}
+                variant="primary"
+                className="w-full"
+              />
+            </div>
           </div>
         </div>
       </div>
