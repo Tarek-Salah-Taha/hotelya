@@ -4,7 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useUser } from "../_hooks/useUser";
-import { signOutUser } from "../_lib/usersApi";
+import { signOutUser, clearAllUserData } from "../_lib/usersApi";
 import { useRouter } from "next/navigation";
 import { SupportedLang } from "../_types/types";
 import { useTranslations } from "next-intl";
@@ -45,14 +45,26 @@ export default function UserDropdown() {
     if (isLoggingOut) return;
     setIsLoggingOut(true);
     setShowConfirm(false);
+
     try {
+      // Clear user context first
+      setUser(null);
+
+      // Clear all user data from storage
+      clearAllUserData();
+
+      // Sign out from Supabase
       const { error } = await signOutUser();
       if (error) {
         console.error("Logout failed:", error);
+        // Even if Supabase logout fails, we've already cleared local data
       } else {
-        setUser(null);
-        router.replace(`/${locale}`);
       }
+
+      // Redirect to home page
+      router.replace(`/${locale}`);
+    } catch (error) {
+      console.error("Unexpected error during logout:", error);
     } finally {
       setIsLoggingOut(false);
     }
