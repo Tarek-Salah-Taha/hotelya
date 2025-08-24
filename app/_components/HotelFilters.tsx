@@ -131,7 +131,9 @@ export default function HotelFilters({ filters, onApplyFilters }: Props) {
     return [...new Set(values)];
   };
 
-  const continents = getLocalizedValues("continent");
+  const continents = getLocalizedValues("continent").sort((a, b) =>
+    a.localeCompare(b)
+  );
 
   const countries = Array.from(
     new Set(
@@ -143,7 +145,7 @@ export default function HotelFilters({ filters, onApplyFilters }: Props) {
         )
         .map((item) => item.country)
     )
-  );
+  ).sort((a, b) => a.localeCompare(b));
 
   const cities = Array.from(
     new Set(
@@ -155,7 +157,7 @@ export default function HotelFilters({ filters, onApplyFilters }: Props) {
         )
         .map((item) => item.city)
     )
-  );
+  ).sort((a, b) => a.localeCompare(b));
 
   const filteredHotels = filters.filter((hotel) => {
     const matchContinent =
