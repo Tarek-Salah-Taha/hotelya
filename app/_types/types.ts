@@ -139,6 +139,7 @@ export type HotelFilterParams = {
   stars: number[];
   paymentOptions: string[];
   languagesSpoken: string[];
+  sort: string;
 };
 
 export type HotelPageProps = {

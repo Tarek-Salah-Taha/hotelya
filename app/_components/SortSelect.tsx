@@ -19,7 +19,7 @@ export default function SortSelect({ value, onChange, options, label }: Props) {
       <select
         id="sortBy"
         className="w-full border border-gray-300 p-2 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
-        value={value}
+        value={value || ""}
         onChange={(e) => onChange(e.target.value)}
       >
         {options.map((opt) => (

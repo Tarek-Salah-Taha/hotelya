@@ -202,12 +202,21 @@
     "No filters selected to apply": "لم يتم اختيار أي تصفية للتطبيق.",
     "There are no filters to reset": "لا توجد تصفيات لإعادة تعيينها.",
     "Default": " الافتراضي",
+
     "Price: Low to High": "السعر: من الأدنى إلى الأعلى",
     "Price: High to Low": "السعر: من الأعلى إلى الأدنى",
     "Rating: Low to High": "التقييم: من الأدنى إلى الأعلى",
     "Rating: High to Low": "التقييم: من الأعلى إلى الأدنى",
     "Stars: Low to High": "النجوم: من الأدنى إلى الأعلى",
     "Stars: High to Low": "النجوم: من الأعلى إلى الأدنى",
+
+    "price-asc": "السعر: من الأدنى إلى الأعلى",
+    "price-desc": "السعر: من الأعلى إلى الأدنى",
+    "rating-asc": "التقييم: من الأدنى إلى الأعلى",
+    "rating-desc": "التقييم: من الأعلى إلى الأدنى",
+    "stars-asc": "النجوم: من الأدنى إلى الأعلى",
+    "stars-desc": "النجوم: من الأعلى إلى الأدنى",
+
     "Continent": "القارة",
     "Country": "البلد",
     "City": "المدينة",
@@ -224,7 +233,9 @@
     "All Countries": "جميع البلدان",
     "Sorry, we couldn't find any hotels matching your filters": "نأسف، لم نتمكن من العثور على أي فنادق تطابق مرشحاتك.",
     "Minimum Price": "الحد الأدنى للسعر",
-    "Maximum Price": "الحد الأقصى للسعر"
+    "Maximum Price": "الحد الأقصى للسعر",
+    "Showing": "عرض",
+    "results": "نتائج"
   },
 
   "HotelsPage": {

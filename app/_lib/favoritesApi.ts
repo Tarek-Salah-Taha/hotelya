@@ -58,7 +58,7 @@ export async function fetchFavoriteHotels(
   ]);
 
   const selectFields = [
-    `hotel:hotel_with_standard_room (
+    `hotel:hotels (
       id,
       ${localizedFields.join(",")},
       stars,

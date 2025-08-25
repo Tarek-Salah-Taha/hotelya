@@ -1,8 +1,9 @@
 import Image from "next/image";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 
 export default function BlogPage() {
   const t = useTranslations("BlogPage");
+  const locale = useLocale();
 
   const featuredPosts = [
     {
@@ -85,7 +86,11 @@ export default function BlogPage() {
                   priority={index < 2}
                 />
                 {/* Category Badge */}
-                <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full shadow-sm">
+                <div
+                  className={`absolute ${
+                    locale === "ar" ? "right-4" : "left-4"
+                  } top-4 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full shadow-sm`}
+                >
                   <span className="text-xs font-semibold text-primary">
                     {post.category}
                   </span>

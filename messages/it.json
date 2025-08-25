@@ -277,12 +277,21 @@
     "No filters selected to apply": "Nessun filtro selezionato da applicare.",
     "There are no filters to reset": "Non ci sono filtri da reimpostare.",
     "Default": "Predefinito",
+
     "Price: Low to High": "Prezzo: dal più basso al più alto",
     "Price: High to Low": "Prezzo: dal più alto al più basso",
     "Rating: Low to High": "Valutazione: dal più basso al più alto",
     "Rating: High to Low": "Valutazione: dal più alto al più basso",
     "Stars: Low to High": "Stelle: dal più basso al più alto",
     "Stars: High to Low": "Stelle: dal più alto al più basso",
+
+    "price-asc": "Prezzo: dal più basso al più alto",
+    "price-desc": "Prezzo: dal più alto al più basso",
+    "rating-asc": "Valutazione: dal più basso al più alto",
+    "rating-desc": "Valutazione: dal più alto al più basso",
+    "stars-asc": "Stelle: dal più basso al più alto",
+    "stars-desc": "Stelle: dal più alto al più basso",
+
     "Continent": "Continente",
     "Country": "Il Paese",
     "City": "La città",
@@ -299,7 +308,9 @@
     "All Countries": "Tutti i paesi",
     "Sorry, we couldn't find any hotels matching your filters": "Spiacenti, non siamo riusciti a trovare alcun hotel che corrisponda ai tuoi filtri.",
     "Minimum Price": "Prezzo minimo",
-    "Maximum Price": "Prezzo massimo"
+    "Maximum Price": "Prezzo massimo",
+    "Showing": "Mostrando",
+    "results": "risultati"
   },
 
   "HotelsPage": {

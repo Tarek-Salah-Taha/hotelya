@@ -38,6 +38,8 @@ type Props = {
 };
 
 export default function HotelFilters({ filters, onApplyFilters }: Props) {
+  const searchParams = useSearchParams();
+
   const initialState = useMemo(
     () => ({
       selectedContinents: [] as string[],
@@ -49,35 +51,25 @@ export default function HotelFilters({ filters, onApplyFilters }: Props) {
       selectedStars: [] as number[],
       selectedPayments: [] as string[],
       selectedLanguages: [] as string[],
+      sort: searchParams.get("sort") || "",
     }),
-    []
+    [searchParams]
   );
 
   const router = useRouter();
-  const searchParams = useSearchParams();
 
   const tFavorites = useTranslations("FavoritesPage");
   const tFilters = useTranslations("FiltersPage");
 
   const sortOptions = [
     { value: "", label: tFilters("Default") },
-    { value: "price-asc", label: `▲ ${tFilters("Price: Low to High")}` },
-    { value: "price-desc", label: `▼ ${tFilters("Price: High to Low")}` },
-    { value: "rating-asc", label: `▲ ${tFilters("Rating: Low to High")}` },
-    { value: "rating-desc", label: `▼ ${tFilters("Rating: High to Low")}` },
-    { value: "stars-asc", label: `▲ ${tFilters("Stars: Low to High")}` },
-    { value: "stars-desc", label: `▼ ${tFilters("Stars: High to Low")}` },
+    { value: tFilters("price-asc"), label: `▲ ${tFilters("price-asc")}` },
+    { value: tFilters("price-desc"), label: `▼ ${tFilters("price-desc")}` },
+    { value: tFilters("rating-asc"), label: `▲ ${tFilters("rating-asc")}` },
+    { value: tFilters("rating-desc"), label: `▼ ${tFilters("rating-desc")}` },
+    { value: tFilters("stars-asc"), label: `▲ ${tFilters("stars-asc")}` },
+    { value: tFilters("stars-desc"), label: `▼ ${tFilters("stars-desc")}` },
   ];
-
-  const setSort = (newSort: string) => {
-    const params = new URLSearchParams(searchParams.toString());
-    if (newSort) {
-      params.set("sort", newSort);
-    } else {
-      params.delete("sort");
-    }
-    router.replace(`?${params.toString()}`);
-  };
 
   function getUniqueRatingLabelsFromData(filters: HotelFilterData[]) {
     const ratings = new Set<string>();
@@ -106,6 +98,7 @@ export default function HotelFilters({ filters, onApplyFilters }: Props) {
     newState.selectedStars = getParamArray("stars").map(Number);
     newState.selectedPayments = getParamArray("paymentOptions");
     newState.selectedLanguages = getParamArray("languagesSpoken");
+    newState.sort = searchParams.get("sort") || "";
 
     setFilterState(newState);
   }, [initialState, searchParams]);
@@ -199,7 +192,8 @@ export default function HotelFilters({ filters, onApplyFilters }: Props) {
       filterState.selectedRatings.length === 0 &&
       filterState.selectedStars.length === 0 &&
       filterState.selectedPayments.length === 0 &&
-      filterState.selectedLanguages.length === 0;
+      filterState.selectedLanguages.length === 0 &&
+      !filterState.sort;
 
     if (isEmpty) {
       toast(tFilters("No filters selected to apply"), { icon: "⚠️" });
@@ -226,6 +220,7 @@ export default function HotelFilters({ filters, onApplyFilters }: Props) {
       params.set("paymentOptions", filterState.selectedPayments.join(","));
     if (filterState.selectedLanguages.length)
       params.set("languagesSpoken", filterState.selectedLanguages.join(","));
+    if (filterState.sort) params.set("sort", filterState.sort);
 
     const queryString = params.toString();
     const currentQuery = window.location.search.slice(1);
@@ -258,7 +253,8 @@ export default function HotelFilters({ filters, onApplyFilters }: Props) {
       filterState.selectedRatings.length === 0 &&
       filterState.selectedStars.length === 0 &&
       filterState.selectedPayments.length === 0 &&
-      filterState.selectedLanguages.length === 0;
+      filterState.selectedLanguages.length === 0 &&
+      !filterState.sort;
 
     if (isEmpty) {
       toast(tFilters("There are no filters to reset"), { icon: "ℹ️" });
@@ -277,6 +273,7 @@ export default function HotelFilters({ filters, onApplyFilters }: Props) {
       stars: [],
       paymentOptions: [],
       languagesSpoken: [],
+      sort: "",
     });
   };
 
@@ -292,6 +289,7 @@ export default function HotelFilters({ filters, onApplyFilters }: Props) {
     selectedStars: tFilters("Star Rating"),
     selectedPayments: tFilters("Payment Methods"),
     selectedLanguages: tFilters("Languages Spoken"),
+    sort: tFilters("Sort by"),
   };
 
   const removeFilter = (
@@ -336,13 +334,19 @@ export default function HotelFilters({ filters, onApplyFilters }: Props) {
         onRemove={(key, value) =>
           removeFilter(key as keyof typeof filterState, value)
         }
+        count={filteredHotels.length}
       />
 
       {/* Sort By */}
 
       <SortSelect
-        value={searchParams.get("sort") || ""}
-        onChange={setSort}
+        value={filterState.sort}
+        onChange={(val) =>
+          setFilterState((prev) => ({
+            ...prev,
+            sort: val,
+          }))
+        }
         options={sortOptions}
         label={tFilters("Sort by")}
       />

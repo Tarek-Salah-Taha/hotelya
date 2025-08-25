@@ -1,10 +1,28 @@
 "use client";
 
+import { useTranslations } from "next-intl";
+
 export function useHotelFilters(searchParamsString: string) {
   const DEFAULT_MAX_PRICE = 1000;
   const params = new URLSearchParams(searchParamsString);
   const getArray = (key: string) =>
     params.get(key)?.split(",").map(decodeURIComponent) ?? [];
+
+  const tFilters = useTranslations("FiltersPage");
+
+  // Map localized sort values back to canonical keys
+  const localizedToCanonical: Record<string, string> = {
+    [tFilters("price-asc")]: "price-asc",
+    [tFilters("price-desc")]: "price-desc",
+    [tFilters("rating-asc")]: "rating-asc",
+    [tFilters("rating-desc")]: "rating-desc",
+    [tFilters("stars-asc")]: "stars-asc",
+    [tFilters("stars-desc")]: "stars-desc",
+    "": "",
+  };
+
+  const rawSort = params.get("sort") || "";
+  const sort = localizedToCanonical[rawSort] || rawSort;
 
   return {
     continent: params.get("continent") || "",
@@ -16,6 +34,6 @@ export function useHotelFilters(searchParamsString: string) {
     stars: getArray("stars").map(Number),
     paymentOptions: getArray("paymentOptions"),
     languagesSpoken: getArray("languagesSpoken"),
-    sort: params.get("sort") || "",
+    sort,
   };
 }

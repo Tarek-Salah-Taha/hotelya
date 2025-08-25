@@ -1,14 +1,37 @@
 import { motion } from "framer-motion";
+import { useTranslations } from "next-intl";
 
 type Props = {
   filters: Record<string, (string | number)[] | string | number>;
   labels: Record<string, string>;
   onRemove: (key: string, value?: string | number) => void;
+  count?: number;
 };
 
-export default function FilterTagList({ filters, labels, onRemove }: Props) {
+export default function FilterTagList({
+  filters,
+  labels,
+  onRemove,
+  count,
+}: Props) {
+  const tFilters = useTranslations("FiltersPage");
   return (
-    <div className="flex flex-wrap gap-2">
+    <div className="flex flex-wrap gap-2 items-center">
+      {/* ✅ Show result count if provided */}
+      {typeof count === "number" && (
+        <motion.div
+          key="results-count"
+          className="w-full flex justify-start"
+          initial={{ opacity: 0, y: -5 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.2 }}
+        >
+          <span className="inline-flex items-center bg-primary text-white text-sm font-semibold px-3 py-2 rounded-md shadow-sm">
+            {tFilters("Showing")} {count} {tFilters("results")}
+          </span>
+        </motion.div>
+      )}
+
       {Object.entries(filters)
         .filter(([, val]) => (Array.isArray(val) ? val.length > 0 : val))
         .map(([key, val]) => {

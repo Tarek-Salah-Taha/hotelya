@@ -205,6 +205,14 @@
     "Rating: High to Low": "Rating: High to Low",
     "Stars: Low to High": "Stars: Low to High",
     "Stars: High to Low": "Stars: High to Low",
+
+    "price-asc": "Price: Low to High",
+    "price-desc": "Price: High to Low",
+    "rating-asc": "Rating: Low to High",
+    "rating-desc": "Rating: High to Low",
+    "stars-asc": "Stars: Low to High",
+    "stars-desc": "Stars: High to Low",
+
     "Continent": "Continent",
     "Country": "Country",
     "City": "City",
@@ -221,7 +229,10 @@
     "All Countries": "All Countries",
     "Sorry, we couldn't find any hotels matching your filters": "Sorry, we couldn't find any hotels matching your filters.",
     "Minimum Price": "Minimum Price",
-    "Maximum Price": "Maximum Price"
+    "Maximum Price": "Maximum Price",
+
+    "Showing": "Showing",
+    "results": "results"
   },
 
   "HotelsPage": {

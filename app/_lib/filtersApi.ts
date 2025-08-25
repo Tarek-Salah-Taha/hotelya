@@ -28,7 +28,7 @@ export async function fetchHotelFiltersData({
   ].join(",");
 
   const { data, error } = await supabase
-    .from("hotel_with_standard_room")
+    .from("hotels")
     .select(selectFields)
     .range(0, 1200);
 

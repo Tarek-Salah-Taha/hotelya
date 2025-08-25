@@ -34,7 +34,7 @@ export async function fetchPaginatedHotelsWithLocalization(
   ].join(",");
 
   const { data, error } = await supabase
-    .from("hotel_with_standard_room")
+    .from("hotels")
     .select(selectFields)
     .range(from, to);
 
@@ -53,7 +53,7 @@ export async function fetchPaginatedHotelsWithLocalization(
 // Returns the total number of hotels from the database.
 export async function fetchTotalHotelCount(): Promise<number> {
   const { count, error } = await supabase
-    .from("hotel_with_standard_room")
+    .from("hotels")
     .select("id", { count: "exact", head: true });
 
   if (error) throw new Error(error.message || "Failed to count hotels");
@@ -85,7 +85,7 @@ export async function fetchHotelsPageData({
 // Fetches full hotel details by its unique ID.
 export async function fetchHotelById(id: number): Promise<Hotel> {
   const { data, error } = await supabase
-    .from("hotel_with_standard_room")
+    .from("hotels")
     .select("*")
     .eq("id", id)
     .maybeSingle();
@@ -162,7 +162,7 @@ export async function fetchFilteredHotels(filters: {
   ];
 
   let query = supabase
-    .from("hotel_with_standard_room")
+    .from("hotels")
     .select(selectFields.join(","), { count: "exact" });
 
   // 🌍 Location filters
@@ -248,6 +248,9 @@ export async function fetchFilteredHotels(filters: {
       case "price-desc":
         filtered.sort((a, b) => b.priceNew - a.priceNew);
         break;
+      case "rating-asc":
+        filtered.sort((a, b) => (a.rating || 0) - (b.rating || 0));
+        break;
       case "rating-desc":
         filtered.sort((a, b) => (b.rating || 0) - (a.rating || 0));
         break;
@@ -275,7 +278,7 @@ export async function fetchHotelCountByCity(
   locale: SupportedLang = "en"
 ) {
   let query = supabase
-    .from("hotel_with_standard_room")
+    .from("hotels")
     .select("id", { count: "exact", head: true });
 
   query = query.ilike(`city_${locale}`, `%${city}%`);
@@ -309,7 +312,7 @@ export async function fetchHotelsByIds(
   ].join(",");
 
   const { data, error } = await supabase
-    .from("hotel_with_standard_room")
+    .from("hotels")
     .select(selectFields)
     .in("id", hotelIds);
 
