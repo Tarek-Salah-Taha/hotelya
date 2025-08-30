@@ -15,10 +15,16 @@ export default function FilterTagList({
   count,
 }: Props) {
   const tFilters = useTranslations("FiltersPage");
+
+  // Check if there are any active filters
+  const hasActiveFilters = Object.entries(filters).some(([, val]) =>
+    Array.isArray(val) ? val.length > 0 : val
+  );
+
   return (
     <div className="flex flex-wrap gap-2 items-center">
-      {/* ✅ Show result count if provided */}
-      {typeof count === "number" && (
+      {/* Only show result count if there are active filters */}
+      {typeof count === "number" && hasActiveFilters && (
         <motion.div
           key="results-count"
           className="w-full flex justify-start"

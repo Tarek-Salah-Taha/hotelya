@@ -123,6 +123,7 @@ export type HotelCardProps = {
   basePath: string;
   destination?: string;
   onPageChange?: (page: number) => void; // for client-side pagination
+  totalResults?: number;
 };
 
 export type HotelCardItemProps = {

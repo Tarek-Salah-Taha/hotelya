@@ -37,6 +37,7 @@ export default function FilteredHotelList({
     parseInt(searchParams.get("page") || "1", 10)
   );
   const [isLoading, setIsLoading] = useState(false);
+  const [isFilterLoading, setIsFilterLoading] = useState(false);
 
   const tFilters = useTranslations("FiltersPage");
 
@@ -55,9 +56,10 @@ export default function FilteredHotelList({
 
   const filterParams = useHotelFilters(searchParamsString);
 
-  // Memoize the fetch function
+  // Memoize the fetch function with individual filter params as dependencies
   const fetchHotels = useCallback(async () => {
     try {
+      setIsLoading(true);
       const result = await fetchFilteredHotels({
         ...filterParams,
         locale,
@@ -72,6 +74,7 @@ export default function FilteredHotelList({
       setFilteredHotels([]);
     } finally {
       setIsLoading(false);
+      setIsFilterLoading(false); // Reset filter loading when fetch completes
     }
   }, [filterParams, currentPage, locale]);
 
@@ -84,6 +87,7 @@ export default function FilteredHotelList({
       setFilteredHotels(initialHotels);
       setTotalPages(initialTotalPages);
       setIsLoading(false);
+      setIsFilterLoading(false);
     }
   }, [fetchHotels, searchParamsString, initialHotels, initialTotalPages]);
 
@@ -94,8 +98,14 @@ export default function FilteredHotelList({
 
   const resetPage = () => setCurrentPage(1);
 
+  // Handle filter application with loading state
+  const handleApplyFilters = useCallback(() => {
+    setIsFilterLoading(true);
+    resetPage();
+  }, []);
+
   const mainContent = useMemo(() => {
-    if (isLoading) {
+    if (isLoading || isFilterLoading) {
       return (
         <div className="flex justify-center items-center py-10">
           <Spinner />
@@ -121,7 +131,7 @@ export default function FilteredHotelList({
         basePath="/hotels"
       />
     );
-  }, [isLoading, filteredHotels, currentPage, totalPages]);
+  }, [isLoading, isFilterLoading, filteredHotels, currentPage, totalPages]);
 
   return (
     <>
@@ -130,7 +140,7 @@ export default function FilteredHotelList({
         <HotelFilters
           filters={filters}
           locale={locale}
-          onApplyFilters={resetPage}
+          onApplyFilters={handleApplyFilters}
         />
       </aside>
 
@@ -165,7 +175,7 @@ export default function FilteredHotelList({
                   <HotelFilters
                     filters={filters}
                     locale={locale}
-                    onApplyFilters={resetPage}
+                    onApplyFilters={handleApplyFilters}
                   />
                 </div>
               </motion.div>

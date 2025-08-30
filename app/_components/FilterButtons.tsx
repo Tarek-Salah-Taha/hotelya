@@ -7,6 +7,7 @@ type FilterButtonsProps = {
   onReset: () => void;
   applyLabel: string;
   resetLabel: string;
+  loading?: boolean;
 };
 
 export default function FilterButtons({
@@ -14,10 +15,12 @@ export default function FilterButtons({
   onReset,
   applyLabel,
   resetLabel,
+  loading = false,
 }: FilterButtonsProps) {
   return (
     <div className="mt-6 flex flex-col gap-3">
       <MotionButton
+        disabled={loading}
         label={applyLabel}
         onClick={onApply}
         variant="primary"
@@ -26,6 +29,7 @@ export default function FilterButtons({
       />
 
       <MotionButton
+        disabled={loading}
         label={resetLabel}
         onClick={onReset}
         variant="danger"

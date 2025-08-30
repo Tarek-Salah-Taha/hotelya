@@ -707,5 +707,16 @@
   "404Page": {
     "Go Back Home": "Volver a la página de inicio",
     "Sorry, the page you’re looking for doesn’t exist": "Lo sentimos, la página que estás buscando no existe."
+  },
+
+  "Badge": {
+    "Legendary": "Legendario",
+    "Exemplary": "Ejemplar",
+    "Elite Choice": "Elección de élite",
+    "Outstanding": "Pendiente",
+    "Exceptional": "Excepcional",
+    "Highly Rated": "Altamente calificado",
+    "Recommended": "Recomendado",
+    "Superior": "Superior"
   }
 }

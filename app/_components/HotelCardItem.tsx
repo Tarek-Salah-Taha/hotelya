@@ -16,6 +16,7 @@ import PriceDisplay from "./PriceDisplay";
 import MotionButton from "./MotionButton";
 import HotelLocation from "./HotelLocation";
 import { useFavoriteHotel } from "../_hooks/useFavoriteHotel";
+import HotelCardBadge from "./HotelCardBadge";
 
 export default function HotelCardItem({ hotel }: HotelCardItemProps) {
   const router = useRouter();
@@ -42,7 +43,7 @@ export default function HotelCardItem({ hotel }: HotelCardItemProps) {
       />
 
       {/* Hotel Image */}
-      <div className="relative h-60 w-full overflow-hidden">
+      <div className="relative h-75 w-full overflow-hidden">
         <Image
           src={hotel.exteriorImages || "/placeholder.jpg"}
           alt={hotel.hotelName}
@@ -55,9 +56,12 @@ export default function HotelCardItem({ hotel }: HotelCardItemProps) {
         />
 
         <div
-          className={`absolute top-4 ${locale === "ar" ? "right-4" : "left-4"}`}
+          className={`absolute top-4 z-10 flex flex-col gap-2 items-start ${
+            locale === "ar" ? "right-4" : "left-4"
+          }`}
         >
           <RatingBadge rating={hotel.rating} namespace="FavoritesPage" />
+          <HotelCardBadge rating={hotel.rating} stars={hotel.stars} />
         </div>
 
         <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
@@ -65,23 +69,19 @@ export default function HotelCardItem({ hotel }: HotelCardItemProps) {
 
       {/* Content */}
       <div className="p-6 flex flex-col flex-grow">
-        <div className="mb-4">
-          <HotelLocation
-            hotelName={hotel.hotelName}
-            city={hotel.city}
-            country={hotel.country}
-          />
-        </div>
+        <HotelLocation
+          hotelName={hotel.hotelName}
+          city={hotel.city}
+          country={hotel.country}
+        />
 
-        <div className="mb-4">
+        <div className="mb-2">
           <Stars stars={hotel.stars} />
         </div>
-
-        <div className="mb-5">
+        <div className="mb-2">
           <Tags tags={hotel.tags} />
         </div>
-
-        <div className="mt-auto pt-5 border-t border-gray-100">
+        <div className="mt-auto border-t border-gray-100">
           <div className="flex flex-col gap-4">
             <div className="w-full">
               <PriceDisplay

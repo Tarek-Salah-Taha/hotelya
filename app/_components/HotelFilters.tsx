@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useCallback } from "react";
 import {
   HotelFilterData,
   SupportedLang,
@@ -71,15 +71,18 @@ export default function HotelFilters({ filters, onApplyFilters }: Props) {
     { value: tFilters("stars-desc"), label: `▼ ${tFilters("stars-desc")}` },
   ];
 
-  function getUniqueRatingLabelsFromData(filters: HotelFilterData[]) {
-    const ratings = new Set<string>();
-    for (const item of filters) {
-      if (item.rating !== undefined) {
-        ratings.add(getRatingLabel(item.rating, tFavorites));
+  const getUniqueRatingLabelsFromData = useCallback(
+    (hotels: HotelFilterData[]) => {
+      const ratings = new Set<string>();
+      for (const item of hotels) {
+        if (item.rating !== undefined) {
+          ratings.add(getRatingLabel(item.rating, tFavorites));
+        }
       }
-    }
-    return Array.from(ratings);
-  }
+      return Array.from(ratings);
+    },
+    [tFavorites]
+  );
 
   useEffect(() => {
     const newState = { ...initialState };
@@ -111,60 +114,128 @@ export default function HotelFilters({ filters, onApplyFilters }: Props) {
     setOpenSection((prev) => (prev === section ? null : section));
   };
 
-  const getLocalizedValues = (key: keyof HotelFilterData): string[] => {
-    const values: string[] = [];
-    for (const item of filters) {
-      const field = item[key];
-      if (Array.isArray(field)) {
-        values.push(...field);
-      } else if (typeof field === "string") {
-        values.push(field);
-      }
-    }
-    return [...new Set(values)];
-  };
+  // Filtered hotels based on location selection (continent, country, city)
+  const locationFilteredHotels = useMemo(() => {
+    return filters.filter((hotel) => {
+      const matchContinent =
+        filterState.selectedContinents.length === 0 ||
+        filterState.selectedContinents.includes(hotel.continent);
 
-  const continents = getLocalizedValues("continent").sort((a, b) =>
-    a.localeCompare(b)
-  );
+      const matchCountry =
+        !filterState.selectedCountry ||
+        hotel.country === filterState.selectedCountry;
 
-  const countries = Array.from(
-    new Set(
-      filters
-        .filter((item) =>
-          filterState.selectedContinents.length === 0
-            ? true
-            : filterState.selectedContinents.includes(item.continent)
-        )
-        .map((item) => item.country)
-    )
-  ).sort((a, b) => a.localeCompare(b));
+      const matchCity =
+        !filterState.selectedCity || hotel.city === filterState.selectedCity;
 
-  const cities = Array.from(
-    new Set(
-      filters
-        .filter((item) =>
-          filterState.selectedCountry
-            ? item.country === filterState.selectedCountry
-            : true
-        )
-        .map((item) => item.city)
-    )
-  ).sort((a, b) => a.localeCompare(b));
+      return matchContinent && matchCountry && matchCity;
+    });
+  }, [
+    filters,
+    filterState.selectedContinents,
+    filterState.selectedCountry,
+    filterState.selectedCity,
+  ]);
 
-  const filteredHotels = filters.filter((hotel) => {
-    const matchContinent =
-      filterState.selectedContinents.length === 0 ||
-      filterState.selectedContinents.includes(hotel.continent);
+  const fullyFilteredHotels = useMemo(() => {
+    return locationFilteredHotels.filter((hotel) => {
+      // Apply rating filter
+      const matchRating =
+        filterState.selectedRatings.length === 0 ||
+        (hotel.rating !== undefined &&
+          filterState.selectedRatings.includes(
+            getRatingLabel(hotel.rating, tFavorites)
+          ));
 
-    const matchCountry =
-      !filterState.selectedCountry ||
-      hotel.country === filterState.selectedCountry;
-    const matchCity =
-      !filterState.selectedCity || hotel.city === filterState.selectedCity;
-    return matchContinent && matchCountry && matchCity;
-  });
+      // Apply star filter
+      const matchStars =
+        filterState.selectedStars.length === 0 ||
+        (hotel.stars !== undefined &&
+          filterState.selectedStars.includes(hotel.stars));
 
+      // Apply price filter
+      // const matchPrice =
+      //   (filterState.minPrice === 0 ||
+      //     (hotel.price !== undefined && hotel.price >= filterState.minPrice)) &&
+      //   (filterState.maxPrice === 0 ||
+      //     (hotel.price !== undefined && hotel.price <= filterState.maxPrice));
+
+      // Apply payment methods filter
+      const matchPayment =
+        filterState.selectedPayments.length === 0 ||
+        (hotel.paymentOptions &&
+          filterState.selectedPayments.some((payment) =>
+            hotel.paymentOptions.includes(payment)
+          ));
+
+      // Apply languages filter
+      const matchLanguages =
+        filterState.selectedLanguages.length === 0 ||
+        (hotel.languagesSpoken &&
+          filterState.selectedLanguages.some((lang) =>
+            hotel.languagesSpoken.includes(lang)
+          ));
+
+      return (
+        matchRating &&
+        matchStars &&
+        // matchPrice &&
+        matchPayment &&
+        matchLanguages
+      );
+    });
+  }, [
+    locationFilteredHotels,
+    filterState.selectedRatings,
+    filterState.selectedStars,
+    // filterState.minPrice,
+    // filterState.maxPrice,
+    filterState.selectedPayments,
+    filterState.selectedLanguages,
+    tFavorites,
+  ]);
+
+  // Get available continents
+  const continents = useMemo(() => {
+    const values = Array.from(new Set(filters.map((item) => item.continent)));
+    return values.sort((a, b) => a.localeCompare(b));
+  }, [filters]);
+
+  // Get available countries based on selected continents
+  const countries = useMemo(() => {
+    const filteredByContinent = filters.filter((item) =>
+      filterState.selectedContinents.length === 0
+        ? true
+        : filterState.selectedContinents.includes(item.continent)
+    );
+
+    const values = Array.from(
+      new Set(filteredByContinent.map((item) => item.country))
+    );
+    return values.sort((a, b) => a.localeCompare(b));
+  }, [filters, filterState.selectedContinents]);
+
+  // Get available cities based on selected country (and continents)
+  const cities = useMemo(() => {
+    const filteredByLocation = filters.filter((item) => {
+      const matchContinent =
+        filterState.selectedContinents.length === 0 ||
+        filterState.selectedContinents.includes(item.continent);
+
+      const matchCountry =
+        !filterState.selectedCountry ||
+        item.country === filterState.selectedCountry;
+
+      return matchContinent && matchCountry;
+    });
+
+    const values = Array.from(
+      new Set(filteredByLocation.map((item) => item.city))
+    );
+    return values.sort((a, b) => a.localeCompare(b));
+  }, [filters, filterState.selectedContinents, filterState.selectedCountry]);
+
+  // Get filtered values for other filters based on location
   const getFilteredValues = (
     key: keyof HotelFilterData,
     hotels: HotelFilterData[]
@@ -178,9 +249,34 @@ export default function HotelFilters({ filters, onApplyFilters }: Props) {
     return [...new Set(values)];
   };
 
-  const paymentMethods = getFilteredValues("paymentOptions", filteredHotels);
-  const languages = getFilteredValues("languagesSpoken", filteredHotels);
-  const ratingLabels = getUniqueRatingLabelsFromData(filters);
+  // Get payment methods, languages, and ratings based on location filtering
+  const paymentMethods = useMemo(
+    () => getFilteredValues("paymentOptions", fullyFilteredHotels),
+    [fullyFilteredHotels]
+  );
+
+  const languages = useMemo(
+    () => getFilteredValues("languagesSpoken", fullyFilteredHotels),
+    [fullyFilteredHotels]
+  );
+
+  const ratingLabels = useMemo(
+    () => getUniqueRatingLabelsFromData(locationFilteredHotels),
+    [locationFilteredHotels, getUniqueRatingLabelsFromData]
+  );
+
+  // Get star counts for filtered hotels
+  const starCounts = useMemo(() => {
+    const counts: Record<number, number> = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
+
+    locationFilteredHotels.forEach((hotel) => {
+      if (hotel.stars && hotel.stars >= 1 && hotel.stars <= 5) {
+        counts[hotel.stars] = (counts[hotel.stars] || 0) + 1;
+      }
+    });
+
+    return counts;
+  }, [locationFilteredHotels]);
 
   const handleApplyFilters = async () => {
     const isEmpty =
@@ -201,46 +297,53 @@ export default function HotelFilters({ filters, onApplyFilters }: Props) {
     }
 
     setLoading(true);
-    const params = new URLSearchParams();
 
-    if (filterState.selectedContinents.length)
-      params.set("continent", filterState.selectedContinents.join(","));
-    if (filterState.selectedCountry)
-      params.set("country", filterState.selectedCountry);
-    if (filterState.selectedCity) params.set("city", filterState.selectedCity);
-    if (filterState.minPrice > 0)
-      params.set("minPrice", filterState.minPrice.toString());
-    if (filterState.maxPrice > 0)
-      params.set("maxPrice", filterState.maxPrice.toString());
-    if (filterState.selectedRatings.length)
-      params.set("ratingLabels", filterState.selectedRatings.join(","));
-    if (filterState.selectedStars.length)
-      params.set("stars", filterState.selectedStars.join(","));
-    if (filterState.selectedPayments.length)
-      params.set("paymentOptions", filterState.selectedPayments.join(","));
-    if (filterState.selectedLanguages.length)
-      params.set("languagesSpoken", filterState.selectedLanguages.join(","));
-    if (filterState.sort) params.set("sort", filterState.sort);
+    try {
+      const params = new URLSearchParams();
 
-    const queryString = params.toString();
-    const currentQuery = window.location.search.slice(1);
+      if (filterState.selectedContinents.length)
+        params.set("continent", filterState.selectedContinents.join(","));
+      if (filterState.selectedCountry)
+        params.set("country", filterState.selectedCountry);
+      if (filterState.selectedCity)
+        params.set("city", filterState.selectedCity);
+      if (filterState.minPrice > 0)
+        params.set("minPrice", filterState.minPrice.toString());
+      if (filterState.maxPrice > 0)
+        params.set("maxPrice", filterState.maxPrice.toString());
+      if (filterState.selectedRatings.length)
+        params.set("ratingLabels", filterState.selectedRatings.join(","));
+      if (filterState.selectedStars.length)
+        params.set("stars", filterState.selectedStars.join(","));
+      if (filterState.selectedPayments.length)
+        params.set("paymentOptions", filterState.selectedPayments.join(","));
+      if (filterState.selectedLanguages.length)
+        params.set("languagesSpoken", filterState.selectedLanguages.join(","));
+      if (filterState.sort) params.set("sort", filterState.sort);
 
-    if (queryString !== currentQuery) {
-      router.replace(
-        queryString ? `?${queryString}` : window.location.pathname
-      );
+      const queryString = params.toString();
+      const currentQuery = window.location.search.slice(1);
+
+      if (queryString !== currentQuery) {
+        router.replace(
+          queryString ? `?${queryString}` : window.location.pathname
+        );
+      }
+
+      onApplyFilters?.({
+        ...filterState,
+        continent: [],
+        country: "",
+        city: "",
+        ratingLabels: [],
+        stars: [],
+        paymentOptions: [],
+        languagesSpoken: [],
+      });
+    } finally {
+      // Keep loading state until the parent component handles the update
+      setTimeout(() => setLoading(false), 500);
     }
-
-    onApplyFilters?.({
-      ...filterState,
-      continent: [],
-      country: "",
-      city: "",
-      ratingLabels: [],
-      stars: [],
-      paymentOptions: [],
-      languagesSpoken: [],
-    });
   };
 
   const resetFilters = async () => {
@@ -261,20 +364,27 @@ export default function HotelFilters({ filters, onApplyFilters }: Props) {
       return;
     }
 
-    setFilterState(initialState);
-    router.replace("?");
-    onApplyFilters?.({
-      continent: [],
-      country: "",
-      city: "",
-      minPrice: 0,
-      maxPrice: 0,
-      ratingLabels: [],
-      stars: [],
-      paymentOptions: [],
-      languagesSpoken: [],
-      sort: "",
-    });
+    setLoading(true);
+
+    try {
+      setFilterState(initialState);
+      router.replace("?");
+      onApplyFilters?.({
+        continent: [],
+        country: "",
+        city: "",
+        minPrice: 0,
+        maxPrice: 0,
+        ratingLabels: [],
+        stars: [],
+        paymentOptions: [],
+        languagesSpoken: [],
+        sort: "",
+      });
+    } finally {
+      // Keep loading state until the parent component handles the update
+      setTimeout(() => setLoading(false), 500);
+    }
   };
 
   if (filters.length <= 1) return null;
@@ -327,18 +437,16 @@ export default function HotelFilters({ filters, onApplyFilters }: Props) {
       </div>
 
       {/* Filter Summary */}
-
       <FilterTagList
         filters={filterState}
         labels={filterLabels}
         onRemove={(key, value) =>
           removeFilter(key as keyof typeof filterState, value)
         }
-        count={filteredHotels.length}
+        count={fullyFilteredHotels.length}
       />
 
       {/* Sort By */}
-
       <SortSelect
         value={filterState.sort}
         onChange={(val) =>
@@ -352,7 +460,6 @@ export default function HotelFilters({ filters, onApplyFilters }: Props) {
       />
 
       {/* Continent */}
-
       <FilterSection
         title={tFilters("Continent")}
         icon={<FaGlobe className="text-primary" />}
@@ -377,6 +484,7 @@ export default function HotelFilters({ filters, onApplyFilters }: Props) {
                     selectedContinents: e.target.checked
                       ? [...prev.selectedContinents, item]
                       : prev.selectedContinents.filter((c) => c !== item),
+                    // Reset dependent filters when continent changes
                     selectedCountry: "",
                     selectedCity: "",
                   }))
@@ -405,6 +513,7 @@ export default function HotelFilters({ filters, onApplyFilters }: Props) {
             setFilterState((prev) => ({
               ...prev,
               selectedCountry: value,
+              // Reset city when country changes
               selectedCity: "",
             }))
           }
@@ -450,7 +559,7 @@ export default function HotelFilters({ filters, onApplyFilters }: Props) {
         />
       </FilterSection>
 
-      {/* Rating */}
+      {/* Rating - Now based on location filtered hotels */}
       <FilterSection
         title={tFilters("User Rating")}
         icon={<FaThumbsUp className="text-primary" />}
@@ -471,7 +580,7 @@ export default function HotelFilters({ filters, onApplyFilters }: Props) {
         />
       </FilterSection>
 
-      {/* Stars */}
+      {/* Stars - Now with counts based on location filtered hotels */}
       <FilterSection
         title={tFilters("Star Rating")}
         icon={<FaStar className="text-primary" />}
@@ -480,6 +589,7 @@ export default function HotelFilters({ filters, onApplyFilters }: Props) {
       >
         <StarCheckboxList
           selected={filterState.selectedStars}
+          counts={starCounts}
           onChange={(stars, checked) =>
             setFilterState((prev) => ({
               ...prev,
@@ -491,7 +601,7 @@ export default function HotelFilters({ filters, onApplyFilters }: Props) {
         />
       </FilterSection>
 
-      {/* Payment */}
+      {/* Payment - Now based on location filtered hotels */}
       <FilterSection
         title={tFilters("Payment Methods")}
         icon={<FaMoneyBill className="text-primary" />}
@@ -512,7 +622,7 @@ export default function HotelFilters({ filters, onApplyFilters }: Props) {
         />
       </FilterSection>
 
-      {/* Languages */}
+      {/* Languages - Now based on location filtered hotels */}
       <FilterSection
         title={tFilters("Languages Spoken")}
         icon={<FaLanguage className="text-primary" />}
@@ -539,6 +649,7 @@ export default function HotelFilters({ filters, onApplyFilters }: Props) {
         onReset={resetFilters}
         applyLabel={tFilters("Apply Filters")}
         resetLabel={tFilters("Reset")}
+        loading={loading}
       />
     </motion.section>
   );

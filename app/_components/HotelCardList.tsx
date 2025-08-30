@@ -13,6 +13,7 @@ export default function HotelCardList({
   basePath,
   destination = "",
   onPageChange,
+  totalResults,
 }: HotelCardProps) {
   const locale = useLocale() as SupportedLang;
   const t = useTranslations("HotelsPage");
@@ -39,6 +40,13 @@ export default function HotelCardList({
 
   return (
     <div className="space-y-8">
+      {/* Results Count */}
+      {totalResults !== undefined && (
+        <div className="text-gray-600 text-sm">
+          Showing {hotels.length} of {totalResults} hotels
+        </div>
+      )}
+
       {/* Cards Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
         {hotels.map((hotel) => (

@@ -4,7 +4,7 @@ export default function Tags({ tags }: { tags?: string[] }) {
   if (!tags || tags.length === 0) return null;
 
   return (
-    <div className="flex flex-wrap gap-2 mb-4">
+    <div className="flex flex-wrap gap-2 mb-2">
       {tags.map((tagLabel) => {
         const matchedTag = availableTags.find((tagDef) =>
           tagDef.labels.includes(tagLabel)

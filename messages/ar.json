@@ -710,5 +710,16 @@
   "404Page": {
     "Go Back Home": "العودة إلى الصفحة الرئيسية",
     "Sorry, the page you’re looking for doesn’t exist": "عذرا، الصفحة التي تبحث عنها غير موجودة."
+  },
+
+  "Badge": {
+    "Legendary": "أُسطوري",
+    "Exemplary": "مثالي",
+    "Elite Choice": "اختيار النخبة",
+    "Outstanding": "مُمَيَّز",
+    "Exceptional": "استثنائي",
+    "Highly Rated": "تَقيِيم عَالٍ",
+    "Recommended": "مُستَحسَن",
+    "Superior": "رَاقٍ"
   }
 }
