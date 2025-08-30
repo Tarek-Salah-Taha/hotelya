@@ -27,6 +27,7 @@ export default function FavoritesPage() {
 
   const tFavorites = useTranslations("FavoritesPage");
   const tHotels = useTranslations("HotelsPage");
+  const tNavigation = useTranslations("Navigation");
 
   const {
     favorites,
@@ -69,10 +70,18 @@ export default function FavoritesPage() {
 
   if (!user) {
     return (
-      <EmptyState
-        icon={FaRegUserCircle}
-        text={tFavorites("Please log in to view your favorite hotels")}
-      />
+      <div className="flex flex-col items-center justify-center text-center py-12">
+        <EmptyState
+          icon={FaRegUserCircle}
+          text={tFavorites("Please log in to view your favorite hotels")}
+        />
+        <button
+          onClick={() => router.push(`/${locale}/auth/login`)}
+          className="mt-6 px-6 py-2.5 bg-primary text-white font-medium rounded-xl shadow-lg hover:bg-primary-dark hover:shadow-xl transition-all duration-300"
+        >
+          {tNavigation("signin")}
+        </button>
+      </div>
     );
   }
 

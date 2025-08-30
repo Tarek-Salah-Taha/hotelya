@@ -43,7 +43,7 @@ export default function HotelCardItem({ hotel }: HotelCardItemProps) {
       />
 
       {/* Hotel Image */}
-      <div className="relative h-75 w-full overflow-hidden">
+      <div className="relative h-70 w-full overflow-hidden">
         <Image
           src={hotel.exteriorImages || "/placeholder.jpg"}
           alt={hotel.hotelName}

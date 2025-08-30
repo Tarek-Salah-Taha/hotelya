@@ -154,11 +154,13 @@ export default function HotelFilters({ filters, onApplyFilters }: Props) {
           filterState.selectedStars.includes(hotel.stars));
 
       // Apply price filter
-      // const matchPrice =
-      //   (filterState.minPrice === 0 ||
-      //     (hotel.price !== undefined && hotel.price >= filterState.minPrice)) &&
-      //   (filterState.maxPrice === 0 ||
-      //     (hotel.price !== undefined && hotel.price <= filterState.maxPrice));
+      const matchPrice =
+        (filterState.minPrice === 0 ||
+          (hotel.priceNew !== undefined &&
+            hotel.priceNew >= filterState.minPrice)) &&
+        (filterState.maxPrice === 0 ||
+          (hotel.priceNew !== undefined &&
+            hotel.priceNew <= filterState.maxPrice));
 
       // Apply payment methods filter
       const matchPayment =
@@ -179,7 +181,7 @@ export default function HotelFilters({ filters, onApplyFilters }: Props) {
       return (
         matchRating &&
         matchStars &&
-        // matchPrice &&
+        matchPrice &&
         matchPayment &&
         matchLanguages
       );
@@ -188,8 +190,8 @@ export default function HotelFilters({ filters, onApplyFilters }: Props) {
     locationFilteredHotels,
     filterState.selectedRatings,
     filterState.selectedStars,
-    // filterState.minPrice,
-    // filterState.maxPrice,
+    filterState.minPrice,
+    filterState.maxPrice,
     filterState.selectedPayments,
     filterState.selectedLanguages,
     tFavorites,

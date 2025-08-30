@@ -21,6 +21,8 @@ import { filterAndSortBookings } from "@/app/_utils/bookingsUtils";
 import { useLocale } from "next-intl";
 import BookingsHeader from "@/app/_components/BookingsHeader";
 import PaginationControls from "@/app/_components/PaginationControls";
+import EmptyState from "@/app/_components/EmptyState";
+import { FaRegUserCircle } from "react-icons/fa";
 
 export default function Page() {
   const { user, loading: userLoading } = useUser();
@@ -35,6 +37,7 @@ export default function Page() {
   const tBooking = useTranslations("BookingPage");
   const tRoom = useTranslations("RoomTypes");
   const tHotels = useTranslations("HotelsPage");
+  const tNavigation = useTranslations("Navigation");
 
   const ITEMS_PER_PAGE = 5;
 
@@ -88,10 +91,17 @@ export default function Page() {
 
   if (!user)
     return (
-      <div className="flex items-center justify-center min-h-[60vh]">
-        <p className="text-center text-gray-500 text-lg">
-          {tBooking("Please log in to view your bookings")}
-        </p>
+      <div className="flex flex-col items-center justify-center text-center py-12">
+        <EmptyState
+          icon={FaRegUserCircle}
+          text={tBooking("Please log in to view your bookings")}
+        />
+        <button
+          onClick={() => router.push(`/${locale}/auth/login`)}
+          className="mt-6 px-6 py-2.5 bg-primary text-white font-medium rounded-xl shadow-lg hover:bg-primary-dark hover:shadow-xl transition-all duration-300"
+        >
+          {tNavigation("signin")}
+        </button>
       </div>
     );
 
