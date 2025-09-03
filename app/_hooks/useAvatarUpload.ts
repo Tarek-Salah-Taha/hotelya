@@ -2,10 +2,15 @@
 
 import { useState } from "react";
 import toast from "react-hot-toast";
-import { updateUserAvatar, uploadUserAvatar } from "../_lib/usersApi";
+import {
+  updateUserAvatar,
+  uploadUserAvatar,
+  cacheUserData,
+} from "../_lib/usersApi";
 import { UseFormSetValue } from "react-hook-form";
 import { FormValues } from "../_types/types";
 import { useTranslations } from "next-intl";
+import { useUserContext } from "../_context/UserContext";
 
 export function useAvatarUpload(
   userId: string | undefined,
@@ -13,6 +18,7 @@ export function useAvatarUpload(
 ) {
   const [avatarUrl, setAvatarUrl] = useState("");
   const [isUploading, setIsUploading] = useState(false);
+  const { user, setUser } = useUserContext();
   const t = useTranslations("ProfilePage");
 
   const handleAvatarChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -30,6 +36,14 @@ export function useAvatarUpload(
       if (uploadedUrl && typeof uploadedUrl === "string") {
         setAvatarUrl(uploadedUrl);
         setValue("avatarUrl", uploadedUrl);
+
+        // Update user context with new avatar URL
+        if (user) {
+          const updatedUser = { ...user, avatarUrl: uploadedUrl };
+          setUser(updatedUser);
+          cacheUserData(updatedUser);
+        }
+
         toast.success(t("Avatar uploaded successfully!"));
       } else {
         toast.error(t("Failed to upload avatar"));

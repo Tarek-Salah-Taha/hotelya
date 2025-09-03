@@ -18,6 +18,7 @@ export default function Profile() {
     form,
     profileChecks,
     getProgress,
+    isLoadingProfile,
   } = useProfileForm(user);
 
   const { avatarUrl, handleAvatarChange, isUploading } = useAvatarUpload(
@@ -25,7 +26,7 @@ export default function Profile() {
     setValue
   );
 
-  if (loading || !user) return <Spinner />;
+  if (loading || !user || isLoadingProfile) return <Spinner />;
 
   return (
     <motion.div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 p-4 md:p-8">
